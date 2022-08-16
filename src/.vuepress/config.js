@@ -2,8 +2,8 @@ const { config } = require("vuepress-theme-hope");
 
 module.exports = config({
   plugins: ["vuepress-plugin-export"],
-  title: "Linux Server",
-  description: "Cursus Linux Server IT Graduaten Thomas More",
+  title: "Linux Webservices",
+  description: "Linux Webservices - IT Factory Thomas More",
 
   // theme: "@vuepress/default", // enable for PDF export
 
@@ -37,7 +37,7 @@ module.exports = config({
     logo: "/tux.svg",
     hostname: "https://linux.maartje.dev",
 
-    author: "CC-BY-SA Maartje Eyskens @ Thomas More Kempen",
+    author: "CC-BY-SA Linux Webservices Team @ Thomas More",
     //repo: "https://github.com/meyskens/linux-server-graduaten",
 
     iconPrefix: "",
@@ -89,11 +89,6 @@ module.exports = config({
           { text: "Docker", link: "/docker/docker/" },
           { text: "Docker Compose", link: "/docker/compose/" },
         ],
-      },
-      {
-        text: "Canvas LMS",
-        link: "https://thomasmore.instructure.com/courses/21437",
-        icon: "fas fa-book",
       },
     ],
 
