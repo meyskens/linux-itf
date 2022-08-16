@@ -1,25 +1,27 @@
 # Passwords
 
-Wachtoorden zijn overal gebruikt in deze wereld. Maar als we aan onze servers gaan denken moeten we gaan oppassen met wachtwoorden.
-Wachtwoorden zijn makkelijk te achterhalen in veel te veel gevallen.
+Passwords are used everywhere in this world. But when we start thinking about our servers we have to start being careful with passwords.
+Passwords are easy to figure out in far too many cases.
 
-## Hoe lang tot we je wachtwoord kunnen raden?
+## How long until we can guess your password?
 
-We bekijken even [password haystacks](https://www.grc.com/%5Chaystack.htm). Dit gaat bereken hoelang **1 computer** erover gaat doen om je wachtwoord te brute forcen en houd geen rekening met lijsten van gelekte passwoorden of woordeboeken!
+Let's take a look at [password haystacks](https://www.grc.com/%5Chaystack.htm). This is going to calculate how long **1 computer** is going to take to brute fork your password, and doesn't take into account lists of leaked passwords or word books!
 
 ![haystack](./haystack.png)
 
-## Ben jij te koop op het dark web?
+## Are you for sale on the dark web?
 
-Voor enkele euros kan je op de donkere plekken op het internet een lijst aan wachtwoorden kopen die komt van slecht beveiligde websites. Al geluk hebben we ook echte data verzamelaars die deze voor goed gebruiken.
+For a few bucks, you can buy a list of passwords coming from poorly secured websites on the dark web. As luck would have it, we also have real data collectors who use these for good.
 
-[Have I been pwned?](https://haveibeenpwned.com/) heeft een collectie bijgehouden door security researcher Troy Hunt. Dit is ondertussen een bekende database die ook door andere diensten wordt gebruikt voor alerts.
+[Have I been pwned?](https://haveibeenpwned.com/) has a collection maintained by security researcher Troy Hunt. This is now a well-known database that is also used by other services for alerts.
 
-_Prijzen niet na te vragen bij uw docent_
+_Prices not to be checked with your instructor_
 
 ## Tips
 
-- Zorg ervoor dat je een veilig wachtwoord kiest.
-- Limiteer het aantal pogingen met tools als [Fail2Ban](https://www.fail2ban.org/)
-- Genereer willekeurige wachtwoorden
-- Prefereer geen wachtwoorden, werk bijvoorbeel met [SSH Keys](/security/ssh-keys)
+- Make sure you choose a secure password.
+- Limit the number of attempts with tools like [Fail2Ban](https://www.fail2ban.org/)
+- Generate random passwords
+
+Long story short... we repeated this part from cybersecurity because we would probably never want to use a password to secure our servers...
+We will work with [SSH Keys](/security/ssh-keys) instead
