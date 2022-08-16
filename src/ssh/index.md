@@ -251,7 +251,3 @@ Advantages of MOSH over SSH are:
 - Builds on SSH Security
 - Uses UDP with its own packet-loss detection
 - Can be resumed indefinitely
-
-```
-
-```
