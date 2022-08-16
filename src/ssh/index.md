@@ -61,19 +61,16 @@ First the word `ssh` followed by any options, we are hardly going to use these. 
 
 For example, we want to log on with the user `ubuntu` to the server `10.0.0.1`.
 
-``bash
+```bash
 ssh ubuntu@10.0.0.1
-
 ```
 
 We try this out with our own server. Immediately after this we get a question
 
 ```
-
 The authenticity of host '10.0.0.1 (10.0.0.1)' can't be established.
 ED25519 key fingerprint is SHA256:pc8xxMRaW8kmA/p+GUXoi1dR2CQBlGpUfIXT2Ypde0I.
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
-
 ```
 
 The first time you connect to a server you are asked if you trust this server.
@@ -81,10 +78,8 @@ We type `yes` followed by enter. This succeeds in capturing the fingerprint of o
 
 ::: warning note
 If you reinstall your server or change the IP you may get the following message. If you are sure you have changed your server's SSH keys you may follow the remove instructions that will remove the fingerprint from your trust store.
-:::
 
 ```
-
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED! @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -100,7 +95,6 @@ remove with:
 ssh-keygen -f "/home/maartje/.ssh/known_hosts" -R "10.0.0.1"
 ED25519 host key for 10.0.0.1 has changed and you have requested strict checking.
 Host key verification failed.
-
 ```
 
 :::
@@ -108,7 +102,6 @@ Host key verification failed.
 Next, your server is going to ask for your password:
 
 ```
-
 $ ssh ubuntu@10.0.0.1
 ubuntu@10.0.0.1's password:
 
@@ -123,7 +116,6 @@ SSH is a non-encrypted protocol, which ensures that all data including passwords
 We put an SSH server on the public Internet with password access for 5 minutes to demonstrate:
 
 ```
-
 Disconnected from invalid user ki 165.227.163.85 port 42826 [preauth]
 Disconnected from invalid user 212.83.34.253 46.101.18.46 port 60404 [preauth]
 Disconnected from invalid user 212.109.218.126 46.101.18.46 port 57008 [preauth]
@@ -242,7 +234,6 @@ Disconnected from invalid user verity 134.175.219.148 port 59880 [preauth]
 Disconnected from invalid user charles 106.13.75.187 port 38448 [preauth]
 Disconnected from invalid user emia 186.151.197.189 port 59182 [preauth]
 Disconnected from invalid user janne 111.229.235.119 port 57154 [preauth]
-
 ```
 
 Botnets are constantly scanning for SSH servers to test out every possible password. Why are they likely to get in? [We'll look at this in the Password Security chapter](/security/passwords)
@@ -260,4 +251,7 @@ Advantages of MOSH over SSH are:
 - Builds on SSH Security
 - Uses UDP with its own packet-loss detection
 - Can be resumed indefinitely
+
+```
+
 ```
