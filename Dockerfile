@@ -1,6 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:16-alpine as frontend
-
-RUN apk add --no-cache git
+FROM --platform=$BUILDPLATFORM node:16 as frontend
 
 COPY ./ /github.com/meyskens/linux-itf
 COPY ./.git /github.com/meyskens/linux-itf/.git
