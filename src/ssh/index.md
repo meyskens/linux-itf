@@ -1,89 +1,92 @@
 ﻿# Remote access via SSH
- 
- 
-Wanneer we in de praktijk werken uitvoeren aan een server zullen we zelden of nooit fysieke toegang hebben tot onze server.
-Deze kan zich bevinden in een dataroom verweg in een gebouw of zelfs aan de andere kant van de wereld.
-Omdat de meeste bedrijven gebruik maken van de cloud is er zelfs weinig bekend waar deze server draait.
 
-Kortom we hebben een veilige manier nodig om onze servers te kunenn configureren en beheren. Uit de lessen netwerken ken je onwaarschijnlijk Telnet en SSH al. In de Linux wereld word er meestal uitsluitend gebruik gemaakt van SSH. SSH heeft vooral zijn populariteit door de goede beveiliging van het protocol. Maar bied ook handige functies aan zoals: versturen van bestanden, doorsturen van netwerkverkeer en meer.
+When we perform work on a server in practice, we will rarely, if ever, have physical access to our server.
+It may be located in a data room far away in a building or even on the other side of the world.
+Since most companies use the cloud, there is little even known where this server is running.
 
-Draai je een server in de cloud dan ga je meestal een SSH login krijgen voor de server verder op te zetten. Dit is ook op onze hosting van onze les VMs het geval.
+In short, we need a secure way to configure and manage our servers. From the networking classes you probably already know Telnet and SSH. In the Linux world SSH is mostly used exclusively. SSH has gained popularity mainly because of the good security of the protocol. But it also offers useful functions such as: sending files, forwarding network traffic and more.
 
-## Opzetten van SSH
+If you run a server in the cloud then you will usually get an SSH login to further set up the server.
 
-### Installatie
+## Setting up SSH
+
+### Installation
 
 ::: warning note
-Meeste Linux servers hebben al een SSH server geinstalleerd. Dit is zo het geval voor onze VMs. De volgende instructies zijn ter informatie, of als je op een Ubuntu Desktop SSH wil gebruiken.
+Most Linux servers already have an SSH server installed. This is the case for our VMs. The following instructions are for your information, or if you want to use SSH on an Ubuntu Desktop.
 :::
 
-We insstalleren onze SSH server via `apt`
+We inset our SSH server via `apt`
 
 ```bash
-apt install ssh openssh-server # Installeer SSH via apt
-systemctl status ssh # check de status van ssh
+apt install ssh openssh-server # Install SSH via apt
+systemctl status ssh # check the status of ssh
 ```
 
 ### SSH clients
 
-Nu we een SSH server hebben gaan we ook een SSH client nodig hebben
+Now that we have an SSH server we will also need an SSH client
 
 #### Windows
 
-In het verleden was [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) de beste optie voor SSH op Windows.
-Sinds recente versies van Windows 10 heeft Microsoft echter ook een SSH client ingebouwd! Je kan deze oproen met het `ssh` commando in PowerShell of CMD.
+In the past, [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) was the best option for SSH on Windows.
+However, since recent versions of Windows 10, Microsoft has also built in an SSH client! You can green it with the `ssh` command in PowerShell or CMD.
 
-Echter raden we de nieuwe [Microsoft Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701#activetab=pivot:overviewtab) aan. Deze Terminal laat je (na 20 jaar eindelijk) toe de verschillende Windows command line interfaces samen te gebruiken en naar je eigen voorkeuren aan te passen! En is daardoor veel gebruiksvriendelijker dan PowerShell.
+However, we recommend the new [Microsoft Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701#activetab=pivot:overviewtab). This Terminal allows you (after 20 years finally) to use the different Windows command line interfaces together and to adapt them to your own preferences! And is therefore much more user friendly than PowerShell alone. You can even use it in combination with Git Bash to have a Bash shell on Windows, which will be very convenient for our purposes.
 
-![Windows Terminal](./terminal.png)
+[Windows Terminal](./terminal.png)
 
 #### macOS
 
-macOS heeft een SSH client ingebouwd. Je kan deze gebruiken door gewoon de Terminal app te openen.
+macOS has an SSH client built in. You can use it by just opening the Terminal app.
 
 #### Linux
 
-Meeste Linux installaties komen standaard met een SSH client. Heb je dit commando niet ter beschikking, dan kun je deze downloaden via je package manager. Onderstaand voorbeeld is voor Ubuntu:
+First of all congratualations on your choice of desktop OS! Most Linux installations come with an SSH client by default. If you don't have this command available, you can download it from your package manager. The example below is for Ubuntu:
 
 ```bash
 apt update
 apt install ssh
 ```
 
-### Verbinden met je server
+### Connecting to your server
 
-Het SSH commando heeft een simpele opbouw:
+The SSH command has a simple structure:
 
 ```
 ssh [options] [user@]hostname
 ```
 
-Eerst het woord `ssh` gevolgd door eventuele opties, deze gaan we amper gebruiken. Daarna volgt de gebruikersnaam en de hostnaam.
+First the word `ssh` followed by any options, we are hardly going to use these. Then comes the user name and hostname.
 
-Bijvoorbeeld we willen inloggen met te gebruiker `ubuntu` op de server `10.0.0.1`
+For example, we want to log on with the user `ubuntu` to the server `10.0.0.1`.
 
-```bash
+``bash
 ssh ubuntu@10.0.0.1
-```
-
-We proberen dit uit met onze eigen server. We krijgen hierna al meteen een vraag
 
 ```
+
+We try this out with our own server. Immediately after this we get a question
+
+```
+
 The authenticity of host '10.0.0.1 (10.0.0.1)' can't be established.
 ED25519 key fingerprint is SHA256:pc8xxMRaW8kmA/p+GUXoi1dR2CQBlGpUfIXT2Ypde0I.
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
+
 ```
 
-De eerste keer als je met een server verbind krijg je de vraag of je deze server vertrouwt.
-We typen `yes` gevolgd door enter. Dit slaagt de "vingerafdruk" op van onze SSH server's key op. Zo weten we zeker dat de volgende keer wanneer we verbinden met dezelfde server praten!
+The first time you connect to a server you are asked if you trust this server.
+We type `yes` followed by enter. This succeeds in capturing the fingerprint of our SSH server's key. This way we know for sure that the next time we connect we are talking to the same server!
 
 ::: warning note
-
-Stel je herinstalleert je server of je veranderd het IP dan kan je de volgende melding krijgen. Als je zeker weet dat je je server's SSH keys hebt aangepast mag je de remove instructies volgen dat haalt de vingerafdruk weg uit je trust store.
+If you reinstall your server or change the IP you may get the following message. If you are sure you have changed your server's SSH keys you may follow the remove instructions that will remove the fingerprint from your trust store.
+:::
 
 ```
+
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@ WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED! @
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
 Someone could be eavesdropping on you right now (man-in-the-middle attack)!
@@ -93,30 +96,34 @@ SHA256:pc8xxMRaW8kmA/p+GUXoi1dR2CQBlGpUfIXT2Ypde0I.
 Please contact your system administrator.
 Add correct host key in /home/maartje/.ssh/known_hosts to get rid of this message.
 Offending ED25519 key in /home/maartje/.ssh/known_hosts:503
-  remove with:
-  ssh-keygen -f "/home/maartje/.ssh/known_hosts" -R "10.0.0.1"
+remove with:
+ssh-keygen -f "/home/maartje/.ssh/known_hosts" -R "10.0.0.1"
 ED25519 host key for 10.0.0.1 has changed and you have requested strict checking.
 Host key verification failed.
+
 ```
 
 :::
 
-Vervolgens gaat je server je wachtwoord vragen:
+Next, your server is going to ask for your password:
 
 ```
+
 $ ssh ubuntu@10.0.0.1
 ubuntu@10.0.0.1's password:
+
 ```
 
-Vul dit in. Merk op dat SSH om je veiligheid geeft en zelfs geen sterretjes toont voor het wachtwoord, als je niets ziet is dat dus normaal! Druk dan op enter en je bent nu verbonden met de server! Hierna kan je gewoon werken zoals je gewoon bent op een Linux machine! Je kan ook copy-pasten tussen de machines (handig toch!).
+Enter this. Note that SSH cares about your security and doesn't even show asterisks for the password, so if you don't see anything it's normal! Then press enter and you are now connected to the server! After this you can work as usual on a Linux machine! You can also copy-paste between the machines (very convenient, isn't it?).
 
 ### Security
 
-SSH is een geencrypteerd protocol, dat zorgt ervoor dat alle data inclusief wachtwoorden versleuteld is over het netwerk. Toegang tot onze server is beveiligd door een wachtwoord. Maar is een wachtwoord dan zo een goed idee?
+SSH is a non-encrypted protocol, which ensures that all data including passwords is encrypted over the network. Access to our server is password protected. But is a password such a good idea?
 
-We hebben eventjes ter demonstratie 5 minuten een SSH server op het publieke internet gezet met toegang via een wachtwoord:
+We put an SSH server on the public Internet with password access for 5 minutes to demonstrate:
 
 ```
+
 Disconnected from invalid user ki 165.227.163.85 port 42826 [preauth]
 Disconnected from invalid user 212.83.34.253 46.101.18.46 port 60404 [preauth]
 Disconnected from invalid user 212.109.218.126 46.101.18.46 port 57008 [preauth]
@@ -143,7 +150,7 @@ Disconnected from invalid user yw 200.73.132.237 port 46766 [preauth]
 Disconnected from invalid user postgres 112.78.3.39 port 49906 [preauth]
 Disconnected from invalid user mapred 152.182.83.182 port 52084 [preauth]
 Connection closed by invalid user user 87.251.77.206 port 23028 [preauth]
-Connection closed by invalid user  87.251.77.206 port 22948 [preauth]
+Connection closed by invalid user 87.251.77.206 port 22948 [preauth]
 Connection closed by invalid user admin 87.251.77.206 port 23012 [preauth]
 Disconnected from invalid user postgres 45.43.62.224 port 43358 [preauth]
 Disconnected from invalid user azureuser 47.74.44.224 port 38802 [preauth]
@@ -206,7 +213,7 @@ Disconnected from invalid user jira 42.194.132.178 port 42890 [preauth]
 Disconnected from invalid user 212.103.62.233 46.101.18.46 port 42914 [preauth]
 Disconnected from invalid user shonta 177.184.75.130 port 45296 [preauth]
 Connection closed by invalid user admin 87.251.77.206 port 54638 [preauth]
-Connection closed by invalid user  87.251.77.206 port 54518 [preauth]
+Connection closed by invalid user 87.251.77.206 port 54518 [preauth]
 Connection closed by invalid user user 87.251.77.206 port 54642 [preauth]
 Disconnected from invalid user 212.34.129.107 46.101.18.46 port 39548 [preauth]
 Disconnected from invalid user 212.95.141.233 46.101.18.46 port 36104 [preauth]
@@ -235,20 +242,22 @@ Disconnected from invalid user verity 134.175.219.148 port 59880 [preauth]
 Disconnected from invalid user charles 106.13.75.187 port 38448 [preauth]
 Disconnected from invalid user emia 186.151.197.189 port 59182 [preauth]
 Disconnected from invalid user janne 111.229.235.119 port 57154 [preauth]
+
 ```
 
-Botnets scannen constant naar SSH-servers om alle mogelijke wachtwoorden uit te testen. Waarom is de kans groot dat ze binnen geraken? [Dit bekijken we in het hoofdstuk Password Security](/security/passwords)
+Botnets are constantly scanning for SSH servers to test out every possible password. Why are they likely to get in? [We'll look at this in the Password Security chapter](/security/passwords)
 
-Hoe krijgen we dan wel een SSH-server veilig op het internet? We gaan [SSH Keys gebruiken](/security/ssh-keys).
+So how do we get an SSH server secure on the Internet? We're going to use [SSH Keys](/security/ssh-keys).
 
 ## The next generation: MOSH
 
-[MOSH](https://mosh.org/) (mobile shell) wordt gezien als een opvolger voor SSH. MOSH komt vooral uit het probleem van SSH connecties op verbindingen die kunnen verbreken (lees: 4G connectie op de trein, rondlopen tussen verschillende AP points of heel dynamische IP-adressen). Een SSH verbining zal ook verbreken als je IP verandert.
+[MOSH](https://mosh.org/) (mobile shell) is seen as a successor to SSH. MOSH mainly comes from the problem of SSH connections on connections which can break (read: 4G connection on the train, walking around between different AP points or very dynamic IP addresses). An SSH connection will also break if your IP changes.
 
-Voordelen van MOSH over SSH zijn:
+Advantages of MOSH over SSH are:
 
-- Draait niet als privileged user
-- Ontworpen voor UTF-8 karakterset
-- Bouwt op SSH Security
-- Gebruikt UDP met eigen packet-loss-detection
-- Kan oneindig hervat worden
+- Does not run as privileged user
+- Designed for UTF-8 character set
+- Builds on SSH Security
+- Uses UDP with its own packet-loss detection
+- Can be resumed indefinitely
+```
