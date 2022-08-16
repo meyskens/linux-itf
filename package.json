@@ -1,0 +1,29 @@
+{
+  "name": "devops-graduaten",
+  "version": "0.0.1",
+  "description": "DevOps",
+  "main": "index.js",
+  "authors": {
+    "name": "Maartje Eyskens",
+    "email": "maartje.eyskens@thomasmore.be"
+  },
+  "repository": "https://github.com/meyskens/linux-server-graduaten",
+  "scripts": {
+    "dev": "vuepress dev src",
+    "build": "vuepress build src",
+    "docs:build": "vuepress build hope",
+    "docs:clean-dev": "vuepress dev hope --no-cache",
+    "docs:dev": "vuepress dev hope",
+    "docs:eject-theme": "vuepress eject-hope hope",
+    "export": "vuepress export src"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.9.5",
+    "vuepress-plugin-md-enhance": "^1.20.1",
+    "vuepress-theme-hope": "^1.23.0"
+  },
+  "dependencies": {
+    "vuepress-plugin-export": "^0.2.0"
+  }
+}
