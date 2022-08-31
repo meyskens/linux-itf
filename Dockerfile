@@ -1,7 +1,6 @@
 FROM --platform=$BUILDPLATFORM node:16 as frontend
 
 COPY ./ /github.com/meyskens/linux-itf
-COPY ./.git /github.com/meyskens/linux-itf/.git
 
 WORKDIR /github.com/meyskens/linux-itf
 

@@ -9,9 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
+          # Need all the history for git describe --tags to work
           fetch-depth: 0
+          clean: false
       - name: Fetch history
         run: |
           git fetch origin
