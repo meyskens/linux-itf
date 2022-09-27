@@ -2,89 +2,89 @@
 
 ![Systemd logo](./logo.png)
 
-Elk Unix systeem heeft een init systeem. Ons init systeem heeft **PID 1** dat betekend dat dit het allereerste process is dat opstart bij het opstarten van ons systeem. Dit start dan ook meteen nadat de Kernel geboot is. In macOS is dit `launchd`, elke BSD heeft ook een eigen systeem. Ook zijn er verschillende init systemen die je op Linux kan gebuiken als `OpenRC`.
+Every Unix system has an init system. Our init system has **PID 1** which means it is the very first process to start at system boot. This therefore starts immediately after the Kernel is booted. In macOS this is `launchd`, every BSD also has its own system. There are also several init systems that you can use on Linux as `OpenRC`.
 
-Als we kijken naar de keuzes van Ubuntu hebben we `upstart` sinds 2006 gebruikt en in 2014 vervangen door systemd.
-In andere Linux distributies zagen we ook een meer verschijden en vele distro specifieke configuraties terugkomen.
+Looking at Ubuntu's choices, we have used `upstart` since 2006 and replaced it with systemd in 2014.
+In other Linux distributions we also saw a more shifting and many distro specific configurations coming back.
 
-In meeste systemen bestonden services als complexe scripts die veel functionalteiten zelf deden, hierdoor was een eigen service schrijven niet zo handig.
+In most systems, services existed as complex scripts that did a lot of functionalities themselves, because of this, writing your own service was not so convenient.
 
-In 2010 in Systemd gestart als idee om init systems beter te maken.
-Systemd probeerd complexiteit en overheid van verschillende scripts te verminderen. Het regelt veel zeld op basis van configuratiebestanden.
-Ook maakt systemd parallelisatie van het opstartproces mogelijk, oudere initstsemen werkten sequentieel in het uitvoeren van alle opstart scripts. Systemd probeert zoveel mogelijk gelijk te doen.
+In 2010, Systemd was started as an idea to make init systems better.
+Systemd tries to reduce complexity and government of different scripts. It handles many things based on configuration files.
+Also, systemd enables parallelization of the boot process, older init systems worked sequentially in executing all boot scripts. Systemd tries to parallelize as much as possible.
 
-Systemd kunnen we zien als een allesomvattend init systeem. Het zal niet enkel zorgen voor onze achtergrondproccessen maar ook voor alles omliggend as netwerk instellen tot cron jobs draaien.
-Dit lijkt een mooie keuze te zijn maar het is ook de grootste kritiek, het doet namelijk de Unix filosofie teniet. In plaats van vele kleine tooltjes die elks iets heel goed doen te combineren gaat Systemd zelf alles in 1 codebase doen.
+We can think of systemd as an all-encompassing init system. It will not only take care of our background processes but also everything around it as network setup to running cron jobs.
+This seems to be a nice choice but it is also its biggest criticism, for it nullifies the Unix philosophy. Instead of combining many small tools that each do something very well, Systemd itself does everything in one code base.
 
-Voor ons gaat dit een voordeel bieden dat we veel informatie over onze server in 1 plek gaan kunnen vinden!
+For us this will have the advantage that we can find a lot of information about our server in one place!
 
-### Structuur
+### Structure
 
-De onderstaande structuur komt van Tizen, maar geeft een mooi overzicht van de verschillende componenten van Systemd.
-![Systemd compomenten in Tizen](./components.png)
+The structure below comes from Tizen, but gives a nice overview of Systemd's various components.
+![Systemd compoments in Tizen](./components.png)
 
-We zien een paar grote groepen:
+We see a couple of major groups:
 
-- `Utilities` dit zijn de tooltjes die wij gaan gebruiken om alles aan te sturen
-- `Daemons` zijn achtergrondproccessen van Systemd zelf die alles regelen, deze spreken we aan met onze utilities
-- `Targets` zijn delen van het systeem die gestart moeten worden. Wij gaan deze gebruiken in onze services.
-- `Core` en `Libraries` zijn de onderliggende basis van Systemd.
+- `Utilities` these are the tools we are going to use to control everything
+- `Daemons` are background components of Systemd itself that control everything, we address these with our utilities
+- `Targets` are parts of the system that need to be started. We are going to use these in our services.
+- `Core` and `Libraries` are the underlying foundation of Systemd.
 
-### Gebruik
+### Use in Linux
 
-Systemd is terugtevinden in de grote meerderheid van alle Linux distributies, velen hebben rond het jaar 2015 Systemd geadopteerd. Er zijn ook een aantal Linux distributies die specifiek gemaakt zijn voor geen Systemd te hebben zoals `Devuan`. Hieronder is een lijst van grote Linux distribities die Systemd gebruiken volgens Wikipedia:
+Systemd is found in the vast majority of all Linux distributions, many adopted Systemd around the year 2015. There are also some Linux distributions that are specifically made to not have Systemd such as `Devuan`. Below is a list of major Linux distributions that use Systemd according to Wikipedia:
 
 ![systemd in Linux distros](./use.png)
 
-## Systemd voor Linux Servers
+## Systemd for Linux Servers
 
-Wat betekend dit nu voor ons? Doorheen de cursus hebben we overal al `systemctl` gebruikt. We bekijken dit nu in meer detail!
+What does this mean for us now? Throughout the course we have been using `systemctl` everywhere. We will now look at this in more detail!
 
-We hebben 2 commando's die we veel gaan gebruiken
+We have 2 commands that we are going to use a lot
 
-- `systemctl` dit commando gaat alles van Systemd op onze server uitvoeren.
-- `journalctl` dit commando gaat alle logs van Systemd lezen en besturen.
+- `systemctl` this command is going to run everything from Systemd on our server.
+- `journalctl` this command is going to read and control all the logs from Systemd.
 
 :::warning note
-In vele tutorials op het internet ga je het oude `service` commando tegenkomen. Dit commando dateert van voor Systemd maar is zo vaak gebruikt dan Ubuntu een alias instelt dat deze commando's gaat doorsturen naar Systemd.
+In many tutorials on the Internet you are going to come across the old `service` command. This command predates Systemd but has been used so often than Ubuntu sets up an alias that is going to forward these commands to Systemd.
 
-Gebruik hiervan is afgeraden, Linux distributies die progresiever zijn (zoals Flatcar Linux) hebben deze alias niet (meer).
+Use of this is not recommended, Linux distributions that are more progressive (such as Flatcar Linux) do not have this alias (anymore).
 :::
 
-## Installatie
+## Installation
 
 ```bash
-# Ik laat deze titel hier om een punt te maken
-# Systemd staat al geïnstalleerd
-# het heeft je server net opgestart
+# I leave this title here to make a point
+# Systemd is already installed
+# it has just started your server
 ```
 
-## Gebruik
+## Using Systemd
 
-We gaan verschillende utilities gebruiken in de volgende delen. Maar waar komen deze rare namen als `systemctl` vandaan?
-Het is een recente trend in de Linux/Server wereld om een achtergrondprocces te hebben, traditioneel eindigend op `d` van `daemon`.
-Kijk naar `httpd` en `sshd`. Deze aansturen doen we via CLI (command line interface) tools die vaak eindigen op `ctl` van `control`. Voorbeelden zijn `bluetoothctl`, `kubectl` en `systemctl`.
+We are going to use different utilities in the following sections. But where did these weird names like `systemctl` come from?
+It is a recent trend in the Linux/Server world to have a background utility, traditionally ending in `d` from `daemon`.
+Look at `httpd` and `sshd`. We control these via CLI (command line interface) tools that often end in `ctl` from `control`. Examples are `bluetoothctl`, `kubectl` and `systemctl`.
 
 ### `systemctl`
 
-We gaan `systemctl` gebruiken om alle informatie van Systemd op onze server te lezen.
+We are going to use `systemctl` to read all the information from Systemd on our server.
 
-Eerst gaan we bekijken wat er nu eigenlijk draait in systemd?
+First we are going to look at what is actually running in systemd?
 
 ```bash
 sudo systemctl list-units
 ```
 
-We krijgen een enorme lijst aan alles wat op ons systeem draait. (Je kan deze verlaren door op `q` te drukken)
-We zien niet enkel onze services maar meer units. Een `unit` is een component dat in systemd draait, je herkent het type door hun bestandsextensie. We bekijken er een paar:
+We get a huge list of everything running on our system. (You can save it by pressing `q`)
+We see not only our services but more units. A `unit` is a component running in systemd, you recognize the type by their file extension. We look at a few of them:
 
-- `.device` dit zijn alle aangesloten devices (ook virtueel)
-- `.mount` dit zijn alle mountpoints van bestandssystemen
-- `.service` dit zijn alle services
-- `.socket` dit zijn alle netwerksockets
-- `.timer` dit zijn alle timers (vergelijkbaar met Cron jobs)
+- `.device` these are all connected devices (also virtual)
+- `.mount` are all mount points of file systems
+- `.service` these are all services
+- socket` are all network sockets
+- `.timer` these are all timers (similar to Cron jobs)
 
-In ons vak focussen we ons vooral op alle services, we kunnen deze filteren met een simpele `grep`:
+In our job we focus mainly on all services, we can filter them with a simple `grep`:
 
 ```bash
 sudo systemctl list-units | grep .service
@@ -92,25 +92,27 @@ sudo systemctl list-units | grep .service
 
 #### Services
 
-Services zijn achtergrondprocessen die wij gaan configureren op onze server. Ze dienen voornamelijk om onze server software te laten draaien.
-We hebben al een service op onze Linux server staan, namelijk `nginx`.
+We are going to use `systemctl` to read all the information from Systemd on our server.
 
-Willen we alles weten over de status van NGINX? Dan kunnen we het commando `systemctl status` gebruiken. `nginx.service` is het bestand waar de service zich bevindt.
+First we are going to look at what is actually running in systemd?
 
 ```bash
-sudo systemctl status nginx.service
+sudo systemctl list-units
 ```
 
-Systemctl gaat ook herkennen dat `nginx` een service is en we kunnen het ook korter schrijven:
+We get a huge list of everything running on our system. (You can save it by pressing `q`)
+We see not only our services but more units. A `unit` is a component running in systemd, you recognize the type by their file extension. We look at a few of them:
+
+- `.device` these are all connected devices (also virtual)
+- `.mount` are all mount points of file systems
+- `.service` these are all services
+- socket` are all network sockets
+- `.timer` these are all timers (similar to Cron jobs)
+
+In our job we focus mainly on all services, we can filter them with a simple `grep`:
 
 ```bash
-sudo systemctl status nginx
-```
-
-`nginx.service` is een file die we meekregen in de installatie van NGINX. We kunnen dit bekijken met `systemctl cat`
-
-```bash
-sudo systemctl cat nginx
+sudo systemctl list-units | grep .service
 ```
 
 ```
@@ -147,45 +149,45 @@ KillMode=mixed
 WantedBy=multi-user.target
 ```
 
-Hiermee zien we alle congiguratie opties van de service. We bekijken de deelcomponenten later als we zelf een scrhijven.
+With this we see all the congiguration options of the service. We'll look at the subcomponents later when we scrhve our own.
 
-We kunnen deze achtergrond service ook stoppen en starten:
+We can also stop and start this background service:
 
 ```bash
 sudo systemctl start nginx.service
 sudo systemctl stop nginx.service
 ```
 
-Of we combineren het met 1 commando:
+Or we combine it with 1 command:
 
 ```bash
 sudo systemctl restart nginx.service
 ```
 
-NGINX ondersteunt ook het "live reloaden" van configuratie, hier kunnen we dit doen:
+NGINX also supports "live reloading" of configuration, here we can do this:
 
 ```bash
 sudo systemctl reload nginx.service
 ```
 
-Hebben we echt problemen met NGINX? Dan hebben we de noodoplossing `kill` dit gaat de service killen in de process list.
+Are we really having problems with NGINX? Then we have the emergency solution `kill` this is going to kill the service in the process list.
 
 ```bash
-sudo systemctl kill nginx.service # noodrem, do not use
+sudo systemctl kill nginx.service # emergency brake, do not use
 ```
 
-We kunnen ook het automatisch opstarten van onze service besturen met Systemd. Met `systemctl enable` kunnen we de service automatisch opstarten bij het opstarten van de server. Met `systemctl disable` kunnen we de service uitschakelen.
+We can also control the automatic startup of our service with Systemd. With `systemctl enable` we can start the service automatically at server startup. With `systemctl disable` we can disable the service.
 
 ```bash
 sudo systemctl enable nginx.service
 sudo systemctl disable nginx.service
 ```
 
-#### Eigen service
+#### Own service
 
-In de cursus gaan we vaak via onze `apt` installatie al een Systemd service meekrijgen. Echter in de praktijk moeten we vaak eigen services gaan schrijven voor interne applicaties. We gaan hier `simple-service` als voorbeeld gebruiken. Dit is een kleine webserver die ons op poort `8080` een webpagina gaat geven.
+In the course, we often go through our `apt` installation to already include a Systemd service. However, in practice we often have to write our own services for internal applications. Here we are going to use `simple-service` as an example. This is a small Web server that is going to give us a Web page on port `8080`.
 
-Voor we een service kunnen scrhijven hebben we onze binary nodig. Deze kunnen we downloaden van GitHub met `wget` en daarna uitpakken en installeren:
+Before we can script a service we need our binary. We can download this from GitHub with `wget` and then unpack and install it:
 
 ```bash
 wget https://github.com/meyskens/simple-service/releases/download/v1.0.0/simple-service_1.0.0_linux_amd64.tar.gz
@@ -193,17 +195,17 @@ tar xzf simple-service_1.0.0_linux_amd64.tar.gz
 sudo mv simple-service /usr/local/bin/simple-service
 ```
 
-Meeste configuratie van systemd is te vinden in `/etc/systemd/`, de map `system` hier staan heel wat services. We gaan hier een service schrijven voor onze `simple-service`:
+Most configuration of systemd can be found in `/etc/systemd/`, the directory `system` here are a lot of services. Here we are going to write a service for our `simple-service`:
 
 ```bash
-sudo nano /etc/systemd/system/mijn-service.service
+sudo nano /etc/systemd/system/my-service.service
 ```
 
-Hierin plakken we de volgende configuratie:
+Into this we paste the following configuration:
 
 ```toml
 [Unit]
-Description=Mijn Coole Server
+Description=My Cool Server
 After=network.target
 [Service]
 ExecStart=/usr/local/bin/simple-service
@@ -213,55 +215,55 @@ RestartSec=10s
 WantedBy=multi-user.target
 ```
 
-We zien 3 delen:
+We see 3 sections:
 
-- `[Unit]` geeft alle informatie weer over deze Systemd unit.
-  - `Description` is een beschrijving van de service
-  - `After` geeft weer wat de service moet starten na de `network.target`, dus wanneer de server een netwerk verbinding heeft.
-- `[Service]` geeft dat dit een service en verteld ook wat te doen
-  - `ExecStart` is het pad naar de binary om uit te voeren
-  - `Restart` verteld wanneer Systemd de service moet herstarten. `on-failure` zorgt ervoor dat de service herstart als de binary een fout code geeft.
-  - `RestartSec` is de tijd in seconden dat de service moet wachten voor een restart
-- `[Install]` geeft alle informatie weer voor de Systemd installatie.
-  - `WantedBy` geeft weer wat de service moet worden gestart in de targer `multi-user`, dit draait op alle Linux systemen. Anders start de service niet tenzij een systeem component onze service als dependency heeft.
+- `[Unit]` displays all the information about this Systemd unit.
+  - `Description` is a description of the service
+  - `After` displays what the service should start after the `network.target`, so when the server has a network connection.
+- `[Service]` indicates that this is a service and also tells what to do
+  - `ExecStart` is the path to the binary to run
+  - `Restart` tells when Systemd should restart the service. `on-failure` causes the service to restart if the binary returns an error code.
+  - `RestartSec` is the time in seconds that the service must wait for a restart
+- `[Install]` displays all the information for the Systemd installation.
+  - `WantedBy` displays what the service should be started in the targer `multi-user`, this runs on all Linux systems. Otherwise, the service will not start unless a system component has our service as a dependency.
 
 :::warning note
-Er zijn enorm veel opties in Systemd units. We bespreken deze niet allemaal in de cursus. Hieronder zie je een aantal referenties die je kan raadplegen:
+There are a huge number of options in Systemd units. We will not discuss all of them in the course. Below are some references you can refer to:
 
-- [freedesktop.org manpage over systemd services](https://www.freedesktop.org/software/systemd/man/systemd.service.html)
-- [Arch wiki over Systemd](https://wiki.archlinux.org/title/systemd)
-- [DigitalOcean over Systemd units](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files)
-- [Flatcar documentatie over Advanced Unit Files](https://www.flatcar.org/docs/latest/setup/systemd/getting-started/#advanced-unit-files)
+- [freedesktop.org manpage about systemd services](https://www.freedesktop.org/software/systemd/man/systemd.service.html)
+- Arch wiki about Systemd](https://wiki.archlinux.org/title/systemd)
+- DigitalOcean about Systemd units](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files)
+- Flatcar documentation about Advanced Unit Files](https://www.flatcar.org/docs/latest/setup/systemd/getting-started/#advanced-unit-files)
 
 :::
 
-Nu we onze unit file hebben aangemaakt moeten we Systemd vragen deze opnieuw te laden. Dit doen we met:
+Now that we have created our unit file, we need to ask Systemd to reload it. We do this with:
 
 ```bash
 sudo systemctl daemon-reload
 ```
 
-Dit commando moeten we bij elke aanpassing aan een Systemd unit draaien.
+We need to run this command every time we modify a Systemd unit.
 
-Nu we de service hebben aangemaakt kunnen we deze enablen:
-
-```bash
-sudo systemctl enable mijn-service.service
-```
-
-En we starten de service met:
+Now that we have created the service we can enable it:
 
 ```bash
-sudo systemctl start mijn-service.service
+sudo systemctl enable my-service.service
 ```
 
-Zoals altijd bekijken we ook even de status:
+And we start the service with:
 
 ```bash
-sudo systemctl status mijn-service.service
+sudo systemctl start my-service.service
 ```
 
-En ten slotte kijken we ook even naar de output:
+As always, we also take a quick look at the status:
+
+```bash
+sudo systemctl status my-service.service
+```
+
+And finally, we also take a quick look at the output:
 
 ```bash
 curl http://localhost:8080
@@ -269,81 +271,81 @@ curl http://localhost:8080
 
 ### `journalctl`
 
-We hebben al eens kort naar logging gekeken eerder in de cursus.
-Vandaag vinden we op twee plaatsen logs terug (3 als je systlog nog meeteld) op onze Linux server.
+We have already briefly looked at logging earlier in the course.
+Today we find logs in two places (3 if you still count systlog) on our Linux server.
 
-- Applicatie specifieke logfiles, meestal in `/var/log/`
-- Journals: deze logfiles zijn geschreven door de `systemd` daemon van het systeem en services.
+- Application specific log files, usually in `/var/log/`.
+- Journals: these log files are written by the `systemd` daemon of the system and services.
 
-Applicatie specifieke logging werd vaak gebruikt maar vereist veel werk van de server code zelf. De server (zoals NGINX) is verantwoordelijk voor het schrijven van logging, maar ook voor het verwijderen van oude logfiles. Ook worden oudere logs vaak gecompressed voor schijfruimte te besparen. Meeste van deze files zijn te vinden in `/var/log/`.
+Application specific logging was often used but requires a lot of work from the server code itself. The server (such as NGINX) is responsible for writing logging as well as deleting old log files. Also, older logs are often compressed to save disk space. Most of these files can be found in `/var/log/`.
 
-In dit hoofdstuk zullen we vooral de Journals bekijken. Deze worden beheerd door de `systemd` daemon. Onze services moeten enkel maar simpele logs sturen naar de [standard output/error](https://en.wikipedia.org/wiki/Standard_streams) en Systemd regeld alles voor ons. Het zal ze opslagen, archiveren en verwijderen wanneer nodig.
+In this chapter we will mainly look at the Journals. These are managed by the `systemd` daemon. Our services just need to send simple logs to the [standard output/error](https://en.wikipedia.org/wiki/Standard_streams) and Systemd takes care of everything for us. It will store, archive and delete them when needed.
 
-#### Bekijken van logs
+#### Viewing logs
 
-Logs kunnen we gaam bekijken met `journalctl`.
+Logs can be viewed gaam with `journalctl`.
 
 ```bash
 sudo journalctl
 ```
 
-Dit geeft ons ALLE logs van het systeem weer... nu is dat iets te veel om nuttig te zijn.
+This will show us ALL logs from the system.... now that is a little too much to be useful.
 
-Met de optie `-u` bekijken we de logs van een specifieke Systemd unit:
-
-```bash
-sudo journalctl -u mijn-service
-```
-
-We krijgen hier alle logs van onze applicatie zelf maar ook van Systemd over onze service. Probeer deze maar eens te herstarten!
-
-We kunnen ook live onze logs "followen" met `-f`.
+With the `u` option, we view the logs of a specific Systemd unit:
 
 ```bash
-sudo journalctl -u mijn-service -f
+sudo journalctl -u my-service
 ```
 
-Deze logs zijn een beetje saai, we stoppen ze met `Ctrl+C`.
+Here we get all the logs from our application itself but also from Systemd about our service. Try restarting this one!
 
-We nemen even `ssh` als voorbeeld:
+We can also "follow" our logs live with `-f`.
+
+```bash
+sudo journalctl -u my-service -f
+```
+
+These logs are a little boring, we stop them with `Ctrl+C`.
+
+We'll take `ssh` for a moment as an example:
 
 ```bash
 sudo journalctl -u ssh -f
 ```
 
-Open nu een 2de termimal en log in op je server, je merkt op dat je de login live kan volgen!
+Now open a 2nd termimal and log in to your server, you will notice that you can watch the login live!
 
 #### Log housekeeping
 
-Logs nemen na een tijdje wel wat ruimte in, zo heeft mijn Linux laptop op dit moment `4GB` aan logfiles, en ik draai nog niet eens een server!
+Logs do take up some space after a while, for example, my Linux laptop currently has `4GB` of log files, and I'm not even running a server yet!
 
-Journalctl kan ons alle informatie geven met:
+Journalctl can give us all the information with:
 
 ```bash
 sudo journalctl --disk-usage
 ```
 
-We kunnen dit gaan opruimen met:
+We can start cleaning this up with:
 
 ```bash
 sudo journalctl --vacuum-size=1G
 ```
 
-Dit commando geeft Journald de opdracht de logs te beperken tot 1GB. Het blijft wel rekening houden met een minimale opslag van log files. Op onze niewe server gaat het weinig uitmaken.
+This command instructs Journald to limit the logs to 1GB. It does still allow for minimum storage of log files. On our new server, it's not going to make much difference.
 
-We kunnen ook vragen om oude log files te verwijderen die ouder zijn dan een jaar:
+We can also ask to delete old log files older than one year:
 
 ```bash
 sudo journalctl --vacuum-time=1years
 ```
 
-Deze acties zijn manueel uit te voeren, je kan de ook aanpassen in `/etc/systemd/journald.conf`
+These actions can be performed manually, you can also modify the in `/etc/systemd/journald.conf`
 
-We hebben verschillende opties:
+We have several options:
 
-- `SystemMaxUse=` is de maximale grootte van de systeem logfiles op de schijf
-- `SystemMaxFileSize=` is de maximale grootte van 1 logfile op de schijf
-- `RuntimeMaxUse=` is de maximale grootte van de runtime logfiles op volitile media (geheugen)
-- `RuntimeMaxFileSize=` is de maximale grootte van 1 logfile op volitile media
+- `SystemMaxUse=` is the maximum size of the system log files on disk
+- `SystemMaxFileSize=` is the maximum size of 1 logfile on disk
+- `RuntimeMaxUse=` is the maximum size of the runtime log files on volitile media (memory)
+- `RuntimeMaxFileSize=` is the maximum size of 1 logfile on volitile media
 
-Voorlopig zijn we nog blij met de standaard waarden!
+For now, we are still happy with the default values!
