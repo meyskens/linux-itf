@@ -4,39 +4,39 @@
 
 > Everything is a freaking DNS problem
 
-Dit is een vaak voorkomende uitdrukking uit de SysAdmin wereld, omdat er veel problemen uit voorkomen uit het slecht beheren van DNS. Alle systemen zijn er afhandelijk van dat maakt dat een DNS probleem vaak alles met zich meeneemt.
+This is a common expression from the SysAdmin world, because many problems arise from poor management of DNS. All systems depend on it, so a DNS problem often involves everything.
 
 ## DNS
 
-Heyt Domain Name System (DNS) is een de om een naam te geven aan apparaten op een netwerk.
-Het vertaalt een leesbare naam naar een IP adres (dat toch niemand kan onthouden).
-DNS is misschien wel het belangrijk onderdeel van het internet!
+Heyt Domain Name System (DNS) is a the to name devices on a network.
+It translates a readable name into an IP address (which no one can remember anyway).
+DNS is perhaps the most important part of the Internet!
 
-Het hiërarchisch systeem dat ervoor zorgt ervoor dat mensen geen "moeilijke" websites moeten onthouden:
-zo kan je in plaats van 172.217.20.67 in te typen beter google.be gebruiken.
-"google.be" noemen we een een domein naam.
+The hierarchical system that keeps people from having to remember "difficult" websites:
+For example, instead of typing in 172.217.20.67, it's better to use google.be.
+"google.be" is called a a domain name.
 
 ![DNS hyerachie](./dns.png)
 
-### Top-Level Domain (TLD)
+### Top-Level Domain (TLD).
 
-Het meest algemene deel van de domein naam, het is het deel dat het meest rechts staat.
-Voorbeelden:
+The most general part of the domain name, it is the part that is most to the right.
+Examples:
 
 - be
 - nl
 - fr
 
-Deze TLDs zijn gelinkt aan de landen. Ze worden ook wel eens ccTLD - Country Code Top-Level Domain genoemd.
+These TLDs are linked to countries. They are also sometimes called ccTLD - Country Code Top-Level Domain.
 
-Je hebt ook algemene TLDs, Generic TLDs of gTLD.
-Voorbeelden:
+You also have generic TLDs, Generic TLDs or gTLD.
+Examples:
 
 - com
 - org
 - net
 
-Deze zijn de klassieke gTLDs. De recente groei van het internet heeft ook met zich mee gebracht dat er vraag was aan heel wat nieuwe TLDs als:
+These are the classic gTLDs. The recent growth of the Internet has also brought with it a demand for a lot of new TLDs like:
 
 - jobs
 - biz
@@ -47,174 +47,173 @@ Deze zijn de klassieke gTLDs. De recente groei van het internet heeft ook met zi
 - club
 - pizza
 
-Of steden met eigen TLDs:
+Or cities with their own TLDs:
 
 - ghent
 - brussels
 - vegas
 - paris
 
-Sommigen noemen het wel eens een wildgroei maar het geeft wel meer mogelijkheden, [Wikipedia heeft een complete lijst van TLDs](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains). Elke TLD is in beheer van een bepaalde organisatie die de authoritive nameservers hiervoor host, gesponsord met het "registatie bedrag" dat je betaald om een domein naam te kopen
+Some call it proliferation but it does give more options, [Wikipedia has a complete list of TLDs](https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains). Each TLD is managed by a particular organization that hosts the authoritative nameservers for it, sponsored by the "registration fee" you pay to buy a domain name
 
 - com
 - be
 - net
-  • Staan bovenaan de hiërarchie
-  • Geven andere domein namen uit, binnen hun TLD
+  - Are at the top of the hierarchy
+  - Issue other domain names, within their TLD
 
 ### Root Domain
 
-`www.google.be` is technisch gezien geen volledige DNS invoer! Er komt een verborgen punt achter de TLD, dus `www.google.be.`
-Deze punt wordt het root domein genoemd, deze worden verstrekt door de root name servers.
-Er zijn er 13 in de wereld, ze hebben elks een letter: A tot M.
-Als deze verdwijnen, is er geen internet meer zoals we het kennen! Daarom zijn de verspreid over de wereld en maken ze allemaal deel uit van andere organisaties.
-1 "server" voor een root server is vandaag niet het geval meer, ook staan ze niet meer op 1 locatie. Ze maken allemaal gebruik van [anycast IPs](https://en.wikipedia.org/wiki/Anycast) om requests te load balancen en redundantie te krijgen.
+`www.google.be` is technically not a full DNS entry! There will be a hidden dot after the TLD, i.e. `www.google.be.`
+This dot is called the root domain, these are provided by the root name servers.
+There are 13 of them in the world, each one has a letter: A to M.
+If these disappear, there will be no more Internet as we know it! Therefore, they are scattered around the world and are all part of other organizations.
+1 "server" for a root server is no longer the case today, nor are they in 1 location. They all use [anycast IPs](https://en.wikipedia.org/wiki/Anycast) to load balance requests and get redundancy.
 
 ![root servers](./root.png)
 
-Root servers zijn hardcoded in onze DNS setup op onze PCs als ook DNS resolver servers.
+Root servers are hardcoded into our DNS setup on our PCs as well as DNS resolver servers.
 
 ### Host
 
-Een host is een individuele computer binnen een domein. Bijvoorbeeld, je webserver bevindt zich op de 'www' host.
-Dan krijg je `www.google.be` .
-Je kan meerdere individuele hosts hebben, zoals:
+A host is an individual computer within a domain. For example, your web server resides on the 'www' host.
+Then you get `www.google.be` .
+You can have multiple individual hosts, such as:
 
-- db.google.be - voor database toegang
-- api.google.be - voor de programmeer API
-- ftp.google.be - voor FTP toegang tot het domein
-  De host naam kan alles zijn wat je wil, zolang als het uniek is voor het domein!
+- db.google.be - for database access
+- api.google.be - for the programming API
+- ftp.google.be - for FTP access to the domain
+  The host name can be anything you want, as long as it is unique to the domain!
 
 ### Subdomain
 
-Subdomain is niet te verwarren met een `host`. DNS is een hiërarchie: een TLD heeft vele domeinen onder zich zo `.be.` heeft
-`thomasmore.be` en `google.be`.
+Subdomain is not to be confused with a `host`. DNS is a hierarchy: a TLD has many domains under it so `.be.` has
+`thomasmore.be` and `google.be`.
 
-Een subdomein verwijst naar elk domein dat onderdeel is van een groter domein.
-Bijvoorbeeld thomasmore.be en google.be zijn dus subdomeinen van het .be domein.
+A subdomain refers to any domain that is part of a larger domain.
+So for example thomasmore.be and google.be are subdomains of the .be domain.
 
-Elk domein kan subdomeinen hebben zo kan de school kan bijvoorbeeld een subdomein hebben voor het IT team, waarvan:
+Any domain can have subdomains for example the school can have a subdomain for the IT team, of which:
 
 - it.thomasmore.be
-- aanmelden.it.thomasmore.be - specifieke host onder het domein `it.thomasmore.be`
+- login.it.thomasmore.be - specific host under the domain `it.thomasmore.be`.
 
-Het verschil tussen een host en een subdomein is dat een host een enkele computer of resource aanduidt, terwijl een subdomein het domein nog eens helemaal gaat onderverdelen.
+The difference between a host and a subdomain is that a host designates a single computer or resource, while a subdomain is going to subdivide the domain all over again.
 
 ### Nameserver
 
-Een nameserver is een server die domein namen vertaalt naar een IP adres.
-Zij doen het al zware werk in DNS, ze antwoorden op DNS queries die van verschillende gebruikers gestuurd worden. Vaak ook gestuurd door andere DNS servers.
+A nameserver is a server that translates domain names to an IP address.
+They do all the heavy lifting in DNS, responding to DNS queries sent from various users. Often sent by other DNS servers as well.
 
-Een nameserver kan 'gezaghebbend' (authoritative) zijn, zij kunnen "het correcte" antwoord geven op een vraag, een DNS server kan authoritive zijn voor een bepaalde domein naam. DNS servers die we zelf opzetten gaan dus authoritive zijn voor domeinnamen in ons bezig.
+A name server can be "authoritative," they can give "the correct" answer to a query, a DNS server can be authoritative for a particular domain name. So DNS servers that we set up ourselves are going to be authoritative for domain names in our busy.
 
-Als ze niet gezaghebbend zijn op een bepaalde vraag, verwijzen ze vaak door naar andere server, of geven het antwoord in hun cache. DNS servers als 1.1.1.1 en 8.8.8.8 zijn nooit authoritive maat hebben een grote cache voor te kunne antwoorden.
+If they are not authoritative on a particular query, they often redirect to other server, or cache the answer. DNS servers like 1.1.1.1 and 8.8.8.8 are never authoritative mate have a large cache for answer.
 
 ### Zone file
 
-Simpel tekst bestand voor DNS records te configureren.
-De zone file bevat de vertaling van domein naam naar IP adres.
-Deze worden pgeslagen op een nameserver en definieert de resources die beschikbaar zijn (authoritive) of wijst naar andere NS waar deze info te vinden is.
+Simple text file to configure DNS records.
+The zone file contains the translation from domain name to IP address.
+These are stored on a name server and define the available resources (authoritive) or point to other NS where this info can be found.
 
-Een enkele lijn binnen een zone bestand is een `record`.
-Een record kan:
+A single line within a zone file is a `record`.
+A record can:
 
-- De toewijzing van domein naam naar IP adres weergeven
-- Een domein verwijzen naar een andere domein
-- Name servers definiëren
-- Mail servers definiëren
+- Display the assignment of domain name to IP address
+- Point a domain to another domain
+- Define name servers
+- Define mail servers
 - etc.
 
 ## Record types
 
 ### Start of Authority (SOA)
 
-Start of Authority (SOA) is een verplicht in een zone bestand.
-Het slaat belangrijke informatie op over een domein of zone, zoals het e-mailadres van de beheerder, wanneer het domein voor het laatst is bijgewerkt, en hoe lang de server moet wachten tussen refreshen van data.
+Start of Authority (SOA) is a required in a zone file.
+It stores important information about a domain or zone, such as the administrator's email address, when the domain was last updated, and how long the server should wait between refresh dates.
 
 ![soa](./soa.png)
 
-### A en AAAA record
+### A and AAAA record
 
-Toewijzing van een domein naar een IP adres. A record is voor IPv4, een AAAA record is voor IPv6 (een v6 is 4x zo lang als een v4 vandaar 4xA).
+Assignment of a domain to an IP address. A record is for IPv4, a AAAA record is for IPv6 (a v6 is 4x as long as a v4 hence 4xA).
 
 ![a](./a.png)
 
-Een `@` in DNS betekend de root van de zone, dus bijvoorbeeld `@` in de configuratie van Thomas More is `thomasmore.be`
+An `@` in DNS means the root of the zone, so for example `@` in the configuration of Thomas More is `thomasmore.be`
 
 ### Canonical name (CNAME) record
 
-Verwijzing naar een ander record, de waarde is dus een andere domein naam.
+Reference to another record, so the value is another domain name.
 
-Meestal kost een extra aanvraag naar de DNS server. Vaak is het performanter om een extra A (of AAAA) record te gebruiken.
-Is het toch nodig dan gaan vele geavanceerde DNS servers zelf een antwoord meesturen voor de record waar de CNAME naar wijst uit een eigen cache.
+Usually costs an additional request to the DNS server. Often it is more performant to use an extra A (or AAAA) record.
+If it is needed anyway, many advanced DNS servers will send a response for the record the CNAME points to from their own cache.
 
 ![cname](./cname.png)
 
-CNAME records zijn enkel toegelaten op subdomeinen van je eigen domein!
+CNAME records are only allowed on subdomains of your own domain!
 
 ### Mail exchange (MX) record
 
-Geeft aan welke mail server er gebruikt wordt voor dit domein.
-Een MX record moet naar een A of AAAA record wijzen
-MX recorfs hebben ook een priority nummer dat wijst op voorkeur van behandeling. Een lager nummer heeft voorkeur. Je kan dit gebruiken voor een backup mailserver in te stellen.
+Indicates which mail server is used for this domain.
+An MX record must point to an A or AAAA record.
+MX recorfs also have a priority number that indicates preference of handling. A lower number is preferred. You can use this to set up a backup mail server.
 
 ![mx](./mx.png)
 
-## Name server (NS)
+## Name server (NS).
 
-NS staat voor 'nameserver' en het nameserverrecord geeft aan welke DNS-server gezaghebbend is voor dat domein.
-NS-records vertellen het internet waar het IP-adres van een domein te vinden is.
-Een domein heeft vaak meerdere NS-records die primaire en secundaire nameservers voor dat domein kunnen aangeven dit voor redundantie.
+NS stands for "name server," and the name server record indicates which DNS server is authoritative for that domain.
+NS records tell the Internet where to find a domain's IP address.
+A domain often has multiple NS records that can specify primary and secondary nameservers for that domain this for redundancy.
 
-Onze authotivie server voor een TLD gaat enkel maar NS records teruggeven.
+Our authotivie server for a TLD is only going to return NS records.
 
 ![ns](./ns.png)
 
-### Pointer record (PTR)
+### Pointer record (PTR).
 
-Toewijzing van een domein naam aan een IP adres, het is het omgekeerde van een A (of AAAA) record.
-Het eindigt altijd op '.in-addr.arpa.' voor IPv4 of '.ip6.arpa.' voor IPv6.
-Configuratie van deze loopt meestal via je internet service provider.
+Assignment of a domain name to an IP address, it is the inverse of an A (or AAAA) record.
+It always ends in '.in-addr.arpa.' for IPv4 or '.ip6.arpa.' for IPv6.
+Configuration of these is usually through your Internet service provider.
 
 ## DNS vs. DNS
 
-Vaak spreken we over de DNS server instellen als we een netwerk adapter gaan instellen. We mogen deze DNS server niet gaan verwarren met onze authoritive DNS server.
+We often talk about setting up the DNS server when we go to set up a network adapter. We should not confuse this DNS server with our authoritative DNS server.
 
-Een DNS Resolver is een server erver die voor ons de hele DNS “zoektocht” maakt.
-Voorbeelden zijn
+A DNS Resolver is a server erver that makes the whole DNS "search" for us.
+Examples are
 
-- kan zelf hosted zijn, niet super perfomant want weinig cache. Kan leuk zijn met extra functies als de [pi-hole](https://pi-hole.net/)
-- onze ISP (Telenet,Proximus,Belnet,...) - heeft vaak een grote cache en is "dichtbij" onze server
-- 1.1.1.1 (Cloudflare) 8.8.8.8 (Google) 9.9.9.9 (IBM), OpenDNS, NextDNS... - zijn Anycast en veel gebruikt
+- Can be self hosted, not super perfomant because little cache. Can be nice with extra features like the [pi-hole](https://pi-hole.net/)
+- our ISP (Telenet,Proximus,Belnet,...) - often has a big cache and is "close" to our server
+- 1.1.1.1 (Cloudflare) 8.8.8.8 (Google) 9.9.9.9 (IBM), OpenDNS, NextDNS.... - are Anycast and widely used
 
-Authoritive DNS, de DNS server die onze domein gaan hosten:
+Authoritive DNS, the DNS server that will host our domain:
 
-- Zelf hosted (zie oefening met Bind9)
+- Self hosted (see exercise with Bind9)
 - Cloud hosted: DNSimple, Cloudflare, Amazon Route53, Google Cloud DNS,...
 
-:::warning bloktip
-De website [howdns.works](https://howdns.works/) is een leuke maar ook correcte uitleg van DNS!
+:::warning block tip
+The website [howdns.works](https://howdns.works/) is a nice but also correct explanation of DNS!
 :::
 
 ## Dig
 
-![dig joke](./dig.png)
+dig joke](./dig.png)
 
-Dig is een enorm handige tool voor DNS records op te zoeken, te testen en te troubleshooten!
+Dig is a hugely useful tool for looking up, testing and troubleshooting DNS records!
 
-### Installatie
+### Installation
 
-We installeren dig met APT:
+We install dig with APT:
 
 ```bash
 sudo apt update
 sudo apt install dnsutils
 ```
 
-### Simpele vraag
+### Simple query
 
-Simpele vraag naar het IP adres van `discord.thomasmore.be`
-`+short` zorgt voor beperkte informatie.
+Simple query for the IP address of ` discord.thomasmore.be``  `+short` provides limited information.
 
 ```bash
 dig discord.thomasmore.be +short
@@ -225,70 +224,70 @@ $ dig discord.thomasmore.be +short
 5.134.6.217
 ```
 
-`discord.thomasmore.be` heeft enkel een A-record met dan IP.
+`discord.thomasmore.be` only has an A record with then IP.
 
-We bekijken nu de cursus zelf: `linux.maartje.dev`
+We now look at the course itself: `linux.marchje.dev`
 
 ```bash
-dig linux.maartje.dev +short
+dig linux.marchje.dev +short
 ```
 
 ```
-$ dig linux.maartje.dev +short
-dynaproxy.ari.maartje.dev.
+$ dig linux.marchje.dev +short
+dynaproxy.ari.marchje.dev.
 51.15.107.76
 ```
 
-Deze domein naam heeft een CNAME naar `dynaproxy.ari.maartje.dev.` met het IP `51.15.107.76`.
+This domain name has a CNAME to `dynaproxy.ari.marchje.dev.` with the IP `51.15.107.76`.
 
-Zonder `+short` krijgen we al deze informatie.
+Without `+short` we get all this information.
 
 ```bash
-dig linux.maartje.dev
+dig linux.marchje.dev
 ```
 
 ```
-$ dig linux.maartje.dev +short
-; <<>> DiG 9.16.15-Ubuntu <<>> linux.maartje.dev
+$ dig linux.marchje.dev +short
+; <<>> DiG 9.16.15-Ubuntu <<>> linux.marchje.dev
 ;; global options: +cmd
 ;; Got answer:
 ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 44803
 ;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
 
 ;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 65494
+;; EDNS: version: 0, flags:; udp: 65494
 ;; QUESTION SECTION:
-;linux.maartje.dev.		IN	A
+;linux.marchje.dev.		IN A
 
 ;; ANSWER SECTION:
-linux.maartje.dev.	54	IN	CNAME	dynaproxy.ari.maartje.dev.
-dynaproxy.ari.maartje.dev. 54	IN	A	51.15.107.76
+linux.marchje.dev.	54 IN CNAME dynaproxy.ari.marchje.dev.
+dynaproxy.ari.marchje.dev. 54 IN A 51.15.107.76
 
 ;; Query time: 3 msec
 ;; SERVER: 127.0.0.53#53(127.0.0.53)
 ;; WHEN: Sun Mar 13 13:06:58 CET 2022
-;; MSG SIZE  rcvd: 90
+;; MSG SIZE rcvd: 90
 ```
 
-We zien hier verschillende delen:
+We see several parts here:
 
-![dig indeling](./dig-section.png)
+![dig layout](./dig-section.png)
 
-In het answer section zien we ook een aantal delen:
+In the answer section we also see several parts:
 
 ```
 ;; ANSWER SECTION:
-linux.maartje.dev.	54	IN	CNAME	dynaproxy.ari.maartje.dev.
-dynaproxy.ari.maartje.dev. 54	IN	A	51.15.107.76
+linux.marchje.dev.	54 IN CNAME dynaproxy.ari.marchje.dev.
+dynaproxy.ari.marchje.dev. 54 IN A 51.15.107.76
 ```
 
-- `linux.maartje.dev.` is de record naam
-- `54` is het aantal seconden dat we dit mogen cachen = Time To Live (TTL)
-- `IN` is een internet record
-- `CNAME` is het record type
-- `dynaproxy.ari.maartje.dev.` is de record waarde
+- `linux.marchje.dev.` is the record name
+- `54` is the number of seconds we are allowed to cache this = Time To Live (TTL)
+- `IN` is an internet record
+- `CNAME` is the record type
+- `dynaproxy.ari.marchje.dev.` is the record value
 
-We kunnen ook en bepaald record type opvragen, zoals MX
+We can also request and particular record type, such as MX
 
 ```bash
 dig thomasmore.be MX
@@ -303,19 +302,19 @@ $ dig thomasmore.be MX
 ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 3, ADDITIONAL: 2
 
 ;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 65494
-;; QUESTION SECTION:
-;thomasmore.be.			IN	MX
+;; EDNS: version: 0, flags:; udp: 65494
+;;; QUESTION SECTION:
+;thomasmore.be.			IN MX
 
 ;; ANSWER SECTION:
-thomasmore.be.		3589	IN	MX	0 thomasmore-be.mail.protection.outlook.com.
+thomasmore.be.		3589 IN MX 0 thomasmore-be.mail.protection.outlook.com.
 ```
 
 ### @ resolver
 
-We kunnen ook met dig aan elke DNS resolver een vraag gaan stellen, dit doen we met `@`
+We can also use dig to go ask each DNS resolver a query, we do this with `@``.
 
-Bijvoorbeeld gaan we 8.8.8.8 vragen voor een IP
+For example we are going to ask 8.8.8.8 for an IP
 
 ```bash
 dig thomasmore.be @8.8.8.8
@@ -330,23 +329,23 @@ $ dig thomasmore.be @8.8.8.8
 ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
 
 ;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 512
-;; QUESTION SECTION:
-;thomasmore.be.			IN	A
+;; EDNS: version: 0, flags:; udp: 512
+;;; QUESTION SECTION:
+;thomasmore.be.			IN A
 
 ;; ANSWER SECTION:
-thomasmore.be.		3600	IN	A	62.213.218.216
+thomasmore.be.		3600 IN A 62.213.218.216
 
 ;; Query time: 43 msec
 ;; SERVER: 8.8.8.8#53(8.8.8.8)
 ;; WHEN: Sun Mar 13 15:13:56 CET 2022
-;; MSG SIZE  rcvd: 58
+;; MSG SIZE rcvd: 58
 ```
 
-We vergelijken even de antwoorden van verschillende DNS resolvers
+We briefly compare the answers from different DNS resolvers
 
 ```bash
-dig +short www.rt.com @193.190.198.2 #Belnet, werkt enkel op school
+dig +short www.rt.com @193.190.198.2 #Belnet, only works at school
 dig +short www.rt.com @1.1.1.1 #Cloudflare
 ```
 
@@ -359,12 +358,12 @@ en.wpc.rt.com.
 ```
 
 :::warning note
-Op het moment van schrijven blokeert de Belgische overheid Rusische media op DNS niveau. Zoals je kan zien is omzeilen enorm makkelijk.
+At the time of writing, the Belgian government is blocking Russian media at the DNS level. As you can see, circumvention is tremendously easy.
 :::
 
 ### +trace
 
-Met de `+trace` optie kan je een DNS resolutie helemaal bekijken, dig gaat starten bij de rootservers en alle stappen uitvoeren. Zo kan je uitvinden wat er misloopt bij het instellen van je DNS.
+With the `+trace` option you can watch a DNS resolution all the way through, dig is going to start at the root servers and perform all the steps. This way you can find out what goes wrong when setting up your DNS.
 
 ```bash
 dig thomasmore.be +trace
@@ -375,49 +374,45 @@ $ dig thomasmore.be +trace
 
 ; <<>> DiG 9.16.15-Ubuntu <<>> thomasmore.be +trace
 ;; global options: +cmd
-.			208576	IN	NS	a.root-servers.net.
-.			208576	IN	NS	b.root-servers.net.
-.			208576	IN	NS	c.root-servers.net.
-.			208576	IN	NS	d.root-servers.net.
-.			208576	IN	NS	e.root-servers.net.
-.			208576	IN	NS	f.root-servers.net.
-.			208576	IN	NS	g.root-servers.net.
-.			208576	IN	NS	h.root-servers.net.
-.			208576	IN	NS	i.root-servers.net.
-.			208576	IN	NS	j.root-servers.net.
-.			208576	IN	NS	k.root-servers.net.
-.			208576	IN	NS	l.root-servers.net.
-.			208576	IN	NS	m.root-servers.net.
+.			208576 IN NS a.root-servers.net.
+.			208576 IN NS b.root-servers.net.
+.			208576 IN NS c.root-servers.net.
+.			208576 IN NS d.root-servers.net.
+.			208576 IN NS e.root-servers.net.
+.			208576 IN NS f.root-servers.net.
+.			208576 IN NS g.root-servers.net.
+.			208576 IN NS h.root-servers.net.
+.			208576 IN NS i.root-servers.net.
+.			208576 IN NS j.root-servers.net.
+.			208576 IN NS k.root-servers.net.
+.			208576 IN NS l.root-servers.net.
+.			208576 IN NS m.root-servers.net.
 ;; Received 503 bytes from 127.0.0.53#53(127.0.0.53) in 39 ms
 
-be.			172800	IN	NS	d.nsset.be.
-be.			172800	IN	NS	c.nsset.be.
-be.			172800	IN	NS	y.nsset.be.
-be.			172800	IN	NS	b.nsset.be.
-be.			172800	IN	NS	z.nsset.be.
-be.			172800	IN	NS	a.nsset.be.
-be.			86400	IN	DS	12664 8 2 75141E9B1188A95A7A855BF47E278A742A5E3F2DDEED8E995D749D48 F2F0E72D
-be.			86400	IN	DS	52756 8 2 5485AC33DD7C7ED237EA2A4BD269731C816960FE181042024484B5CE CA6ECC9F
-be.			86400	IN	RRSIG	DS 8 1 86400 20220326050000 20220313040000 9799 . MyvomweWG6YNFHwZKZkuzLJ6XUHohEDnW1/ouxeNCagP8oWXXuPgfEO5 ps7VZZAg6TZbQyKaPeWrh2Dd9jdui2i3yESeTYl8y1OdHzZTHTROdba2 c32zrUh+mfD107naBvMusUcMDy1BRxSc/xNQO+9v9deUtoGwnitjuW3O qPbFc7FYNzcwxCFXMtR2sSy8o3nChoX4ShQRg/H8JyzFeJ6MMH3rjZpy 24+aXVJ8islEs3T4LwcqF6KwiFeMtcYkaF89ENMEiRqY2jkN4VH7woTe CaoUtpdjGxmV6TzCUp4capXh55hWD7Xo3XJyPSE+6elx51r/O1Wx+3th W9KtBw==
+be.			172800 IN NS d.nsset.be.
+be.			172800 IN NS c.nsset.be.
+be.			172800 IN NS y.nsset.be.
+be.			172800 IN NS b.nsset.be.
+be.			172800 IN NS z.nsset.be.
+be.			172800 IN NS a.nsset.be.
+be.			86400 IN DS 12664 8 2 75141E9B1188A95A7A855BF47E278A742A5E3F2DDEED8E995D749D48 F2F0E72D
+be.			86400 IN DS 52756 8 2 5485AC33DD7C7ED237EA2A4BD269731C816960FE181042024484B5CE CA6ECC9F
+be.			86400 IN RRSIG DS 8 1 86400 20220326050000 20220313040000 9799 . MyvomweWG6YNFHwZKZkuzLJ6XUHohEDnW1/ouxeNCagP8oWXXuPgfEO5 ps7VZZAg6TZbQyKaPeWrh2Dd9jdui2i3yESeTYl8y1OdHzZTHTROdba2 c32zrUh+mfD107naBvMusUcMDy1BRxSc/xNQO+9v9deUtoGwnitjuW3O qPbFc7FYNzcwxCFXMtR2sSy8o3nChoX4ShQRg/H8JyzFeJ6MMH3rjZpy 24+aXVJ8islEs3T4LwcqF6KwiFeMtcYkaF89ENMEiRqY2jkN4VH7woTe CaoUtpdjGxmV6TzCUp4capXh55hWD7Xo3XJyPSE+6elx51r/O1Wx+3th W9KtBw==
 ;; Received 791 bytes from 192.58.128.30#53(j.root-servers.net) in 31 ms
 
-thomasmore.be.		86400	IN	NS	ns2.belnet.be.
-thomasmore.be.		86400	IN	NS	ns3.belnet.be.
-thomasmore.be.		86400	IN	NS	ns1.belnet.be.
+thomasmore.be.		86400 IN NS ns2.belnet.be.
+thomasmore.be.		86400 IN NS ns3.belnet.be.
+thomasmore.be.		86400 IN NS ns1.belnet.be.
 ba141snrnoe1rc9mddgrest23g657rir.be. 600 IN NSEC3 1 1 5 1A4E9B6C BA175A6M75ITNTD2DO5RIQLCVM45GSMR NS SOA RRSIG DNSKEY NSEC3PARAM
-ba141snrnoe1rc9mddgrest23g657rir.be. 600 IN RRSIG NSEC3 8 2 600 20220331223823 20220309100036 7359 be. j9Yyu7tUHu+BwRrnqdM0/kyQxs75g+mZHRfQsMaIqMLVUmn+EJbSjO2f BupTuWH9Pm0900c5d5ynXroEjSkWJocKkPKuHyM2xUajCAcUpgf9eGkz 0s6ioryjMuWZVVLS4FT2XIDmK0JhY2Y/9teO6i6yn14dyYNZI9yNquLD 2ek=
+ba141snrnoe1rc9mddgrest23g657rir.be. 600 IN RRSIG NSEC3 8 2 600 20220331223823 20220309100036 7359 be. j9Yyyu7tUHu+BwRrnqdM0/kyQxs75g+mZHRfQsMaIqMLVUmn+EJbSjO2f BupTuWH9Pm0900c5d5ynXroEjSkWJocKkPKuHyM2xUajCAcUpgf9eGkz 0s6ioryjMuWZVVLS4FT2XIDmK0JhY2Y/9teO6i6yn14dyYNZI9yNquLD 2ek=
 nn9pn59ki9m1be2ssp48ld67g7ceec0c.be. 600 IN NSEC3 1 1 5 1A4E9B6C NN9TH6B4VGI5NDLQLA5RSKMT58B7AQD2 NS DS RRSIG
 nn9pn59ki9m1be2ssp48ld67g7ceec0c.be. 600 IN RRSIG NSEC3 8 2 600 20220330001255 20220307223002 7359 be. cMu3SJOcNd+ncc7VkGTKHqusdoRsiQwmYdgHxyiSE65djVdvUFUGhu59 00XGoW7VRPZWXvawP6oTAcwmNCyXENzUxC0qpz4Jc+m+cwxlop2fKBeC wTo038m7RgjVHxgOB06+uElt0NV93z6n/X9D0fb2fKDdXuwfdI2oN6ys VZk=
 ;; Received 726 bytes from 194.0.6.1#53(a.nsset.be) in 23 ms
 
-thomasmore.be.		3600	IN	A	62.213.218.216
-thomasmore.be.		3600	IN	NS	ns.thomasmore.be.
-thomasmore.be.		3600	IN	NS	ns1.belnet.be.
-thomasmore.be.		3600	IN	NS	ns2.belnet.be.
+thomasmore.be.		3600 IN A 62.213.218.216
+thomasmore.be.		3600 IN NS ns.thomasmore.be.
+thomasmore.be.		3600 IN NS ns1.belnet.be.
+thomasmore.be.		3600 IN NS ns2.belnet.be.
 ;; Received 134 bytes from 193.190.182.40#53(ns2.belnet.be) in 31 ms
 
 ```
-
-## DNS Server
-
-> In de cursus bekijken we Bind9 als DNS server. We zien dit in de vorm van een begeleidende oefening, deze is te vinden op Canvas.

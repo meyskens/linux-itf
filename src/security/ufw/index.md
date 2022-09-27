@@ -1,51 +1,51 @@
 # Uncomplicated Firewall
 
-Als we over security praten kunnen we moeilijk een firewall uit het verhaal weglaten. Onze firewall gaat ons bescherming bieden tussen twee netwerken. We hebben er allemaal een thuis in de vorm van onze NAT-router.
+When we talk about security, it's hard to leave a firewall out of the story. Our firewall is going to give us protection between two networks. We all have one at home in the form of our NAT router.
 
 ![firewall diagram](./firewall.png)
 
-We kunnen eigenlijk (kort door de bocht) spreken over 2 types firewall:
+We can actually (briefly) talk about 2 types of firewall:
 
-- Een netwerk firewall: meestal fysiek tussen de LAN en WAN.
-- Een systeem firewall: deze staat op een PC of server
+- A network firewall: usually physical between the LAN and WAN.
+- A system firewall: this is located on a PC or server.
 
-Wij spreken in deze cursus over het laatste. We willen ongevraagd netwerkverkeer naar/van onze server kunnen afschermen.
-Er zijn een aantal beschikbare applicaties om firewalls in Ubuntu te beweren, maar enige complexiteit blijkt aanwezig te zijn.
-Linux zelf heeft een ingebouwde filter: "iptables". iptables is de core van de netwerk stack op onze Linux server. Deze beheert alle routing van netwerkverkeer. In recente versies van Debian en Ubuntu is de iptables netfilter vervangen door "nftables".
+We are talking about the latter in this course. We want to be able to shield unsolicited network traffic to/from our server.
+There are a number of available applications to assert firewalls in Ubuntu, but some complexity appears to be present.
+Linux itself has a built-in filter: "iptables". iptables is the core of the network stack on our Linux server. It manages all routing of network traffic. In recent versions of Debian and Ubuntu, the iptables net filter has been replaced by "nftables."
 
-iptables kent verschillende routing fases en tabellen waar je regels kan op instellen. De [Arch Linux wiki](https://wiki.archlinux.org/title/iptables) bevat een overzicht van deze tabellen.
+iptables has several routing stages and tables that you can set rules on. The [Arch Linux wiki](https://wiki.archlinux.org/title/iptables) contains an overview of these tables.
 
 ![iptables chains](./iptables.png)
 
-iptables is standaard ook stateless, een reboot reset alle regels die ingesteld zijn.
-Samen met een complexe command line interface is het enorm moeilijk om iptables correct te configureren.
+iptables is also stateless by default, a reboot resets all rules set.
+Along with a complex command line interface, it is enormously difficult to configure iptables correctly.
 
-Daarom bekijken we in deze cursus liever een veel gebruikte tool die al het harde werk voor ons doet!
+Therefore, in this course we prefer to look at a commonly used tool that does all the hard work for us!
 
 ## Uncomplicated Firewall
 
-Eén van de meest gebruikte host-based firewalls in Ubuntu is de Uncomplicated Firewall (UFW) vanwege zijn krachtige functionaliteit en eenvoudige gebruiksvriendelijkheid. UFW was toegevoegd in Ubuntu 8.04 als een firewall interface bovenop iptables.
+One of the most widely used host-based firewalls in Ubuntu is the Uncomplicated Firewall (UFW) because of its powerful functionality and easy usability. UFW was added in Ubuntu 8.04 as a firewall interface on top of iptables.
 
 :::warning note
-We bekijken in deze cursus IPv4 firewall regels, de syntax voor IPv6 is gelijkaardig.
+We are looking at IPv4 firewall rules in this course, the syntax for IPv6 is similar.
 :::
 
-### Installatie
+### Installation
 
-We installeren UFW via `apt`:
+We install UFW via `apt`:
 
 ```bash
 sudo apt update
 sudo apt install ufw
 ```
 
-We bekijken nu of UFW actief is:
+We now check to see if UFW is active:
 
 ```bash
 sudo systemctl status ufw
 ```
 
-We krijgen nu normaal dat onze service "active" is van systemd.
+We now get normal that our service is "active" from systemd.
 
 ```
 $ sudo systemctl status ufw
@@ -60,99 +60,99 @@ $ sudo systemctl status ufw
      CGroup: /system.slice/ufw.service
 ```
 
-We zijn nu klaar om de firewall te configureren!
+We are now ready to configure the firewall!
 
-### Configuratie
+### Configuration
 
-Configuratie gaan we vooral via de commandline zelf doen, maar we moeten 1 value dubbelchecken.
-UFW heeft default congiguratie voor eerste gebruik gedefinieerd in `/etc/default/ufw`.
+Configuration we are going to do mainly through the commandline itself, but we need to double check 1 value.
+UFW has default conﬁguration for first use defined in `/etc/default/ufw`.
 
 ```bash
 sudo nano /etc/default/ufw
 ```
 
-De default configuratie is goed voor ons maar we willen 1 value checken:
+The default configuration is good for us but we want to check 1 value:
 
 ```
 IPV6=yes
 ```
 
-We hebben geen IPv6 op onze servers maar we willen dat er wel een IPv6 firewall is. Dit is fundamenteel omdat anders onze firewall rond gewerkt kan worden vanaf het moment dat we IPv6 ondersteunen en zo dus onverwacht onze firewall effectief hebben uitgezet. Dit willen we dus vermijden.
+We do not have IPv6 on our servers but we want there to be an IPv6 firewall. This is fundamental because otherwise our firewall can be worked around from the moment we support IPv6 and thus unexpectedly have our firewall effectively disabled. So we want to avoid this.
 
 #### Default policies
 
-Voor we onze firewall gaan activeren willen we de "default policies" instellen. Deze policies zijn de standaard waarden voor ons verkeer waarvoor geen specifieke regels voor geschreven zijn.
-We willen 2 dingen doen:
+Before activating our firewall we want to set the "default policies". These policies are the default values for our traffic for which no specific rules are written.
+We want to do 2 things:
 
-- weigeren van alle inkomende verbindingen
-  - zo vermijden we connecties naar server applicaties die we niet willen openstellen
-- toelaten van alle uitgaande verbindingen.
-  - zo laten we toe dat onze software nog wel aan het internet kan
+- deny all incoming connections
+  - thus avoiding connections to server applications we don't want to open up
+- allow all outgoing connections.
+  - so we allow our software to still connect to the internet
 
 ```bash
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 ```
 
-#### Instellen regels
+#### Setting rules
 
-Firewall regels kunnen we doen via de commandline met het `ufw` commando. De syntax is vrij simpel en heel flexibel.
+Firewall rules can be done via the command line with the `ufw` command. The syntax is quite simple and very flexible.
 
-Als we een service willen toelaten kunnen we bijvoorbeeld de naam gebruiken:
+For example, if we want to allow a service we can use the name:
 
 ```bash
 sudo ufw allow ssh
 ```
 
-UFW gaat `ssh` toestaan van alle IPs naar alle IPs op je server, UFW weet door `/etc/services` dat dit een SSH service op TCP poort 22 is.
+UFW is going to allow `ssh` from all IPs to all IPs on your server, UFW knows by `/etc/services` that this is an SSH service on TCP port 22.
 
-We kunnen dit ook schrijven als
+We can also write this as
 
 ```bash
 sudo ufw allow 22
 ```
 
-Dit werkt voor 1 poort, we kunnen ook meteen een range toestaan met een `:`. Bjvoorbeeld
+This works for 1 port, we can also immediately allow a range with a `:`. For example
 
 ```bash
 sudo ufw allow 6000:6007
 ```
 
-We kunnen ook limiteren tot TCP of UDP:
+We can also limit to TCP or UDP:
 
 ```bash
 sudo ufw allow 22/tcp
 sudo ufw allow 53/udp
 ```
 
-Bovenstaande regels zijn het meeste gebruikt, zij laten verkeer op een poort toe van elk IP adres.
-We kunnen ook dat gaan limiteten:
+The above rules are the most commonly used, they allow traffic on a port from any IP address.
+We can also go limiting that:
 
 ```bash
 sudo ufw allow from 193.191.186.132 to any port 22
 ```
 
-Het deel `from` zegt welk bron IP toegestaan is. Het deel `to` geeft aaan naar welk IP (in dit geval `any` van onze interfaces) en poort `22`.
+The `from` part tells which source IP is allowed. The `to` part indicates to which IP (in this case `any` of our interfaces) and port `22`.
 
-We kunnen ook een subnet toestaan:
+We can also allow a subnet:
 
 ```bash
 sudo ufw allow from 10.2.0.0/16 to any port 22
 ```
 
-Hetzelfde is omgekeerd mogelijk, stel dat we een bepaald IP address willen bannen kunnen we dit schrijven:
+The same is possible in reverse, suppose we want to ban a particular IP address we can write this:
 
 ```bash
 sudo ufw deny from 192.168.20.1
 ```
 
-#### Eerste configuratie
+#### Initial Configuration
 
-Nu we weten hoe de UFW syntax werkt kunnen we de firewall configureren.
-**Voor** we onze firewall gaan aanzetten moeten we zorgen dat we zelf nog kunnen inloggen. We gaan dus eerst de SSH service toestaan.
-Ook stellen we in dat HTTP en HTTPs openstaan voor de wereld.
+Now that we know how the UFW syntax works we can configure the firewall.
+**before** we turn on our firewall we need to make sure we can still log in ourselves. So first we are going to allow the SSH service.
+We also set HTTP and HTTPs to be open to the world.
 
-Als laatse stap zetten we de firewall op actief met `ufw enable`:
+The last step is to set the firewall to active with `ufw enable`:
 
 ```bash
 sudo ufw default deny incoming
@@ -164,34 +164,34 @@ sudo ufw allow https
 sudo ufw enable
 ```
 
-(`ufw disable` zet onze firewall uit, niet aangeraden gewoon ter informatie)
+(`ufw disable` disables our firewall, not recommended just for your information)
 
-We bekijken nu de status met
+We now check the status with
 
 ```bash
 sudo ufw status
 ```
 
-We zien dat onze firewall op active staat en we krijgen ook een lijst van al onze firewall regels.
+We see that our firewall is set to active and we also get a list of all our firewall rules.
 
 ```
 $ sudo ufw status
 Status: active
 
-To                         Action      From
---                         ------      ----
-22/tcp                     ALLOW       Anywhere
-80/tcp                     ALLOW       Anywhere
-443                        ALLOW       Anywhere
-22/tcp (v6)                ALLOW       Anywhere (v6)
-80/tcp (v6)                ALLOW       Anywhere (v6)
-443 (v6)                   ALLOW       Anywhere (v6)
+To Action From
+-- ------ ----
+22/tcp ALLOW Anywhere
+80/tcp ALLOW Anywhere
+443 ALLOW Anywhere
+22/tcp (v6) ALLOW Anywhere (v6)
+80/tcp (v6) ALLOW Anywhere (v6)
+443 (v6) ALLOW Anywhere (v6)
 ```
 
-#### Aanpassen Firewall
+#### Customize Firewall
 
-Willen we een regel aanpassen dan moeten we deze verwijderen met `ufw delete` en terug aanmaken.
-Deleten kunnen we op twee manieren:
+If we want to modify a rule we need to delete it with `ufw delete` and create it again.
+Deleting can be done in two ways:
 
 ```bash
 sudo ufw status numbered
@@ -201,24 +201,24 @@ sudo ufw status numbered
 $ sudo ufw status numbered
 Status: active
 
-     To                         Action      From
-     --                         ------      ----
-[ 1] 22/tcp                     ALLOW IN    Anywhere
-[ 2] 80/tcp                     ALLOW IN    Anywhere
-[ 3] 443                        ALLOW IN    Anywhere
-[ 4] 22/tcp (v6)                ALLOW IN    Anywhere (v6)
-[ 5] 80/tcp (v6)                ALLOW IN    Anywhere (v6)
-[ 6] 443 (v6)                   ALLOW IN    Anywhere (v6)
+     To Action From
+     -- ------ ----
+[ 1] 22/tcp ALLOW IN Anywhere
+[ 2] 80/tcp ALLOW IN Anywhere
+[ 3] 443 ALLOW IN Anywhere
+[ 4] 22/tcp (v6) ALLOW IN Anywhere (v6)
+[ 5] 80/tcp (v6) ALLOW IN Anywhere (v6)
+[ 6] 443 (v6) ALLOW IN Anywhere (v6)
 ```
 
-Dit geeft ons alle regels met nummers. We kunnen nu een bepaalde regel weghalen door bijvorbeeld:
+This gives us all the lines with numbers. We can now remove a particular line by say:
 
 ```bash
 sudo ufw delete 6
 ```
 
-We kunnen ook een regel verwijderen door de regel te herhalen maar daarvoor `ufw delete` te zetten.
-Bijvoorbeeld:
+We can also delete a rule by repeating the rule but putting `ufw delete` before it.
+For example:
 
 ```bash
 sudo ufw delete allow https

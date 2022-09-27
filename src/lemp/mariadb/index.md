@@ -1,18 +1,18 @@
-# MariaDB
+#MariaDB
 
-Wanneer we een applicatie hosten gaan we gegarandeerd werken met data. Het beheren van data is een belangrijke taak die meestal door een database wordt gedaan.
-Onze database server gaat voor ons data opslaan, beheren, doorzoeken en en toegangkelijk stellen aan gebruikers en systemen.
+When we host an application we are guaranteed to work with data. Managing data is an important task that is usually done by a database.
+Our database server is going to store, manage, search and access data for us to users and systems.
 
-Een software pakket dat databases gaat hosten is gekend ald een Database Management System (DBMS)
+A software package that will host databases is known there a Database Management System (DBMS)
 
 ## Databases
 
-Databases zijn er in alle soorten en maten. De juiste keuze is vooral afhankelijk van het type data dat je wil opslagen. Maar ook perfomantie en de hoeveelheid data spelen een grote rol in de keuze. We gaan hier vershillende type databases even bekijken:
+Databases come in all shapes and sizes. The right choice depends mainly on the type of data you want to store. But also perfomance and the amount of data play a major role in the choice. We will take a look at different types of databases:
 
-- Relationele database
+- Relational database
 
-  - Maakt gebruik van Structured Query Language (SQL)
-  - Meest bekende en gebruikte databases
+  - Uses Structured Query Language (SQL)
+  - Most known and used databases
 
 - NoSQL database (Not only SQL / non SQL)
   - Key/value database
@@ -28,30 +28,30 @@ Databases zijn er in alle soorten en maten. De juiste keuze is vooral afhankelij
 
 ### Key / value database
 
-Data wordt opgeslagen enkel als een sleutel (key) die naar bepaalde data (value) wijst.
-Er zijn wel een aantal voorwaarden zoals dat de sleutel uniek is en dat de value niet leeg is.
+Data is stored only as a key that points to certain data (value).
+However, there are some conditions such as that the key is unique and that the value is not empty.
 
-Deze zien we enorm vaak terugkomen voor caching van gegevens. Zo kunnen we bijvoorbeeld resultaten complexe berekingingen opslagen per gebruiker (bijvoorbeeld een saldo van een bankrekening). Deze resultaten kunnen dan snel opgeroepen worden met een unieke sleutel (zoals een rekeningsnummer). Vele key/value stores bieden ook de mogelijkheid om data in het RAM geheugen te bewaren.
+We see these tremendously common for caching data. For example, we can store complex calculation results per user (for example, a bank account balance). These results can then be quickly called with a unique key (such as an account number). Many key/value stores also offer the possibility of storing data in RAM memory.
 
 ![key-value-database](./kv.png)
 
-Voorbeelden van key/value databases:
+Examples of key/value databases:
 
 - [Redis](https://redis.io/)
-- [Memcached](https://memcached.org/)
-- [Etcd](https://etcd.io/)
+- Memcached](https://memcached.org/)
+- Etcd](https://etcd.io/)
 
 ### Document Store
 
-Een document store database slaat elk record op als een (semi)gestructureerd document.
-Alle Relevante info over een object wordt opgeslagen in het document. Vaak worden er geen relaties, in tegenstelling tot een relationele databank, gelegd tussen objecten. Maar in moderne document stores kunner er wel relaties gelegd worden.
+A document store database stores each record as a (semi)structured document.
+All Relevant info about an object is stored in the document. Often no relationships, unlike a relational database, are established between objects. But in modern document stores, relationships can be established.
 
-Een groot voordeel van onze document store is dat deze enorm makkelijk horizontaal te schalen zijn. Daarmee bedoelen we dat we de database makkelijk over verschillende servers kunnen spreiden met de minimale inspanning van onze database server om te weten welke objecten waar in de database zitten.
+A big advantage of our document store is that they are enormously easy to scale horizontally. By this we mean that we can easily spread the database across different servers with the minimal effort of our database server to know which objects are where in the database.
 
-Mogelijkheid tot queries schrijven kan meestal in een bijpassende taal voor waar onze documenten in geschreven zijn. Zo XQuery kan XML querien, en kunnen we JavaScript queries schrijven voor JSON (JavaScript Object Notation) documenten.
+Ability to write queries can usually be done in a matching language for what our documents are written in. For example, XQuery can query XML, and we can write JavaScript queries for JSON (JavaScript Object Notation) documents.
 
-Documenten zijn vaak geschreven in JSON (JavaScript Object Notation):
-Dit is een voorbeeld van een BSON (Binary methode on JSON op te slagen) document in MongoDB:
+Documents are often written in JSON (JavaScript Object Notation):
+This is an example of a BSON (Binary method on JSON to succeed) document in MongoDB:
 
 ```json
 {
@@ -77,126 +77,126 @@ Dit is een voorbeeld van een BSON (Binary methode on JSON op te slagen) document
 }
 ```
 
-Bekende servers zijn:
+Known servers are:
 
 - [MongoDB](https://www.mongodb.com/)
-- [Apache CouchDB](https://couchdb.apache.org/)
-- [Amazon DocumentDB (AWS)](https://aws.amazon.com/documentdb/)
+- Apache CouchDB](https://couchdb.apache.org/)
+- Amazon DocumentDB (AWS)](https://aws.amazon.com/documentdb/)
 
-### (Wide) Column Store
+### (Wide) Column Store.
 
-Data in een colum store wordt opgeslagen in kolommen. Een column family bevat een of meerdere rijen.
-Elke rij kan opzich zelf een verschillend aantal kolommen hebben, met een verschillend aantal datatypes.
+Data in a column store is stored in columns. A column family contains one or more rows.
+Each row can itself have a different number of columns, with a different number of data types.
 
-Dankzij een hierachische structuur kunnen we snel en makkelijk data zoeken en opslagen. Tegevover een document of key/value database kunnen we wel meer structuur aanbrengen die veel weg heeft van onze relationele database.
+Thanks to a hierarchical structure, we can quickly and easily find and store data. Over a document or key/value database, we can apply more structure that our relational database.
 
 ![wicde column store](./wcol.png)
 
-Bekende servers zijn:
+Well-known servers are:
 
 - [Google Cloud Bigtable](https://cloud.google.com/bigtable/)
-- [Apache Cassandra](https://cassandra.apache.org/)
-- [Apache HBase](https://hbase.apache.org/)
+- Apache Cassandra](https://cassandra.apache.org/)
+- Apache HBase](https://hbase.apache.org/)
 
 ### Graph database
 
-Een graph database maakt gebruik van een grafisch model van nodes en relaties tussen nodes om data op te slaan.
-De data heeft geen schema, het belangrijkste is dat de nodes en relaties een unieke identificatie hebben.
-Graph databases bestaan nog niet enorm lang maar kennen door grote gebruikers als Facebook wel een populatiteit.
+A graph database uses a graphical model of nodes and relationships between nodes to store data.
+The data has no schema, the important thing is that the nodes and relationships have a unique identifier.
+Graph databases have not been around for a huge amount of time but have a population due to large users like Facebook.
 
-Graph databases hebben een eigen query taal als GraphQL om data op te halen.
+Graph databases have their own query language like GraphQL to retrieve data.
 
 ![graph database](./graph.png)
 
-Bekende software:
+Well-known software:
 
 - [Neo4j](https://neo4j.com/)
-- [OrientDB](https://www.orientdb.org/)
-- [Dgraph](https://dgraph.io/)
+- OrientDB](https://www.orientdb.org/)
+- Dgraph](https://dgraph.io/)
 
-### Relationele database
+### Relational database
 
-Relationele databanken ken je normaal van de les SQL. Hier slaan we data op in tabellen met rijen en kolommen. Er zijn verschillende relaties tussen deze tabellen.
+Relational databases you normally know from the SQL class. Here we store data in tables with rows and columns. There are different relationships between these tables.
 
-![relationele database](./relational.png)
+![relationaldatabase](./relational.png)
 
-Bekende software:
+Known software:
 
 - [MySQL](https://www.mysql.com/)
-- [MariaDB](https://mariadb.org/)
-- [Oracle Database](https://www.oracle.com/database/technologies/)
-- [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/)
-- [PostreSQL](https://www.postgresql.org/)
+- MariaDB](https://mariadb.org/)
+- Oracle Database](https://www.oracle.com/database/technologies/)
+- Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/)
+- PostreSQL](https://www.postgresql.org/)
 
 ## MariaDB
 
-In onde cursus gebruiken we MySQL. MySQL maakt deel uit van de LAMP stack en is enorm populair bij gebruik met PHP applicaties door goede integratie. De MySQL server is ook makkelijk in gebruik.
+In our course we use MySQL. MySQL is part of the LAMP stack and is hugely popular for use with PHP applications due to good integration. The MySQL server is also easy to use.
 
-MySQL was eerst onafhankelijk ontwikkeld met een open source licentie, met een proprietaire versie onderhouden door MySQL AB. Dit bedrijf werd overgenomen door SUN Microsystems, die zelf overgenomen werd door Oracle.
-De reputatie van Oracle is al niet te goed in de open source wereld, ook dat Oracle al een eigen database heeft was geen goede voorspelling.
-Daarom heeft de oprichter van MySQL [Michael "Monty" Widenius](https://en.wikipedia.org/wiki/Michael_Widenius) beslist MySQL te "forken" naar MariaDB.
+MySQL was first developed independently with an open source license, with a proprietary version maintained by MySQL AB. This company was acquired by SUN Microsystems, which itself was acquired by Oracle.
+Oracle's reputation is already not too good in the open source world, also that Oracle already has its own database was not a good prediction.
+Therefore, the founder of MySQL [Michael "Monty" Widenius](https://en.wikipedia.org/wiki/Michael_Widenius) decided to "fork" MySQL to MariaDB.
 
-:::info Naam
-Waar komt de naam MariaDB vandaan? Monty had 3 kinderen: My (Finse meisjesnaam), Maria en Max.
-My en Maria werden vereeuwigd in de MySQL wereld. Max kreeg ook een eigen database in de SAP wereld: MaxDB.
+:::info Name
+Where did the name MariaDB come from? Monty had 3 children: My (Finnish maiden name), Maria and Max.
+My and Maria were immortalized in the MySQL world. Max also got his own database in the SAP world: MaxDB.
 :::
 
-MariaDB bestaat al sinds 2009. Buiten de visie op open source zijn de twee lichtjes een andere richting uit gegaan. Maar de prioriteit blijft liggen op een "drop in" replacement voor MySQL te zijn. We gaan dit ook merken in de installatie dat deze 99% hetzelfde werken en alle commandos compatibel zijn met MySQL.
+MariaDB has been around since 2009. Beyond the vision of open source, the two have moved slightly in a different direction. But the priority remains to be a "drop in" replacement for MySQL. We are also going to notice this in the installation that they work 99% the same and all commands are compatible with MySQL.
 
-Toch zijn er kleine verschillen:
+Still, there are minor differences:
 
-- MariaDB voegt nieuwe SQL queries toe die niet in MySQL zijn.
-- MariaDB voegt caching toe voor performance.
-- MariaDB voegt ondersteuning doe voor Oracle's SQL dialect.
-- MySQL heeft betalende functies voor betere scaling
-- MySQL laat toe super users te limiteren
+- MariaDB adds new SQL queries that are not in MySQL.
+- MariaDB adds caching for performance.
+- MariaDB adds support for Oracle's SQL dialect.
+- MySQL has paid features for better scaling
+- MySQL allows to limit super users
 
-### Installatie
+### Installation
 
-Voor installatie de package index updaten:
+Before installation, update the package index:
 
 ```bash
 sudo apt update
 ```
 
-Vervolgens gaan we MariaDB server installeren:
+Next, we are going to install MariaDB server:
 
 ```bash
 sudo apt install mariadb-server
 ```
 
-Zoals altijd checken we of de server is gestart:
+As always, we check that the server has started:
 
 ```bash
 sudo systemctl status mariadb
 ```
 
-MariaDB draait nu! MariaDB draait standaard op TCP poort `3306`.
-We gaan geen firewall regels instellen voor MariaDB. Onze database houden we best op de server zelf zodat het publieke internet niet rechtstreks aan de database server kan geraken. In volgende lessen gaan we onze PHP code verbinden met de database.
+MariaDB is now running! MariaDB runs on TCP port `3306` by default.
+We are not going to set firewall rules for MariaDB. We should keep our database on the server itself so that the public Internet cannot get directly to the database server. In the following lessons we will connect our PHP code to the database.
 
-### Configuratie
+### Configuration
 
-Nu we een MariaDB server hebben gaan we deze ook configureren! We gaan uitzonderlijk weinig met de configuratie bestanden zelf werken. Alle configuratie voor het dagelijks gebruik bevinden zich namelijk in de database zelf!
+Now that we have a MariaDB server, we are going to configure it! We are going to work exceptionally little with the configuration files themselves. All configuration for daily use is in the database itself!
 
-Toch gaan we een aantal parameters terugvinden in configuratie bestanden, in `/etc/mysql/` (deze map blijft zo voor compatibiliteit met MySQL).
-Hier vinden we:
+Nevertheless, we are going to find some parameters in configuration files, in `/etc/mysql/` (this directory will remain so for compatibility with MySQL).
+Here we find:
 
-- `my.cnf` dit is de mysql compatibele configuratie
-- `mariadb.cnf` dirt is de MariaDB-specifieke configuratie
+- `my.cnf` this is the mysql compatible configuration
+- `mariadb.cnf` dirt is the MariaDB specific configuration
 
-We kunnen ook logs vinden in `/var/log/mysql/`.
-Al onze data staat dan weer in `/var/lib/mysql/`.
+We can also find logs in `/var/log/mysql/`.
+In turn, all our data is in `/var/lib/mysql/`.
 
-MariaDB voorziet een handig script om configuratie te vergemakkelijken!
-Allereerst gaan we MariaDB configureren om beveiligd te zijn:
+MariaDB provides a handy script to facilitate configuration!
+First, we are going to configure MariaDB to be secure:
 
 ```bash
 sudo mysql_secure_installation
 ```
 
-(standaard is er geen root passowrd, dus we gaan dat instellen)
+(by default there is no root passowrd, so we're going to set that up)
 
-Hiermee stellen we een root password in **voor MariaDB** dit is dus een ander password dan can onze Linux server.
+With this we set a root password **for MariaDB** so this is a different password than can our Linux server.
 
 ```
 NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
@@ -210,13 +210,13 @@ Enter current password for root (enter for none):
 OK, successfully used password, moving on...
 
 Setting the root password or using the unix_socket ensures that nobody
-can log into the MariaDB root user without the proper authorisation.
+can log into the MariaDB root user without the proper authorization.
 
 You already have your root account protected, so you can safely answer 'n'.
 
 Switch to unix_socket authentication [Y/n] y
 Enabled successfully!
-Reloading privilege tables..
+Reloading privilege tables...
  ... Success!
 
 
@@ -226,7 +226,7 @@ Change the root password? [Y/n] y
 New password:
 Re-enter new password:
 Password updated successfully!
-Reloading privilege tables..
+Reloading privilege tables...
  ... Success!
 
 
@@ -271,39 +271,39 @@ Thanks for using MariaDB!
 
 ### Queries
 
-Nu onze database beveiligd is gaan we een query gaan uitvoeren.
+Now that our database is secure we are going to run a query.
 
-Eerst testen we of we kunnen verbinden met MariaDB door de versie nummer te vragen:
+First we test if we can connect to MariaDB by asking for the version number:
 
 ```bash
 sudo mysqladmin version
 ```
 
 ```
-mysqladmin  Ver 9.1 Distrib 10.5.13-MariaDB, for debian-linux-gnu on x86_64
+mysqladmin Ver 9.1 Distrib 10.5.13-MariaDB, for debian-linux-gnu on x86_64
 Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
 
-Server version		10.5.13-MariaDB-0ubuntu0.21.10.1
-Protocol version	10
-Connection		Localhost via UNIX socket
-UNIX socket		/run/mysqld/mysqld.sock
-Uptime:			1 min 32 sec
+Server version 10.5.13-MariaDB-0ubuntu0.21.10.1
+Protocol version 10
+Connection localhost via UNIX socket
+UNIX socket /run/mysqld/mysqld.sock
+Uptime: 1 min 32 sec
 
-Threads: 1  Questions: 486  Slow queries: 0  Opens: 171  Open tables: 28  Queries per second avg: 5.282
+Threads: 1 Questions: 486 Slow queries: 0 Opens: 171 Open tables: 28 Queries per second avg: 5,282
 ```
 
-Als dit werkt kunnen we inloggen in de MariaDB shell:
+If this works we can log into the MariaDB shell:
 
 ```bash
 sudo mysql -u root -p
 ```
 
-`-u` geeft onze user, met `-p` zeggen we dat we een password willen gebruiken.
+`-u` gives our user, with `-p` we say we want to use a password.
 
-Nu krijgen we een MariDB shell:
+Now we get a MariDB shell:
 
 ```
-Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Welcome to the MariaDB monitor.  Commands end with ; or .
 Your MariaDB connection id is 56
 Server version: 10.5.13-MariaDB-0ubuntu0.21.10.1 Ubuntu 21.10
 
@@ -314,70 +314,70 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 MariaDB [(none)]>
 ```
 
-In deze shell kunnen we nu SQL queries gaan uitvoeren! Let wel op dat je nooit de `;` vergeet, dit eindigt de query.
+In this shell, we can now start running SQL queries! Make sure you never forget the `;`, this ends the query.
 
 ```sql
 SELECT * FROM mysql.user;
 ```
 
-Het antwoord is vrij groot en onoverzichtelijk, de shell is namelijk niet de ideale plek voor data queries. Wil je in SQL duiken raden we een GUI tool zoals [MySQL Workbench](https://www.mysql.com/products/workbench/) aan.
+The answer is quite large and cluttered, as the shell is not the ideal place for data queries. If you want to dive into SQL, we recommend a GUI tool such as [MySQL Workbench](https://www.mysql.com/products/workbench/).
 
-We gaan een aantal queries specifiek rond databankbeheer bekijken:
+We're going to look at some queries specifically around database management:
 
 ```sql
 SHOW STATUS;
 ```
 
-Dit geeft ons de status van de MariaDB server.
+This gives us the status of the MariaDB server.
 
 ```sql
 SHOW DATABASES;
 ```
 
-Dit geeft ons alle databases weer.
+This shows us all the databases.
 
-```sql
+`````sql
 SHOW TABLES FROM mysql;
 ```
 
-Dit geeft ons alle tabellen in de `mysql` database weer.
+This shows us all the tables in the ``mysql` database.
 
 ```sql
-SHOW PROCESSLIST;
+SHOW PROCESS LIST;
 ```
 
-Toont alle database processen, zo kunnen we bijvoorbeeld zien of er queries aan het draaien zijn en hoelang al.
+Shows all database processes, so we can see, for example, if there are queries running and for how long.
 
-Willen we de shell verlaten doen we `quit`.
+To exit the shell we do `quit`.
 
-### Gebruikers beheren
+### Manage users
 
-We willen verschillende gebruikers of applicaties toevoegen aan de applicatie. Dit kunnen we gaan doen in SQL.
+We want to add different users or applications to the application. We can do this in SQL.
 
-We openen weer onze SQL shell:
+We open our SQL shell again:
 
 ```bash
 sudo mysql -u root -p
 ```
 
-Gebruikers toevoegen doen we met `CREATE USER`:
+Adding users we do with `CREATE USER`:
 
-```sql
+````sql
 CREATE USER 'test'@'%' IDENTIFIED BY 'password';
 FLUSH PRIVILEGES;
 ```
 
-`'test'@'%'` betekend dat de gebruiker `test` zal kunnen inloggen op alle hosts (`%`). Met `IDENTIFIED BY` geeft we de gebruiker een password.
+`'test'@'%'` means that the user `test` will be able to log in to all hosts (`%`). With `IDENTIFIED BY` we give the user a password.
 
-We verlaten de shell en proberen met de nieuwe gebruiker in te loggen:
+We leave the shell and try to log in with the new user:
 
 ```bash
 sudo mysql -u test -p
 ```
 
-De gebruiker heeft nog geen rechten op iets gekregen, we verlaten de shell dus gewoon.
+The user has not been given permissions to anything yet, so we just leave the shell.
 
-Willen we de gebruiker verwijderen? Dan gebruiken we `DROP USER`:
+Do we want to delete the user? Then we use `DROP USER`:
 
 ```sql
 DROP USER test;
@@ -385,55 +385,55 @@ DROP USER test;
 
 ### Databases
 
-We hebben verschillende databanken nodig, meestal werken we met 1 databank per applicatie.
+We need several databases, usually we work with 1 database per application.
 
-Een databank maken doen we met `CREATE DATABASE`:
-We openen weer onze SQL shell:
+We create a database with `CREATE DATABASE`:
+We open our SQL shell again:
 
 ```bash
 sudo mysql -u root -p
 ```
 
-Gevolgd door:
+Followed by:
 
-```sql
+````sql
 CREATE DATABASE mydb;
 ```
 
-Een database verwijderen doen we met `DROP DATABASE`:
+Deleting a database is done with `DROP DATABASE`:
 
 ```sql
 DROP DATABASE mydb;
 ```
 
-### Rechten
+### Permissions
 
-We hebben een database en een gebruiker nu. Nu willen we permissies instellen dat onze gebruiker aan onze database kan.
-Meestal werken we met 1 user per database zodat we kunnen limiteren wie wat kan zien.
+We have a database and a user now. Now we want to set permissions that our user can access our database.
+Usually we work with 1 user per database so we can limit who can see what.
 
-Rechten geven aan een user doen we met `GRANT`:
+Giving permissions to a user we do with `GRANT`:
 
 ```sql
 GRANT ALL PRIVILEGES ON mydb.* TO test;
 ```
 
-Dit geeft de volledige rechten op alle tabellen van mydb (`mydb.*`) aan de gebruiker `test`.
+This gives full rights to all tables of mydb (`mydb.*`) to the user `test`.
 
-Na elke wijziging aan de database moeten we de privileges opnieuw laden met `FLUSH PRIVILEGES`:
+After each change to the database, we must reload the privileges with `FLUSH PRIVILEGES`:
 
 ```sql
 FLUSH PRIVILEGES;
 ```
 
-MariaDB gaat permissies cachen in het geheugen om snel te kunnen antwoorden we moeten dus zeggen dat deze aangepast zijn.
+MariaDB is going to cache permissions in memory to answer quickly we must therefore say that they have been modified.
 
-We kunnen ook alle rechten bekijken voor user `test`:
+We can also view all permissions for user `test`:
 
 ```sql
 SHOW GRANTS FOR test;
 ```
 
-Willen we de rechten afnemen? Dan gebruiken we `REVOKE`:
+Do we want to take away the permissions? Then we use `REVOKE`:
 
 ```sql
 REVOKE ALL PRIVILEGES ON mydb.* FROM test;
@@ -441,30 +441,32 @@ REVOKE ALL PRIVILEGES ON mydb.* FROM test;
 
 ### Backup
 
-Een backup nemen van een website is simpel, je neemt een kopie van de bestanden en zet ze in een backup folder. Een database is echter moeilijker. Onze bestanden in `/var/lib/mysql` zijn constant in verandering, en ze verschillen ook per MariaDB versie.
+Backing up a website is simple, you take a copy of the files and put them in a backup folder. A database, however, is more difficult. Our files in `/var/lib/mysql` are constantly changing, and they also vary by MariaDB version.
 
-We moeten dus de database kunnen "exporteren" naar een backup. Hiervoor hebben we het commando `mysqldump` nodig.
+So we need to be able to "export" the database to a backup. To do this, we need the command `mysqldump`.
 
 ```bash
 sudo mysqldump mydb > mydb.sql
 ```
 
-`mysqldump` gaat alle data uitlezen van de database en zet deze om in SQL queries die alle data terug gaan genereren!
+`mysqldump` is going to read all the data from the database and convert it into SQL queries that are going to generate all the data back!
 
-Hierdoor kunnen we makkelijk onze database terug zetten.
-We openen weer onze SQL shell en maken een nieuwe database aan:
+This allows us to easily restore our database.
+We open our SQL shell again and create a new database:
 
 ```bash
 sudo mysql -u root -p
 ```
 
-```sql
+````sql
 CREATE DATABASE myNEWdb;
 quit
 ```
 
-Nu kunnen we de backup importeren met `mysql`:
+Now we can import the backup with ``mysql``:
 
 ```bash
 sudo mysql -u root -p myNEWdb < mydb.sql
 ```
+
+`````

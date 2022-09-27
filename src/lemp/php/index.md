@@ -1,83 +1,87 @@
 # PHP
 
+:::warning
+In Linux Webservices the Apache 2 server is still used. This chapter is written for Nginx, the exact installation would be different.
+:::
+
 ![PHP logo](./php.png)
 
-PHP is een programeertaal specifiek ontworpen voor webontwikkeling.PHP is ontworpen door de Rasmus Lerdorf in 1994.
-PHP staat eigenlijk voor voor "Personal Home Page. Nu is dat voor een groeiende taal geen goede reclame, daardoor is het later aangepast naar "PHP: Hypertext Preprocessor".
+PHP is a programming language specifically designed for web development.PHP was designed by the Rasmus Lerdorf in 1994.
+PHP actually stands for "Personal Home Page. Now that is not a good advertisement for a growing language, which is why it was later changed to "PHP: Hypertext Preprocessor."
 
-PHP-code wordt meestal op een server gebruikt in CGI mode. Hierbij wordt bij elke request naar de server PHP code gecompiled en uitgevoerd, de output van dit script wordt dan naar de webbrowser gestuurd. Meestal is dit dan in de vorm van een webpage.
+PHP code is usually used on a server in CGI mode. This involves compiling and executing PHP code with each request to the server, the output of this script is then sent to the web browser. Usually this is then in the form of a web page.
 
-Volgens W3Techs werd in januari 2022 PHP wordt gebruikt door 78,1% van alle websites waarvan we de server-side programmeertaal kennen.
-PHP versie 7.4 is de meest gebruikte versie. Ondersteuning voor versie 7.3 werd op 6 december 2021 beëindigd. Momenteel is versie 8.1 de meest recente, versie 8.0 kent een aantal grote wijzigingen gefocussed op performance zoals het toevoegen van een JIT (Just in Time) compiler.
+According to W3Techs, by January 2022, PHP will be used by 78.1% of all websites for which we know the server-side programming language.
+PHP version 7.4 is the most widely used version. Support for version 7.3 ended on Dec. 6, 2021. Currently version 8.1 is the most recent, version 8.0 has some major changes focused on performance such as adding a JIT (Just in Time) compiler.
 
 ## PHP-FPM
 
-We werken in NGINX setups meestal met de PHP FastCGI Process Manager. FastCGI is een kleine verbetering op het klassieke CGI dat overhead weghaalt en meerdere processen toelaat. PHP-FPM neemt onze FastCGI een stapje verder en gaat processen managen, het gaat al een aantal processen met de PHP taal draaien die verschillende requests gaan afhandelen van NGINX.
-Door deze manier van werken kunnen we ook makkelijk verschillende PHP versies op een server gaan draaien.
+We usually work with the PHP FastCGI Process Manager in NGINX setups. FastCGI is a small improvement on classic CGI that removes overhead and allows multiple processes. PHP-FPM takes our FastCGI a step further and is going to manage processes, it is already going to run a number of processes with the PHP language that are going to handle various requests from NGINX.
+This way we can also easily start running different PHP versions on a server.
 
-Dit systeem gaat het mogelijk maken om te beheren hoeveel PHP processen we gaan draaien en maakt het mogelijk requests snel af te handelen. Voor elke PHP site die toch wel wat verkeer over zich heen krijgt is PHP-FPM een niet te missen component!
+This system is going to make it possible to manage how many PHP processes we are going to run and make it possible to handle requests quickly. For any PHP site that gets some traffic anyway, PHP-FPM is a component not to be missed!
 
-## Installatie
+## Installation
 
-We installeren PHP-FPM via `apt`:
+We install PHP-FPM via `apt`:
 
 ```bash
 sudo apt update
 sudo apt install php7.4-fpm php7.4-mysql
 ```
 
-We installeren PHP versie 7.4, de hoogste versie in Ubuntu 20.04. We kunnen zo ook andere versies installeren.
+We install PHP version 7.4, the highest version in Ubuntu 20.04. We can install other versions this way as well.
 
-We bekijken nu de status van de PHP-FPM server:
+We now check the status of the PHP-FPM server:
 
 ```bash
 sudo systemctl status php7.4-fpm
 ```
 
-## Configuratie
+## Configuration
 
-Configuratie voor PHP-FPM kunnen we vinden in `/etc/php/7.4/fpm/`.
-We hebben hier een aantal bestanden die we kunnen bekijken:
+Configuration for PHP-FPM can be found in `/etc/php/7.4/fpm/`.
+We have some files here that we can look at:
 
-- `php.ini`: dit is het PHP configuratiebestand. Hier staat alles in over the PHP taal, af en toe moeten we hier iets aanpassen voor specifieke applicaties. We hebben hier een paar interessante instellingen:
-  - `memory_limit`: hier staat de maximale geheugenlimiet voor PHP.
-  - `post_max_size`: hier staat de maximale grootte van een POST request.
-  - `upload_max_filesize`: hier staat de maximale grootte van een upload.
-  - `extension=`: laat je PHP extenties inladen
-- `php-fpm.conf`: dit is het algemane configuratiebestand voor de PHP-FPM server.
-- `/pool.d/www.conf` bevat informatie over de "worker pool".
+- `php.ini`: this is the PHP configuration file. It contains everything about the PHP language, occasionally we need to modify something here for specific applications. We have some interesting settings here:
+  - `memory_limit`: this contains the maximum memory limit for PHP.
+  - `post_max_size`: here is the maximum size of a POST request.
+  - `upload_max_filesize`: here is the maximum size of an upload.
+  - `extension=`: lets you load PHP extensions.
+- `php-fpm.conf`: this is the general configuration file for the PHP-FPM server.
+- `/pool.d/www.conf` contains information about the "worker pool".
 
-  - `user` en `group` bepaald onder welke gebruiker PHP draait.
-  - `pm` bepaald wat de manier is om PHP processen te managen. Hier kunnen we ook een aantal opties kiezen zoals:
+  - `user` and `group` determines under which user PHP is running.
+  - `pm` determines the way to manage PHP processes. Here we can also choose some options such as:
 
-    - `static` start een vast aantal (`pm.max_children`) workers op, schaalt niet mee met verkeer
-    - `ondemand` geen processen worden standaard gestart, maar worden gestart als er een request binnenkomt.
-    - `dynamic` is een combinatie van `ondemand` en `static`. Het start een aantal processen op en schaalt mee op bij groter verkeer.
+    - `static` starts up a fixed number (`pm.max_children`) of workers, does not scale with traffic
+    - `ondemand` no processes are started by default, but are started when a request comes in.
+    - `dynamic` is a combination of `ondemand` and `static`. It starts up a number of processes and scales with larger traffic.
 
-  - `pm.max_children`: hier staat het aantal processen dat de PHP-FPM server mag draaien.
-  - `pm.start_servers`: hier staat het aantal processen dat de PHP-FPM server zal starten (enkel bij `dynamic`).
-  - `pm.min_spare_servers`: het minimaal aantal processen dat "idle" moet staan om pieken op te vangen (enkel bij `dynamic`).
-  - `pm.max_spare_servers`: het maximaal aantal processen dat "idle" moet staan om pieken op te vangen (enkel bij `dynamic`).
+  - `pm.max_children`: this specifies the number of processes the PHP-FPM server is allowed to run.
+  - `pm.start_servers`: this lists the number of processes the PHP-FPM server will start (only with `dynamic`).
+  - `pm.min_spare_servers`: the minimum number of processes that must be "idle" to accommodate spikes (only with `dynamic`).
+  - `pm.max_spare_servers`: the maximum number of processes that must be "idle" to accommodate peaks (only with `dynamic`).
 
-Voor ons zijn de standaard waarden meer dan voldoende. We kunnen dit gaan bijstellen bij meer verkeer naar onze webserver.
+For us, the default values are more than sufficient. We can start adjusting this with more traffic to our web server.
 
-### Virtualhost met PHP
+### Virtualhost with PHP
 
-In het hoofdstuk van [NGINX](../nginx/) hebben we een eigen website opgezet met een virtualhost. We gaan een virtualhost bijmaken die PHP gaat ondersteunen. We gaan de virtualhost `/etc/nginx/sites-available/php-site` aanmaken.
+In the chapter of [NGINX](../nginx/) we set up our own website with a virtualhost. We are going to axe a virtualhost that will support PHP. We are going to create the virtualhost `/etc/nginx/sites-available/php-site`.
 
 ```
 server {
-	listen 80; # server op poort 80
-	listen [::]:80; # server op IPv6-poort 80
+	listen 80; # server on port 80
+	listen [::]:80; # server on IPv6 port 80
 
-	root /var/www/php-site; # map van de website
+	root /var/www/php-site; # directory of the website
 
-	index index.php index.html; # welke files je index zijn
+	index index.php index.html; # what files are your index
 
-	server_name php.rnummer.stuvm.be; # hostname van de site, PAS DEZE AAN
+	server_name php.rnummer.stuvm.be; # hostname of the site, CHANGE THIS
 
 	location / {
-		try_files $uri $uri/ =404; # geef een 404 error als de pagina niet bestaat
+		try_files $uri $uri/ =404; # give a 404 error if the page does not exist
 	}
 
     location ~ \.php$ {
@@ -85,67 +89,67 @@ server {
         fastcgi_pass unix:/run/php/php7.4-fpm.sock;
     }
 
-    location ~ /\.ht {
+    location ~ /php.ht {
         deny all;
     }
 }
 ```
 
-Wat is hier anders dan onze vorige configuratie?
+What is different here from our previous configuration?
 
-- `index` staat nu `index.php` vooraan.
-- `location ~ \.php$ ` is een regex die alleen de pagina's die een `.php` extensie hebben worden doorgegeven aan de PHP-FPM server.
-  - `include snippets/fastcgi-php.conf` gaat standaard FastCGI parameters instellen
-  - `fastcgi_pass unix:/run/php/php7.4-fpm.sock` geeft aan waar onze PHP-FPM server staat die PHP voor ons gaat afhandelen.
-- `location ~ /\.ht` met de `deny all` regel geeft aan dat bestanden met .ht niet geopend mogen worden
-  - Vele PHP applicaties gebruiken `.htaccess` en `.htpasswd` bestanden voor Apache in te stellen. Nginx kent deze bestanden niet en wil deze bestanden gewoon doorsturen naar de browser, dit kan wel eens gevoelige data lekken.
+- `index` is now `index.php` in front.
+- `location ~ `.php$ `is a regex that only the pages that have a`.php` extension are passed to the PHP-FPM server.
+  - `include snippets/fastcgi-php.conf` is going to set default FastCGI parameters
+  - `fastcgi_pass unix:/run/php/php7.4-fpm.sock` indicates where our PHP-FPM server is located that will handle PHP for us.
+- `location ~ /\.ht` with the `deny all` line indicates that files with .ht should not be opened
+  - Many PHP applications use `.htaccess` and `.htpasswd` files for Apache to set up. Nginx does not know these files and just wants to forward these files to the browser, this may well leak sensitive data.
 
 :::warning note
-Wat is nu die `unix:/run/php/php7.4-fpm.sock`? Dit is een Unix socket. Een Unix socket is een equivalent van een TCP poort, het verschil is dat we geen IP en poort hebben maar een pad op ons bestandsysteem.
+Now what is this `unix:/run/php/php7.4-fpm.sock`? This is a Unix socket. A Unix socket is an equivalent of a TCP port, the difference is that we do not have an IP and port but a path on our file system.
 :::
 
-We maken nu een map aan waar we onze PHP applicaties kunnen opslaan:
+We now create a directory where we can store our PHP applications:
 
 ```bash
 sudo mkdir /var/www/php-site
 ```
 
-We zetten onze virtualhost op actief:
+We set our virtualhost to active:
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/php-site /etc/nginx/sites-enabled/
 ```
 
-Testen ook wwwr eerst de configuratie:
+Also test wwwr configuration first:
 
 ```bash
 sudo nginx -t
 ```
 
-En ten slotte reloaden we onze NGINX server:
+And finally, we reload our NGINX server:
 
 ```bash
 sudo systemctl reload nginx
 ```
 
-Als we nu onze PHP site openen op onze ingestelde hostname zien we een 404 error.
-We moeten nog een index pagina maken:
+Now when we open our PHP site on our set hostname we see a 404 error.
+We need to create another index page:
 
 ```bash
 sudo nano /var/www/php-site/index.php
 ```
 
-Hier is een klein stukje PHP code dat we gaan gebruiken:
+Here is a small piece of PHP code we are going to use:
 
 ```php
 <?php
 
-echo "hello and welcome to the world of PHP";
+echo "hello and welcome to the world of PHP."
 ```
 
-Als we nu onze website opnieuw openen zien we ons nieuw bericht.
+Now when we reopen our website we see our new message.
 
-We gaan nog een extra pagina maken met PHP:
+We are going to create one more page with PHP:
 
 ```bash
 sudo nano /var/www/php-site/info.php
@@ -156,6 +160,6 @@ sudo nano /var/www/php-site/info.php
 phpinfo();
 ```
 
-Dit geeft ons alle info van onze PHP installatie!
+This gives us all the info of our PHP installation!
 
-Volgend hoofdstuk gaan we Wordpress gebruiken als onze PHP applicatie.
+Next chapter we are going to use Wordpress as our PHP application.

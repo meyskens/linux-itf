@@ -2,46 +2,46 @@
 
 ![logo](./logo.png)
 
-WordPress is een enorm populaire PHP applicatie. Gestart in 2003 als open source blogging systeem draait WordPress nu op 42.8% van de top 10 miljoen websites[^wpstats] of 65% van de websites die een CMS systeem gebruiken.
+WordPress is a hugely popular PHP application. Started in 2003 as an open source blogging system, WordPress now runs on 42.8% of the top 10 million websites[^wpstats] or 65% of websites using a CMS system.
 
-WordPress word voor meer dan blogs gebruikt door flexibel uitbreidbaar te zijn met een groot plugin ecosystem. Van een simpele site tot een heel ecommerce platform WordPress kan het wel draaien. De kans dat je in het werkveld WordPress dus ergens tegenkomt is vrij groot.
+WordPress is used for more than blogs by being flexibly extensible with a large plugin ecosystem. From a simple site to an entire ecommerce platform WordPress can run it. So the chances of you encountering WordPress somewhere in the work field are quite high.
 
-Alle plugins, themas en documentatie is de vinden op [WordPress.org](https://wordpress.org/).
+All the plugins, themes and documentation can be found at [WordPress.org](https://wordpress.org/).
 
-De installatie van WordPress is vrij eenvoudig en snel!
+Installing WordPress is pretty easy and quick!
 
-## Oefening: Installatie
+## Exercise: Installation
 
-We hebben in de vorige hoofdstukken alle componenten besproken die je nodig gaat hebben voor WordPress te installeren!
-Hieronder vind je een checklist wat je moet doen. Als ook enkele (niet alle) nuttige commando's die je kan gaan gebruiken!
+We've covered in the previous sections all the components you're going to need to install WordPress!
+Below is a checklist of what you need to do. As well as some (not all) useful commands you can start using!
 
 Database:
 
-- Maak een MySQL database aan met de naam `wordpress`
-- Maak een MySQL gebruiker aan met de naam `wordpress` en een willekeurig wachtwoord.
-- Voeg de MySQL gebruiker toe aan de database met de naam `wordpress`.
+- Create a MySQL database with the name `wordpress`.
+- Create a MySQL user with the name `wordpress` and any password.
+- Add the MySQL user to the database with the name `wordpress`.
 
-NGINX:
+NGINX/Apache:
 
-- Maak NGINX Virtual Host aan met de domeinnaam `wordpress.r<nummer>.stuvm.be`
-- Voorzie de map `/var/www/wordpress` (TIP: Permissions!)
-- Zet alle nodige WordPress bestanden in deze map.
+- Create Virtual Host with the domain name `wordpress.r<number>.stuvm.be`
+- Provide the folder `/var/www/wordpress` (TIP: Permissions!).
+- Put all necessary WordPress files in this folder.
 
 PHP:
 
-- Voorzie een upload limiet van 1GB
+- Provide an upload limit of 1GB
 
 WordPress:
 
-- Installeer WordPress
-- Log in op `http://wordpress.r<nummer>.stuvm.be/wp-admin`
-- Voorzie inhoud, thema (geen standaard!) en naam naar eigen smaak
-- Installeer `Wordfence Security`
+- Install WordPress
+- Log in to `http://wordpress.r<number>.stuvm.be/wp-admin`
+- Provide content, theme (not default!) and name to your liking
+- Install `Wordfence Security`
 
 ### Tips
 
-We hebben nog geen FTP om bestanden vanop onze PC te uploaden (kan wel via SSH, maar laten we dat feit even negeren).
-Zo kan je WordPress rechtstreeks downloaden (ook sneller) vanaf de website van WordPress.org:
+We do not yet have FTP to upload files from our PC (can be done via SSH, but let's ignore that fact for now).
+So you can download WordPress directly (also faster) from the WordPress.org website:
 
 ```bash
 wget https://wordpress.org/latest.tar.gz
@@ -50,8 +50,10 @@ rm latest.tar.gz
 ls wordpress
 ```
 
-WordPress laat "pretty URLs" toe. Dit is een manier de lelijke `.php` uit je URL te halen.
-Je kan dit doen door de `try_files` directive in de `location` van de Virtual Host aan te passen.
+WordPress allows "pretty URLs." This is a way to remove the ugly `.php` from your URL.
+You can do this by adjusting the `try_files` directive in the `location` of the Virtual Host.
+
+Nginx:
 
 ```
 location / {
@@ -59,7 +61,9 @@ location / {
 }
 ```
 
+Apache can make use of the `.htaccess` file to do the same thing.
+
 [^wpstats]: https://w3techs.com/technologies/overview/content_management
 
-PHP heeft 2 limieten voor het uploaden van bestanden: `upload_max_filesize` en `post_max_size`. Technisch gezien is de laatste voor heel het "formulier", deze moet groter of gelijk zijn aan de eerste.
-NGINX heeft ook een upload limiet, `client_max_body_size 100m;`. Deze kan staan in het `http`, `server` of `location` blok.
+PHP has 2 limits for uploading files: `upload_max_filesize` and `post_max_size`. Technically, the latter is for the entire "form", it must be greater than or equal to the former.
+NGINX also has an upload limit, `client_max_body_size 100m;`. This can be in the `http`, `server` or `location` block.

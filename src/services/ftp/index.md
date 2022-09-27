@@ -1,60 +1,60 @@
 # FTP
 
-FTP staat voor het File Transfer Protocol. FTP is al ontworpen in 1971 (wetenden dat IP in development was sinds 1974 en IPv4 pas in 1978 bescherven werd), maar werd aangepast rond 1980 voor gebruik met TCP en IP. Het doel van FTP was zeer simpel: uitwisselen van bestanden over het internet, kijkende naar de tijd gaat het dan vooral over academici die papers publiceren en willen lezen. De dag van vandaag is FTP nog in gebruik maar het originele doel is dan weer vervangen door het (betere) HTTP(S) protocol.
+FTP stands for the File Transfer Protocol. FTP was already designed in 1971 (knowing that IP was in development since 1974 and IPv4 was not protected until 1978), but was adapted around 1980 for use with TCP and IP. The purpose of FTP was very simple: to exchange files over the Internet, looking at the time it was mainly about academics publishing papers and wanting to read them. Today, FTP is still in use but its original purpose has been replaced by the (better) HTTP(S) protocol.
 
-Waarom willen we in 2022 dan nog FTP gebruiken? De zogeheete "anonymous FTP" waar iedereen files kon downloaden van een server is bijna uitgestorven. Maar FTP is bidirectioneel en heeft mogelijkheden tot het aanmelden van gebruikers. Daardoor zien we FTP vandaag nog op veel plekken zoals op een NAS (naast NFS en SMB) voor bestanden op te slaan, of backups te maken.
-Wij kijken vooral ook nog naar het gebruik in werbhosting, het blijft een populaire methode om websites te uploaden van je laptop naar je server.
+So why do we want to use FTP in 2022? The so-called "anonymous FTP" where anyone could download files from a server is almost extinct. But FTP is bidirectional and has user login capabilities. As a result, we still see FTP today in many places such as on a NAS (in addition to NFS and SMB) for storing files, or making backups.
+We especially still look at its use in werbhosting as well, it remains a popular method for uploading websites from your laptop to your server.
 
-FTP kent zijn roots in de 1970s... Daarom merken we op da het een enorm complex in de normen van vandaag.
-Het kent verschillende transactie modusen en file encodatie transport modusen. Het opent en sluit 1 poort per transactie, wat toen een goed idee leek om verschillende connecties tegelijk te aanvaarden. FTP heeft het niet met NAT, al is dat dankzij aanpassingen in NAT routers wel voor een groot deel opgelost nu, zij volgen namelijk de verbinding op en zetten zo nodige poorten open. SFTP en FTPS lossen een deel van deze problemen op.
+FTP has its roots in the 1970s.... Therefore, we note da it a hugely complex in today's standards.
+It has different transaction modes and file encoding transport modes. It opens and closes 1 port per transaction, which seemed like a good idea at the time to accept several connections at once. FTP doesn't have it with NAT, although thanks to modifications in NAT routers, that is largely solved now, as they track the connection and thus open necessary ports. SFTP and FTPS solve some of these problems.
 
 ## (S)FTP(S)?
 
-Wij gaan in deze cursus geen FTP server opzetten, FTP zelf is onveilig. We gaan kijken naar twee protocollen gebouwd op FTP: SFTP en FTPS.
-Waarom geen FTP? Het internet is niet meer de brave plek voor academici/technologists die het lang geweest is. We zitten in een wereld waar elke vulnerability binnen enkele dagen wordt misbruikt. Nog maar te zwijgen over de ontdekkingen door Edward Snowden over NSA, en al de rest die masaal internet verkeer wil afluisteren... Sinds de internet documenten van de NSA gelekt werden zien we een heel ander internet voor ons, voorheen werd encryptie enkel gebruikt voor het versturen van logingegevens, waarna het weer werd uitgezet. Vele sites vonden het overbodig.
-Sinds 2013 zagen we een massale groei van geencrypteerd verkeer op het internet. De onderstaande cijfers komen uit Firefox (start meting eind 2013):
+We are not going to set up an FTP server in this course, FTP itself is insecure. We are going to look at two protocols built on FTP: SFTP and FTPS.
+Why not FTP? The Internet is no longer the well-behaved place for academics/technologists that it has long been. We are in a world where every vulnerability is exploited within days. Not to mention the discoveries by Edward Snowden about NSA, and all the rest who want to massively eavesdrop on Internet traffic.... Since the NSA Internet documents were leaked we see a completely different Internet before us, previously encryption was only used for sending login data, after which it was turned off again. Many sites found it unnecessary.
+Since 2013 we saw a massive growth of unencrypted traffic on the Internet. The figures below are from Firefox (start measurement in late 2013):
 
 ![https traffic](./https.png)
 
-Terwijl veilige oplossingen en langer bestaan heeft het nu pas enorme populariteit. Daarom gaan we in deze cursus enkel maar beveiligde FTP zie
+While secure solutions and have been around longer it is only now having huge popularity. That's why in this course we are only going to see secure FTP
 
-2 oplossingen werden bedacht in begin jaren 2000 om FTP te beveiligen:
+2 solutions were devised in the early 2000s to secure FTP:
 
-De eerste is om SSH te gebruiken, en over een SSH connectie FTP verkeer te sturen in een licht aangepaste vorm. Dit werd SFTP genoemd.
+The first is to use SSH, and over an SSH connection send FTP traffic in a slightly modified form. This was called SFTP.
 
-De tweede oplossing die bedacht werd was om SSL (Secure Socket Layer) te gebruiken om de verbinding te beveiligen. SSL is een laag bovenop TCP die encryptie voorziet net zoals bij HTTPS. SSL werd later TLS (Transport Layer Security) genoemd. Deze oplossing kreed de naam FTPS mee.
+The second solution devised was to use SSL (Secure Socket Layer) to secure the connection. SSL is a layer on top of TCP that provides encryption just like HTTPS. SSL was later called TLS (Transport Layer Security). This solution was named FTPS.
 
-## Eindgebruiker
+## End User
 
-Hoe gegbuiken we nu FTP op onze laptop? Er zijn een aantal mogelijke programmas:
+How do we use FTP on our laptop? There are a number of possible programs:
 
-- [FileZilla](https://filezilla-project.org/) - een grote, gratis en open source FTP client voor Windows, Mac en Linux.
-- [WinSCP](https://winscp.net/) - een gratis FTP client voor Windows.
-- [Cyberduck](http://cyberduck.io/) - een gratis FTP client voor Mac en Windows met support voor vele andere protocollen.
+- [FileZilla](https://filezilla-project.org/) - a great, free and open source FTP client for Windows, Mac and Linux.
+- WinSCP](https://winscp.net/) - a free FTP client for Windows.
+- Cyberduck](http://cyberduck.io/) - a free FTP client for Mac and Windows with support for many other protocols.
 
-## FTPS met VSFTPD
+## FTPS with VSFTPD
 
-vsftpd: de Very Secure FTP Daemon is een FTP server voor Unix systemem. Het is de standaard FTP-server in de Ubuntu, CentOS, Fedora en RHEL Linux distributies. Het is gelicentieerd onder de GNU General Public License. Het ondersteunt IPv6, TLS en FTPS!
-We gaan VSFTPD gebruiken om een FTPS server te maken.
+vsftpd: the Very Secure FTP Daemon is an FTP server for Unix systemem. It is the default FTP server in the Ubuntu, CentOS, Fedora and RHEL Linux distributions. It is licensed under the GNU General Public License. It supports IPv6, TLS and FTPS!
+We are going to use VSFTPD to create an FTPS server.
 
-### Installatie
+### Installation
 
-vsftp kunnen we installeren via APT:
+We can install vsftp via APT:
 
 ```bash
 sudo apt update
 sudo apt install vsftpd
 ```
 
-We checken de status met `systemctl`:
+We check the status with `systemctl`:
 
 ```bash
 sudo systemctl status vsftpd
 ```
 
-### Configuratie
+### Configuration
 
-Voor we beginnen met FTP te configureren gaan we enkele firewall regels instellen om FTPS verkeer toe te laten
+Before we start configuring FTP we are going to set up some firewall rules to allow FTPS traffic
 
 ```bash
 sudo ufw allow 20/tcp
@@ -63,13 +63,13 @@ sudo ufw allow 990/tcp
 sudo ufw allow 40000:50000/tcp
 ```
 
-Nu zijn we klaar om een de configuratie aan te passen:
+Now we are ready to adjust a the configuration:
 
 ```bash
 sudo nano /etc/vsftpd.conf
 ```
 
-We **verwijderen** de volgende regels:
+We **remove** the following lines:
 
 ```
 # This option specifies the location of the RSA certificate to use for SSL
@@ -79,7 +79,7 @@ rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
 ssl_enable=NO
 ```
 
-Daarna **voegen** we de volgende regels **toe**:
+Then **add** the following lines **add**:
 
 ```
 anonymous_enable=no
@@ -106,40 +106,40 @@ require_ssl_reuse=no
 ssl_ciphers=HIGH
 ```
 
-Wat doet deze configuratie?
+What does this configuration do?
 
-- `anonymous_enable=no`: zorgt ervoor dat anonieme gebruikers niet kunnen inloggen.
-- `local_enable=yes`: zorgt ervoor dat lokale gebruikers kunnen inloggen.
-- `write_enable=yes`: zorgt ervoor dat we data kunnen schrijven.
-- `chroot_local_user=yes`: zorgt ervoor dat we de juiste home directory gebruiken.
-- `user_sub_token=$USER`: zorgt voor de juiste username, we kunnen hiemee usernames een pre of suffix geven
-- `local_root=/home/$USER/ftp`: bepaald welke directory FTP toelaat
-- `pasv_min_port=40000` en `pasv_max_port=50000`: bepaald de minimum port range voor FTP transport poorten om te openen
-- `userlist_enable=yes`: zorgt ervoor dat we een userlist kunnen gebruiken, enkel users die in de userlist staan kunnen inloggen
-- `userlist_file=/etc/vsftpd.userlist`: is waar de userlist staat
-- `userlist_deny=no`: zorgt ervoor dat we in "allow" mode zijn, enkel gebruikers op de lijst kunnen inloggen
-- `rsa_cert_file=/etc/ssl/private/vsftpd.pem`: bepaald de locatie van het TLS certificaat
-- `rsa_private_key_file=/etc/ssl/private/vsftpd.pem`: bepaald de locatie van de TLS private key
-- `ssl_enable=yes`: zorgt ervoor dat we SSL/TLS kunnen gebruiken
-- `allow_anon_ssl=no`: zorgt ervoor dat anonieme gebruikers niet kunnen inloggen over SSL/TLS
-- `force_local_data_ssl=yes`: zorgt ervoor dat we data via SSL/TLS **moeten** versturen
-- `force_local_logins_ssl=yes`: zorgt ervoor dat we gebruikers via SSL/TLS **moeten** inloggen
-- `ssl_tlsv1=yes`: zorgt ervoor dat we TLS v1 kunnen gebruiken
-- `ssl_sslv2=no`: zorgt ervoor dat we SSL v2 **niet** kunnen gebruiken, deze versies zijn onveilig
-- `ssl_sslv3=no`: zorgt ervoor dat we SSL v3 **niet** kunnen gebruiken, deze versies zijn onveilig
-- `require_ssl_reuse=no`: zorgt ervoor dat we SSL/TLS kunnen gebruiken als de verbinding niet meer bestaat
-- `ssl_ciphers=HIGH`: zorgt ervoor dat we de hoogste/veiligste TLS ciphers moeten gebruiken
+- `anonymous_enable=no`: ensures that anonymous users cannot log in.
+- `local_enable=yes`: ensures that local users can log in.
+- `write_enable=yes`: ensures that we can write data.
+- `chroot_local_user=yes`: ensures that we use the correct home directory.
+- `user_sub_token=$USER`: provides the correct username, we can use it to give usernames a prefix or suffix.
+- `local_root=/home/$USER/ftp`: defines which directory allows FTP.
+- `pasv_min_port=40000` and `pasv_max_port=50000`: specifies the minimum port range for FTP transport ports to open.
+- `userlist_enable=yes`: allows us to use a userlist, only users who are in the userlist can log in.
+- `userlist_file=/etc/vsftpd.userlist`: is where the userlist is stored.
+- `userlist_deny=no`: makes sure we are in "allow" mode, only users on the list can log in
+- `rsa_cert_file=/etc/ssl/private/vsftpd.pem`: specifies the location of the TLS certificate
+- `rsa_private_key_file=/etc/ssl/private/vsftpd.pem`: specifies the location of the TLS private key
+- `ssl_enable=yes`: ensures we can use SSL/TLS
+- `allow_anon_ssl=no`: ensures that anonymous users cannot log in over SSL/TLS
+- `force_local_data_ssl=yes`: ensures that we **must** send data over SSL/TLS
+- `force_local_logins_ssl=yes`: ensures we **must** log in users over SSL/TLS
+- `ssl_tlsv1=yes`: allows us to use TLS v1
+- `ssl_sslv2=no`: ensures we can **not** use SSL v2, these versions are insecure
+- `ssl_sslv3=no`: ensures we can **not** use SSL v3, these versions are insecure
+- `require_ssl_reuse=no`: ensures that we can use SSL/TLS if the connection no longer exists
+- `ssl_ciphers=HIGH`: ensures that we must use the highest/secure TLS ciphers
 
-Nu gaan we een TLS certificaat aanmaken voor vsftpd:
+Now we are going to create a TLS certificate for vsftpd:
 
 ```bash
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem
 ```
 
-We vullen de volgende velden in, de informatie over het "subject" van het certificaat is ter informatie, de voorlaatste vraag over Common Name is belangrijk want dit moet ons IP zijn!
+We fill in the following fields, the information about the "subject" of the certificate is for your information, the penultimate question about Common Name is important because this must be our IP!
 
 ```
-Generating a RSA private key
+Generating an RSA private key
 ..............................................................................................................+++++
 ....................................................................................+++++
 writing new private key to '/etc/ssl/private/vsftpd.pem'
@@ -154,27 +154,27 @@ If you enter '.', the field will be left blank.
 Country Name (2 letter code) [AU]:BE
 State or Province Name (full name) [Some-State]:Antwerp
 Locality Name (eg, city) []:Lier
-Organization Name (eg, company) [Internet Widgits Pty Ltd]:Leenux Corp
-Organizational Unit Name (eg, section) []:Unit Technologie
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Leenux Corp.
+Organizational Unit Name (eg, section) []:Unit Technology
 Common Name (e.g. server FQDN or YOUR name) []:10.2.0.1
 Email Address []:
 ```
 
-We herstarten nu vsftpd:
+We now restart vsftpd:
 
 ```bash
 sudo systemctl restart vsftpd
 ```
 
-### Aanmaken gebruikers
+### Creating users
 
-vsftpd maakt gebruik van onze Linux users, we gaan een user aanmaken voor onze webdesigner `Rick`:
+vsftpd uses our Linux users, we are going to create a user for our web designer `Rick`:
 
 ```bash
 sudo adduser rick
 ```
 
-We vullen de volgende velden in:
+We will fill in the following fields:
 
 ```
 $ sudo adduser rick
@@ -196,7 +196,7 @@ Enter the new value, or press ENTER for the default
 Is the information correct? [Y/n] y
 ```
 
-We maken meteen ook een FTP map aan voor Rick:
+We also create an FTP directory for Rick right away:
 
 ```bash
 sudo mkdir -p /home/rick/ftp/files
@@ -204,25 +204,25 @@ sudo chown nobody:nogroup /home/rick/ftp
 sudo chown rick:rick /home/rick/ftp/files
 ```
 
-vsftpd zelf draait onder user `nobody`, de FTP map zelf moet eigendom daarvan zijn of onze connectie zal mislukken.
+vsftpd itself runs under user `nobody`, the FTP directory itself must be owned by it or our connection will fail.
 
-We voegen ook snel even een test bestand toe:
+We also quickly add a test file:
 
 ```bash
 echo "dQw4w9WgXcQ" | sudo tee /home/rick/ftp/files/test.txt
 ```
 
-We moeten Rick ook toegang geven tot FTPS:
+We also need to give Rick access to FTPS:
 
 ```bash
 echo "rick" | sudo tee -a /etc/vsftpd.userlist
 ```
 
-Hiermee voegen we `rick` toe aan het einde van de userlist, we kunnen dit ook gewoon met nano doen maar het mag eens wat clever zijn!
+With this we add `rick`` to the end of the userlist, we can also just do this with nano but it may be a little clever for once!
 
-### Connectie testen
+### Testing connection
 
-We testen even met `ftp` of we goed kunnen connecteren:
+We test with `ftp` if we can connect properly:
 
 ```bash
 ftp localhost
@@ -238,35 +238,35 @@ Login failed.
 421 Service not available, remote server has closed connection
 ```
 
-Het commando `ftp` ondersteunt geen FTPS, ons opzet is dus gelukt!
+The `ftp` command does not support FTPS, so our setup succeeded!
 
-We kunnen dit beter gaan testen met FileZilla of WinSCP.
+We better test this with FileZilla or WinSCP.
 
-We connecteren met de volgende credentials:
+We connect with the following credentials:
 
 - Protocol: FTPS
 - Host: `<server IP>`
 - Username: rick
-- Password: `<je password>`
-- Port: (standaard waarde)
+- Password: `<your password>`
+- Port: (default value)
 
 ![warning](./warning.png)
 
-Je krijgt normaal ook een waarchuwing of je het certificaat vertrouwd, we antwoorden ja. Ons TLS certificaat is ondertekend door onszelf, in praktijk zounden we dit bij een certificate authority gaan aanvragen.
+You normally also get a warning whether you trust the certificate, we answer yes. Our TLS certificate is signed by ourselves, in practice we would request it from a certificate authority.
 
-![filezilla](./filezilla.png)
+filezilla](./filezilla.png)
 
-We kunnen nu bestanden uploaden en downloaden via FTPS, probeer dit maar uit!
+We can now upload and download files via FTPS, try this out!
 
-## SFTP met OpenSSH
+## SFTP with OpenSSH
 
-We kunnen ook SFTP gaan gebruiken, dit protocol werkt over SSH zelf. We gaan toegang configureren voor SFTP in onze `sshd_config`:
+We can also start using SFTP, this protocol works over SSH itself. We are going to configure access for SFTP in our `sshd_config`:
 
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
 
-We voegen onderaan hetzelfde toe:
+We'll add the same thing at the bottom:
 
 ```
 Match group sftp
@@ -276,37 +276,37 @@ ForceCommand internal-sftp
 PasswordAuthentication yes
 ```
 
-Wat doet dit nu?
+Now what does this do?
 
-- `Match group sftp`: zorgt ervoor dat alle configuratie hieronder _enkel_ voor gebruikers in de group `sftp` geldt
-- `X11Forwarding no` en `AllowTcpForwarding no`: zorgt ervoor dat we geen X11 of TCP forwarding kunnen gebruiken, de user mag enkel SFTP gebruiken
-- `ForceCommand internal-sftp`: zorgt ervoor dat de gebrukkers enkel `internal-sftp` kunne gebruiken, de gebruiker zelf krijgt geen shell toegang
-- `PasswordAuthentication yes`: zorgt ervoor dat gebruikers **in de groep sftp** kunnen inloggen met een password
+- `Match group sftp`: ensures that all configuration below _only_ applies to users in the group `sftp`.
+- `X11Forwarding no` and `AllowTcpForwarding no`: ensures that we cannot use X11 or TCP forwarding, the user can only use SFTP.
+- `ForceCommand internal-sftp`: ensures that the users can only use `internal-sftp`, the user will not get shell access.
+- `PasswordAuthentication yes`: ensures that users **in the sftp group** can log in with a password.
 
-We herstarten nu de SSH server:
+We now restart the SSH server:
 
 ```bash
 sudo systemctl restart sshd
 ```
 
-We maken de groep `sftp` aan:
+We create the group `sftp`:
 
 ```bash
 sudo addgroup sftp
 ```
 
-En voegen nu `rick` toe aan de groep:
+And now add `rick` to the group:
 
 ```bash
 sudo usermod -a -G sftp rick
 ```
 
-### Connectie testen
+### Test connection
 
-We kunnen nu inloggen via SFTP met de volgende credantials:
+We can now log in via SFTP with the following credentials:
 
 - Protocol: SFTP
 - Host: `<server IP>`
 - Username: rick
-- Password: `<je password>`
+- Password: `<your password>`
 - Port: 22
