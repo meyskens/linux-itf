@@ -119,5 +119,31 @@ module.exports = config({
         ],
       },
     },
+
+    git: {
+      contributor: true,
+      timezone: "Europe/Brussels",
+    },
   },
+
+  plugins: [
+    [
+      "md-enhance",
+      {
+        enableAll: true,
+        presentation: {
+          plugins: [
+            "highlight",
+            "math",
+            "search",
+            "notes",
+            "zoom",
+            "anything",
+            "audio",
+            "chalkboard",
+          ],
+        },
+      },
+    ],
+  ],
 });
