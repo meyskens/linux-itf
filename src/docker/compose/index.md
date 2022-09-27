@@ -1,21 +1,21 @@
 # Docker Compose
 
-Docker Compose is een heel geliedfe tool bij developers, vele projecten en intrne code komen namelijk met een `docker-compose.yml` file al in de root van een code repository. Deze file bevat alle informatie die nodig is om een project te starten. Zo kan een developer snel aan de slag zonder urenlang services als databases te moeten installeren.
+Docker Compose is a very geliedfe tool among developers, in fact, many projects and intrne code come with a `docker-compose.yml` file already in the root of a code repository. This file contains all the information needed to start a project. This allows a developer to get started quickly without spending hours installing services such as databases.
 
-Voor ons gaat Docker Compose ons helpen om het opzetten van verschillende Docker containers te automatiseren als ook te kunnen beheren en documenteren als code.
+For us, Docker Compose is going to help us automate setting up different Docker containers as well as being able to manage and document them as code.
 
 ![Docker Compose logo](./logo.png)
 
-Docker Compose is een tool van Docker die de [compose specificatie](https://compose-spec.io/) ondersteunt. Deze specificatie is een open standaard geworden gebaseerd op [Docker Compose](https://docs.docker.com/compose/).
+Docker Compose is a Docker tool that supports the [compose specification](https://compose-spec.io/). This specification has become an open standard based on [Docker Compose](https://docs.docker.com/compose/).
 
-Deze cursus maakt gebruik van Docker Compse v2.
-Versie 2 is een verbeterde versie van V1, maar heeft vele verschillen.
-Versie 1 is geschreven in Python en had het apparte commando `docker-compose`. Versie 2 is nu geschreven in Go (net als Docker) en is een plugin voor Docker zelf met het commando `docker compose`. Let hierbij goed op wanneer je informatie gaat opzoeken!
+This course uses Docker Compse v2.
+Version 2 is an enhanced version of V1, but has many differences.
+Version 1 was written in Python and had the separate command `docker-compose`. Version 2 is now written in Go (just like Docker) and is a plugin for Docker itself with the command `docker compose`. Pay close attention to this when looking up information!
 
-## Installatie
+## Installation
 
-Docker compose installeren den we door de binary te downloaden en de installeren onder de plugins map van Docker:
-(Windows en Mac versies zijn normaal al gebundeld met compose)
+We install Docker compose by downloading the binary and installing it under the plugins directory of Docker:
+(Windows and Mac versions are normally already bundled with compose)
 
 ```bash
 wget https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-linux-x86_64
@@ -24,30 +24,30 @@ sudo mkdir -p /usr/local/lib/docker/cli-plugins
 sudo mv docker-compose-linux-x86_64 /usr/local/lib/docker/cli-plugins/docker-compose
 ```
 
-Doe nu `docker compose` en je zou uitleg moeten krijgen.
+Now do `docker-compose` and you should get an explanation.
 
 ## docker-compose.yml
 
-Voor Docker Compse gaan we altijd 1 file tegenkomen: `docker-compose.yml`. Dit is een [YAML](../yaml) file die alle informatie vooe Docker Compose gaat bevatten met onder andere: volumes, services en networks.
+For Docker Compse, we are always going to encounter 1 file: `docker-compose.yml`. This is a [YAML](../yaml) file that is going to contain all the information for Docker Compose including: volumes, services and networks.
 
-### Versies
+### Versions
 
-docker-compose.yml kent verschillende versies, deze specifieren we altijd een het begin van de file. Dit is een praktijk die we ook bij vele andere tools zoals Kubernetes zien terugkoment zodat alle tooling meerdere versies kan ondersteunen.
-Echter bij compose is dit de versie van de compose secificatie en niet die can de tool.
-Terwijn we net v2.0.1 van Docker Compose hebben zi onze `docker-compose.yml` file aan aan v3.9. Let hierbij goed op!
+docker-compose.yml has several versions, which we always specify at the beginning of the file. This is a practice we also see in many other tools such as Kubernetes so that all tooling can support multiple versions.
+However with compose this is the version of the compose secification and not that can the tool.
+While we just got v2.0.1 of Docker Compose zi our `docker-compose.yml` file to v3.9. Be careful with this!
 
-Wij schrijven al onze files in versie 3.x, versie 2.0 zien we nog vaak terugkomen em werkt meestal nog maar is wel verouderd.
+We write all our files in version 3.x, version 2.0 we still see often em still works mostly but is outdated.
 
 ### File
 
-De `docker-compose.yml` file heeft 3 hoofdonderdelen:
+The `docker-compose.yml` file has 3 main parts:
 
-- `version`: Versie van de compose file
-- `services`: De containers die moeten draaien
-- `networks`: De networks die aangemaakt moeten worden
-- `volumes`: De volumes die gebruikt moeten worden
+- `version`: Version of the compose file.
+- `services`: The containers to run
+- `networks`: The networks to be created
+- `volumes`: The volumes to use
 
-Dit is een voorbeeld van een Docker Compose file van de Wordpress setup van vorige week.
+This is an example of a Docker Compose file from last week's Wordpress setup.
 
 ```yaml
 version: "3.9"
@@ -80,30 +80,30 @@ services:
       - wordpress
 ```
 
-We bekijken even elk onderdeel:
+We take a quick look at each component:
 
-```yaml
+`````yaml
 version: "3.9"
 ```
 
-We gebruiken versie 3.9 van de Compose specificatie. Wat hier inzit kan je allemaal bekijken op de [Compose file reference](https://docs.docker.com/compose/compose-file/compose-file-v3/). Dit is een heel handige referentie wanneer je compose files gaat maken.
+We are using version 3.9 of the Compose specification. You can see what's in here on the [Compose file reference](https://docs.docker.com/compose/compose-file/compose-file-v3/). This is a very useful reference when creating compose files.
 
 ```yaml
 networks:
   wordpress: {}
 ```
 
-Dit is een lijst van netwerken die we nodig hebben binnen Docker, die deden we manueel met `docker network create`. We hebben verder geen configuratie nodig dus geven we een leeg object mee namelijk `{}`. Dit kan ook weggelaten worden maar dat is minder duidelijk.
+This is a list of networks we need within Docker, which we did manually with `docker network create`. We need no further configuration so we give an empty object `{}`. This can also be omitted but is less obvious.
 
 ```yaml
 volumes:
   db-data: {}
 ```
 
-Dit lijkt heel erg op wat we met networks deden, dit doet bijna hetzelfde voor volumes.
-Waar we vorige les vooral onze bestanden in een eigen map gaan plaatsen zeggen we hier dat Docker zelf een leeg volume moet aanmaken voor onze data. Dit volume wordt ook bijgehouden alleen kiest Docker hier zelf een interne locateie voor zodat het niet afhankelijk is van de bestandstructuur van een server of laptop.
+This is very similar to what we did with networks, this does almost the same thing for volumes.
+Whereas last lesson we were mainly going to put our files in their own directory, here we are telling Docker to create its own empty volume for our data. This volume is also maintained only Docker chooses its own internal locale for this so it does not depend on the file structure of a server or laptop.
 
-```yaml
+````yaml
 services:
   wordpress:
     image: wordpress:latest
@@ -116,7 +116,7 @@ services:
       - wordpress
 ```
 
-Al onze containers zijn Services. In Docker Compose spreken we meestal over meerdere containers. Deze hebben allemaal een naam en eigenschappen. Hier defineren we de containers dat onze container image `wordpress` nodig heeft, poort 80 moet exposen en netwerk `wordpress` gebruikt. `depends_on is nieuw, dit laat Docker Compose bepalen welke containers eerst moeten starten. Zo gaat de database eerst gemaakt worden omdat WordPress daarmee gaat verbinden. Met `restart: always` stellen we in dat deze container ook moet starten na een reboot.
+All of our containers are Services. In Docker Compose, we usually talk about multiple containers. Each of these has a name and properties. Here we define the containers that our container needs image `wordpress`, must expose port 80 and uses network `wordpress`. `depends_on is new, this lets Docker Compose determine which containers to start first. For example, the database is going to be created first because WordPress is going to connect to it. With `restart: always` we set that this container should also start after a reboot.
 
 ```yaml
 services:
@@ -132,13 +132,13 @@ services:
       - wordpress
 ```
 
-Voor onze database zien we hetzelfde verhaal. Hier is enkel wel `environment` aan toegevoegd waarmee we onze environment variablen kunnen instellen, ook linken we `volumes` aan de map waar onze database staat.
+For our database we see the same story. Only here we have added `environment` with which we can set our environment variables, also we link `volumes` to the directory where our database resides.
 
-### Eigen images
+### Proprietary images
 
-Docker Compose kan ook werken met eigen images, die bij het starten gebouw worden.
+Docker Compose can also work with custom images, which are built at startup.
 
-Dit doen we door `build` te defenieren:
+We do this by defining `build`:
 
 ```yaml
 services:
@@ -146,9 +146,9 @@ services:
     build: .
 ```
 
-Moet je meerdere container images builden? Dat gaan ook, alleen moet je meer specifieren waar Docker de Dockerfile en bestanden kan vinden.
+Do you need to build multiple container images? You can do that too, only you need to specify more where Docker can find the Dockerfile and files.
 
-```yaml
+````yaml
 services:
   my-container:
     build:
@@ -156,73 +156,74 @@ services:
       dockerfile: Dockerfile
 ```
 
-## docker compose commando
+## docker compose command
 
-Nu we weten hoe we onze configuratie scrhijven kunnen we aan de slag!
+Now that we know how to scrhit our configuration we can get started!
 
-We plaatsen onze `docker-compose.yml` file in een nieuwe map.
+We place our `docker-compose.yml` file in a new directory.
 
 ```bash
 mkdir wordpress
 cd wordpress
-# Plaats de docker compose file hier
+# Place the docker compose file here
 ```
 
-De naam van de map gaat Docker Compose ook gebruiken als naam van de setup.
+The name of the folder is also going to use Docker Compose as the name of the setup.
 
-### `docker compose up`
+### `docker compose up``
 
-Nu we onze file hebben klaarstaan kunnen we alles starten met `docker compose up`.
-Dit gaat al onze resources aanmaken en starten.
+Now that we have our file ready we can start everything with `docker compose up`.
+This is going to create and start all of our resources.
 
 ```bash
 docker compose up
 ```
 
-Dit start onze Wordpress omgeving op en we kunnen deze gaan bekijken met de browser.
+This starts up our Wordpress environment and we can start viewing it with the browser.
 
-Net als Docker zelf kunnen we ook `docker compose up -d` gebruiken voor het opstarten in de achtergrond. Docker start deze containers ook terug als de server reboot als `restart: always` in de file staat!
+Like Docker itself, we can also use ``docker compose up -d`` for background startup. Docker also restarts these containers when the server reboots if `restart: always` is in the file!
 
 ```bash
 $ docker ps
-CONTAINER ID   IMAGE              COMMAND                  CREATED       STATUS         PORTS                                 NAMES
-ed81d91b7005   wordpress:latest   "docker-entrypoint.s…"   2 hours ago   Up 3 seconds   0.0.0.0:8091->80/tcp, :::80->80/tcp   wordpress-wordpress-1
-3b3451265a84   mariadb:latest     "docker-entrypoint.s…"   2 hours ago   Up 4 seconds   3306/tcp                              wordpress-db-1
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+ed81d91b7005 wordpress:latest "docker-entrypoint.s..."   2 hours ago Up 3 seconds 0.0.0.0:8091->80/tcp, :::80->80/tcp wordpress-wordpress-1
+3b3451265a84 mariadb:latest "docker-entrypoint.s..."   2 hours ago Up 4 seconds 3306/tcp wordpress-db-1
 ```
 
-In `docker ps` zien we nu dat de containers draaien. Ze hebben ook allemaal een naam gekregen met de mapnaam, naam van de container en het cijfer 1. We kunnen met Docker compose ook meerdere replicas van 1 container draaien als we dat willen.
+In `docker ps` we now see that the containers are running. They have also all been named with the directory name, container name and the number 1. We can also use Docker compose to run multiple replicas of 1 container if we want to.
 
-> **Opmerking:** de naam die je gebruikt om containers met elkaar te verbinden is gewoon de korte naam die je in de `docker-compose.yml` file hebt gespecificeerd.
+> **Note:** the name you use to link containers together is simply the short name you specified in the `docker-compose.yml` file.
 
 ### `docker compose stop`
 
-Draait een Docker compose setup in de achtergrond dak kan je deze stoppen met `docker compose stop`.
+Is a Docker compose setup running in the background roof you can stop it with `docker compose stop`.
 
 ### `docker compose restart`
 
-Draait een service en wil je nieuwe configuratie laden? Dan kan je `docker compose restart` gebruiken om alle containers te herstarten en wijzigingen in te laden.
+Is a service running and you want to load new configuration? Then you can use `docker compose restart` to restart all containers and load changes.
 
 ```bash
 $ docker compose restart
 [+] Running 2/2
- ⠿ Container wp-db-1         Started                                                                                           0.7s
- ⠿ Container wp-wordpress-1  Started                                                                                           1.5s
+ ⠿ Container wp-db-1 Started 0.7s
+ ⠿ Container wp-wordpress-1 Started 1.5s
 ```
 
-### `docker compose down`
+### `docker compose down``
 
-Het down commando is een gevaarlijke, `down` stopt alle containers en **verdijdert** alle data.
-Gebruik dit enkel lokaal of als je alles wilt resetten.
+The down command is a dangerous one, `down` stops all containers and **throws out** all data.
+Use this only locally or if you want to reset everything.
 
 ### `docker compose build`
 
-Als je eigen images gebruikt en je deze wil updaten moet je `docker compose build` gebruiken.
+If you use custom images and want to update them you must use `docker compose build`.
 
 ## Compose files
 
-Vele projecten komen al met een basis compose file aanwezig. We gaan voor het project ook nog eigen compose files schrijven. Heb je echter inspiratie maken? Dan is [Awewome Compose](https://github.com/docker/awesome-compose) een goede referentie, hier zijn verschillende kant en klare stacks te vinden die je kan aanpassen!
+Many projects already come with a basic compose file present. We are going to write our own compose files for the project. However, do you have inspiration make? Then [Awewome Compose](https://github.com/docker/awesome-compose) is a good reference, here are several ready-made stacks that you can customize!
 
 ## References
 
 - Docker Compose file v3 https://docs.docker.com/compose/compose-file/compose-file-v3/#environment
 - Get started with Docker Compose https://docs.docker.com/compose/gettingstarted/
+`````
