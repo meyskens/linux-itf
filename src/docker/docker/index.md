@@ -69,6 +69,19 @@ wget -O docker.sh https://get.docker.com/
 bash docker.sh
 ```
 
+:::warning
+If you are using Ubuntu 22.04 you need to switch to legacy iptables, Docker does not yet work optimally with nftables. You can do this with:
+
+```bash
+sudo update-alternatives --config iptables
+```
+
+Choose `iptables-legacy`.
+
+![iptables](./iptables.png)
+
+:::
+
 Docker is by default only callable by `root`. We can also make it callable by your user by:
 
 ```bash
