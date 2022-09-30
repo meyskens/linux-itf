@@ -160,7 +160,7 @@ The command looks like this:
 docker run <options> <name image> [optional command].
 ```
 
-- The image name is required, it comes from your own images or Docker Hub (or others). A `:` indicates a version e.g. `ubuntu:20.04` by default this is `latest`.
+- The image name is required, it comes from your own images or Docker Hub (or others). A `:` indicates a version e.g. `ubuntu:22.04` by default this is `latest`.
 - The optional command overrides the default command contained in the image
 
 However, there are also many useful options:
@@ -698,11 +698,11 @@ Developers provide the following specs:
 - Downloading can be done with `git clone https://github.com/socketio/chat-example.git`
 - Install the dependencies with `npm install`.
 - Starting the application with `npm start`
-- Port is 3000 (you can change it with enviroment variabe `PORT`)
+- Port is 3000 (you can change it with environment variabe `PORT`)
 
 Your assignment:
 
 - Download the code
-- Add a dockerile
+- Add a Dockerfile
 - Build an image
 - Run the image on port 8090, if this is running view the site on your laptop at http://IP Server:8090/
