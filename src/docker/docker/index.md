@@ -108,7 +108,7 @@ Shipping a version is as simple as `docker push`.
 For management, it first simplifies running servers, most configuration and packages are already included in a Docker image.
 It also improves problems such as different versions of dependencies. Need two versions of MySQL or PHP? No problem anymore with Docker!
 
-Pre Docker](./pre-docker.png)
+[Pre Docker](./pre-docker.png)
 Different services need different libraries, these are all shared on the system and conflicts arise.
 
 ![Post Docker](./post-docker.png)
@@ -292,7 +292,7 @@ WordPress gets port 8081 on our server. MariaDB remains internal.
 
 Now if we open `<ip address>:8081` in our browser we get a WordPress installer.
 
-WP Installer](./wp-installer.png)
+[WP Installer](./wp-installer.png)
 
 Now fill in the fields and click `Install WordPress`. Our database hostname is `db`, Docker automatically links the DNS name `db` to the container with that name within the same network!
 
