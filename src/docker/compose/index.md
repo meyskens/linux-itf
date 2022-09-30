@@ -118,7 +118,7 @@ services:
       - wordpress
 ```
 
-All of our containers are Services. In Docker Compose, we usually talk about multiple containers. Each of these has a name and properties. Here we define the containers that our container needs image `wordpress`, must expose port 80 and uses network `wordpress`. `depends_on is new, this lets Docker Compose determine which containers to start first. For example, the database is going to be created first because WordPress is going to connect to it. With `restart: always` we set that this container should also start after a reboot.
+All of our containers are Services. In Docker Compose, we usually talk about multiple containers. Each of these has a name and properties. Here we define the containers that our container needs image `wordpress`, must expose port 80 and uses network `wordpress`. `depends_on` is new, this lets Docker Compose determine which containers to start first. For example, the database is going to be created first because WordPress is going to connect to it. With `restart: always` we set that this container should also start after a reboot.
 
 ```yaml
 services:
@@ -211,7 +211,7 @@ $ docker compose restart
  ⠿ Container wp-wordpress-1 Started 1.5s
 ```
 
-### `docker compose down``
+### `docker compose down`
 
 The down command is a dangerous one, `down` stops all containers and **throws out** all data.
 Use this only locally or if you want to reset everything.
