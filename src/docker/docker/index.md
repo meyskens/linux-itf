@@ -359,7 +359,7 @@ Docker images are... yes code again! We build images using a `Dockerfile`.
 We take a quick look at one:
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt update && apt install -y nginx
 
@@ -385,7 +385,7 @@ ANY Dockerfile starts with a `FROM` command. This says what we take as a base.
 Usually we start from a Linux Distribution
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 ```
 
 Or prefer Fedora?
@@ -441,7 +441,7 @@ RUN mkdir /hallo
 ```
 
 ```Dockerfile
-FROM ubnuntu:20.04
+FROM ubnuntu:22.04
 
 RUN apt-get update && apt-get install -y nginx
 ```
@@ -460,7 +460,7 @@ Every RUN, COPY, etc. in a Docker file creates a layer in the image. Underneath,
 Therefore, NEVER\*\*
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt-get update
 RUN apt-get install -y nginx
@@ -472,19 +472,19 @@ RUN apt-get install -y php7.2-gd
 RUN apt-get install -y php7.2-mbstring
 ```
 
-But use `&&` for multiple commands in 1 RUN. And ``` for a new line inside a RUN.
+But use `&&` for multiple commands in 1 RUN. And `\` for a new line inside a RUN.
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
-RUN apt-get update &&&
-    apt-get install -y
-    nginx
-    php7.2
-    php7.2-fpm
-    php7.2-mysql
-    php7.2-curl
-    php7.2-gd
+RUN apt-get update && \
+    apt-get install -y \
+    nginx \
+    php7.2 \
+    php7.2-fpm \
+    php7.2-mysql \
+    php7.2-curl \
+    php7.2-gd \
     php7.2-mbstring
 ```
 
@@ -527,7 +527,7 @@ ENV MYSQL_DATABASE=wordpress
 A handy one to set on Debian-based images might be:
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ```
