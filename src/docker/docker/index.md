@@ -108,7 +108,7 @@ Shipping a version is as simple as `docker push`.
 For management, it first simplifies running servers, most configuration and packages are already included in a Docker image.
 It also improves problems such as different versions of dependencies. Need two versions of MySQL or PHP? No problem anymore with Docker!
 
-Pre Docker](./pre-docker.jpg)
+![Pre Docker](./pre-docker.jpg)
 Different services need different libraries, these are all shared on the system and conflicts arise.
 
 ![Post Docker](./post-docker.jpg)
@@ -160,7 +160,7 @@ The command looks like this:
 docker run <options> <name image> [optional command].
 ```
 
-- The image name is required, it comes from your own images or Docker Hub (or others). A `:` indicates a version e.g. `ubuntu:20.04` by default this is `latest`.
+- The image name is required, it comes from your own images or Docker Hub (or others). A `:` indicates a version e.g. `ubuntu:22.04` by default this is `latest`.
 - The optional command overrides the default command contained in the image
 
 However, there are also many useful options:
@@ -292,7 +292,7 @@ WordPress gets port 8081 on our server. MariaDB remains internal.
 
 Now if we open `<ip address>:8081` in our browser we get a WordPress installer.
 
-WP Installer](./wp-installer.png)
+![WP Installer](./wp-installer.png)
 
 Now fill in the fields and click `Install WordPress`. Our database hostname is `db`, Docker automatically links the DNS name `db` to the container with that name within the same network!
 
@@ -359,7 +359,7 @@ Docker images are... yes code again! We build images using a `Dockerfile`.
 We take a quick look at one:
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt update && apt install -y nginx
 
@@ -385,7 +385,7 @@ ANY Dockerfile starts with a `FROM` command. This says what we take as a base.
 Usually we start from a Linux Distribution
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 ```
 
 Or prefer Fedora?
@@ -441,7 +441,7 @@ RUN mkdir /hallo
 ```
 
 ```Dockerfile
-FROM ubnuntu:20.04
+FROM ubnuntu:22.04
 
 RUN apt-get update && apt-get install -y nginx
 ```
@@ -460,7 +460,7 @@ Every RUN, COPY, etc. in a Docker file creates a layer in the image. Underneath,
 Therefore, NEVER\*\*
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt-get update
 RUN apt-get install -y nginx
@@ -472,19 +472,19 @@ RUN apt-get install -y php7.2-gd
 RUN apt-get install -y php7.2-mbstring
 ```
 
-But use `&&` for multiple commands in 1 RUN. And ``` for a new line inside a RUN.
+But use `&&` for multiple commands in 1 RUN. And `\` for a new line inside a RUN.
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
-RUN apt-get update &&&
-    apt-get install -y
-    nginx
-    php7.2
-    php7.2-fpm
-    php7.2-mysql
-    php7.2-curl
-    php7.2-gd
+RUN apt-get update && \
+    apt-get install -y \
+    nginx \
+    php7.2 \
+    php7.2-fpm \
+    php7.2-mysql \
+    php7.2-curl \
+    php7.2-gd \
     php7.2-mbstring
 ```
 
@@ -527,7 +527,7 @@ ENV MYSQL_DATABASE=wordpress
 A handy one to set on Debian-based images might be:
 
 ```Dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ```
@@ -704,11 +704,11 @@ Developers provide the following specs:
 - Downloading can be done with `git clone https://github.com/socketio/chat-example.git`
 - Install the dependencies with `npm install`.
 - Starting the application with `npm start`
-- Port is 3000 (you can change it with enviroment variabe `PORT`)
+- Port is 3000 (you can change it with environment variabe `PORT`)
 
 Your assignment:
 
 - Download the code
-- Add a dockerile
+- Add a Dockerfile
 - Build an image
 - Run the image on port 8090, if this is running view the site on your laptop at http://IP Server:8090/
