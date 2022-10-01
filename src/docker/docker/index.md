@@ -108,10 +108,10 @@ Shipping a version is as simple as `docker push`.
 For management, it first simplifies running servers, most configuration and packages are already included in a Docker image.
 It also improves problems such as different versions of dependencies. Need two versions of MySQL or PHP? No problem anymore with Docker!
 
-Pre Docker](./pre-docker.png)
+Pre Docker](./pre-docker.jpg)
 Different services need different libraries, these are all shared on the system and conflicts arise.
 
-![Post Docker](./post-docker.png)
+![Post Docker](./post-docker.jpg)
 Inside Docker containers, each service has a mini Linux distribution optimized by the creators of the application!
 
 Imagine we are creating a Linux setup. We have so far set up and configured everything ourselves.
@@ -672,6 +672,12 @@ docker build -t <name> . # build an image
 docker network create <name> # create a network
 docker network ls # show all networks
 ```
+
+## Muli-archtecture images
+
+Docker images are built for a specific architecture. This means that if you want to run an image on a different architecture, you need to build it yourself.
+
+For example, if you want to run an image on an ARM-based system, you need to build it yourself.
 
 ## Commands
 
