@@ -677,7 +677,7 @@ docker network ls # show all networks
 
 Want to play a game with the power of Docker?
 
-- Clone the repo `https://github.com/spkane/wearebigchill.git `
+- Clone the repo `https://github.com/spkane/wearebigchill.git`
 - In the directory build the image `docker build -t docker-game .`
 - Run the container `docker run -p 8090:80 docker-game` (can you explain what `8090:80` does?)
 - Open your browser and go to `http://<IP of Server>:8090/` and try the game out for a spin. Try not to mind the very suspect physics. Please note that the 404 error page is the title screen for a game and not an error page.
