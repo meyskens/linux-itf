@@ -673,6 +673,18 @@ docker network create <name> # create a network
 docker network ls # show all networks
 ```
 
+### Exercise 0:
+
+Want to play a game with the power of Docker?
+
+- Clone the repo `https://github.com/spkane/wearebigchill.git `
+- In the directory build the image `docker build -t docker-game .`
+- Run the container `docker run -p 8090:80 docker-game` (can you explain what `8090:80` does?)
+- Open your browser and go to `http://<IP of Server>:8090/` and try the game out for a spin. Try not to mind the very suspect physics. Please note that the 404 error page is the title screen for a game and not an error page.
+- Go back to your terminal and hit ctrl+c to stop the container.
+- Restart the container, this time specifying an environment variable `"THEME=2"`, and try the game again (you might need to clear cache). What happened? Why is this handy?
+- Stop the container and remove it.
+
 ### Exercise 1:
 
 Create a Dockerfile based on `ubuntu` later one based on `alpine`. Name them `my-site-ubuntu` and `my-site-alpine` respectively.
