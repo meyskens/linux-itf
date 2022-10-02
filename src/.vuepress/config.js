@@ -92,11 +92,12 @@ module.exports = config({
       },
       {
         text: "Kubernetes",
-        icon: "far fa-dharmachakra",
+        icon: "fas fa-dharmachakra",
         items: [
           { text: "YAML", link: "/kubernetes/yaml/" },
           { text: "What is k8s?", link: "/kubernetes/what/" },
           { text: "Clusters", link: "/kubernetes/clusters/" },
+          { text: "Resources", link: "/kubernetes/resources/" },
           { text: "Helm", link: "/kubernetes/helm/" },
         ],
       },
