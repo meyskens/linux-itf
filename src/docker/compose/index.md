@@ -26,7 +26,7 @@ sudo mkdir -p /usr/local/lib/docker/cli-plugins
 sudo mv docker-compose-linux-x86_64 /usr/local/lib/docker/cli-plugins/docker-compose
 ```
 
-Now do `docker-compose` and you should get an explanation.
+Now do `docker compose` and you should get an explanation.
 :::
 
 ## docker-compose.yml
@@ -183,7 +183,7 @@ docker compose up
 
 This starts up our Wordpress environment and we can start viewing it with the browser.
 
-Like Docker itself, we can also use ``docker compose up -d`` for background startup. Docker also restarts these containers when the server reboots if `restart: always` is in the file!
+Like Docker itself, we can also use `docker compose up -d` for background startup. Docker also restarts these containers when the server reboots if `restart: always` is in the file!
 
 ```bash
 $ docker ps
