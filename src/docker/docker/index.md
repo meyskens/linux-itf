@@ -673,14 +673,6 @@ docker network create <name> # create a network
 docker network ls # show all networks
 ```
 
-## Muli-archtecture images
-
-Docker images are built for a specific architecture. This means that if you want to run an image on a different architecture, you need to build it yourself.
-
-For example, if you want to run an image on an ARM-based system, you need to build it yourself.
-
-## Commands
-
 ### Exercise 1:
 
 Create a Dockerfile based on `ubuntu` later one based on `alpine`. Name them `my-site-ubuntu` and `my-site-alpine` respectively.
