@@ -20,8 +20,8 @@
   "license": "MIT",
   "devDependencies": {
     "vuepress": "^1.9.5",
-    "vuepress-plugin-md-enhance": "^1.20.1",
-    "vuepress-theme-hope": "^1.23.0"
+    "vuepress-plugin-md-enhance": "^1.30.0",
+    "vuepress-theme-hope": "^1.30.0"
   },
   "dependencies": {
     "vuepress-plugin-export": "^0.2.0"
