@@ -30,8 +30,8 @@ Note that this also impacts security, the isolation between 2 containers is not 
 ## History
 
 > **The Docker Myth**
-> Sysadmin: your code does not work
-> Developer: works on my laptop!
+> Sysadmin: your code does not work  
+> Developer: works on my laptop!  
 > Sysadmin: then send me your laptop for in the datacenter
 >
 > _And that kids is how Docker was born_
