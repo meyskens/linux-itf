@@ -47,7 +47,7 @@ Today these are mostly VMs but in 2005 this was not optimal. OpenVZ (Virtuozzo a
 
 Containers however were treated like VMs, they had heavy images and were maintained individually as if they were physical servers. Each Container had its own network stack, IP and even a name.
 
-Docker briefly saw a Linux Container not as a pet (= server with name and concerns) but as an individual service. As an isolated process on a server. Herein was the breakthrough for Docker in 2013. Containers solved problems around dependency management and application shipping. Containers were now of shorter lifespan, created quickly and container images could be created programmatically.
+Docker saw a Linux Container not as a pet (= server with name and concerns) but as an individual service. As an isolated process on a server. Herein was the breakthrough for Docker in 2013. Containers solved problems around dependency management and application shipping. Containers were now of shorter lifespan, created quickly and container images could be created programmatically.
 
 The technology that made it possible was already there, the concept of Docker newly born.
 
