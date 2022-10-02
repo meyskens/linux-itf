@@ -29,6 +29,12 @@ spec:
 
 ## Service
 
+Gets you an IP and DNS entry
+
+Points to 1 or multiple pods
+
+In the Cloud? It can get you a public IP!
+
 ```yaml
 ---
 apiVersion: v1
@@ -48,6 +54,12 @@ spec:
 ```
 
 ## Ingress
+
+HTTP(S) loadbalancer service
+
+Exposes + secures HTTP services
+
+Terminates TLS
 
 ```yaml
 ---
