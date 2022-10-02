@@ -1,13 +1,13 @@
 {
-  "name": "devops-graduaten",
+  "name": "linux-itf",
   "version": "0.0.1",
-  "description": "DevOps",
+  "description": "Linux Webservives",
   "main": "index.js",
   "authors": {
     "name": "Maartje Eyskens",
     "email": "maartje.eyskens@thomasmore.be"
   },
-  "repository": "https://github.com/meyskens/linux-server-graduaten",
+  "repository": "https://github.com/meyskens/linux-itf",
   "scripts": {
     "dev": "vuepress dev src",
     "build": "vuepress build src",
