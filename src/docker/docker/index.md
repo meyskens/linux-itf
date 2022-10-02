@@ -42,7 +42,7 @@ Containers have their origins in the year 1999 but not in the Linux world. Jails
 
 (Hardware Virtualization existed experimentally since the 60s but had a great perfomance impact until Intel and AMD built in hardware support in 2005)
 
-Containers made their appearance in 2005 with the so-called "VPS" a Virtual Private Server. The VPS offered a cheap solution for hosting servers, where before you had to rent an entire server you could now rent a part. Today we see that this has become the standard with cloud.
+Linux containers made their appearance in 2005 with the so-called "VPS" a Virtual Private Server. The VPS offered a cheap solution for hosting servers, where before you had to rent an entire server you could now rent a part. Today we see that this has become the standard with cloud.
 Today these are mostly VMs but in 2005 this was not optimal. OpenVZ (Virtuozzo as a commercial product) was still a fork of the Linux kernel to make this possible. Later in more recent Linux versions, LXC came with native support for containers.
 
 Containers however were treated like VMs, they had heavy images and were maintained individually as if they were physical servers. Each Container had its own network stack, IP and even a name.
