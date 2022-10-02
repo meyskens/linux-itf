@@ -29,6 +29,13 @@ Note that this also impacts security, the isolation between 2 containers is not 
 
 ## History
 
+> **The Docker Myth**
+> Sysadmin: your code does not work
+> Developer: works on my laptop!
+> Sysadmin: then send me your laptop for in the datacenter
+>
+> _And that kids is how Docker was born_
+
 Containers are not new! While many attribute the invention to Docker and some call a reinvention by Docker a wrong term, containers have been around for a long time. Docker on the other hand changed how we treated them, seeing them no longer as mini-servers but as a building block of a larger whole.
 
 Containers have their origins in the year 1999 but not in the Linux world. Jails were a feature in FreeBSD (Unix based) to be able to split a server into "virtual machines" that shared the FreeBSD kernel to avoid overhead. First ideas about this idea come as early as 1982 from `chroot`, but this isolation was minimal and limited to the file system.
