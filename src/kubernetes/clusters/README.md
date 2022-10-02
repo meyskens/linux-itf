@@ -82,6 +82,8 @@ EOF
 
 ### Ingress
 
+kind doesn't come with an ingress controller out of the box. We will use [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) which is the most popular ingress controller for Kubernetes.
+
 ```bash
 # Now let's install our ingress controller compoment
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
@@ -89,6 +91,8 @@ kubectl get pod --all-namespaces # watch to see them all starting
 ```
 
 ### Storage
+
+kind has a built in local storage provider, we will use that to make Presistend Volumes available in our cluster.
 
 ## kubeadm - the production ready offcial way
 
@@ -102,4 +106,4 @@ https://github.com/cloudnativehero/kubeadm-vagrant
 
 So you want to brag to your friends you know Kubernetes really really well? Go set up a cluster using [Kelsey Hightower's Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 
-[^bashbatter]: Eyskens, Mariën. (2022). Bash vs. PowerShell. B300 cage fights.
+[^bashbatter]: Eyskens, Mariën. (2022). Bash vs. PowerShell. B300 fights.
