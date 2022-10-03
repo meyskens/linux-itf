@@ -1,5 +1,7 @@
 # Kubernetes
 
+![logo](./logo.png)
+
 ## Glossary
 
 - **Kubernetes**: Greek for captain, pilot
@@ -265,7 +267,7 @@ This will make sure the service links to the app `company-website-app` with the 
 We have a spec written in YAML, we can use `kubectl` to create it in our cluster. But how does Kubernetes know what to do with it?
 This is s a process called **reconciling**.
 
-![reconciling](./reconciling.jpg)
+![reconciling](./reconcile.jpg)
 
 How to think of this? Well Kubernetes has a database full of YAML specs, and also access to the actual things it creates like containers.
 
