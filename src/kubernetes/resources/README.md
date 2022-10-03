@@ -761,9 +761,9 @@ wordpress-ingress   localhost   192.168.122.158   80      19m
 
 To have more fun we could forward the domain to our server IP on our own machine:
 
-- Windows: https://www.thewindowsclub.com/hosts-file-in-windows
-- macOS: https://www.alphr.com/edit-hosts-file-mac-os-x/
-- Linux: _do i really have to tell you?..._ okay here it is: https://www.makeuseof.com/tag/modify-manage-hosts-file-linux/
+- Windows: [https://www.thewindowsclub.com/hosts-file-in-windows](https://www.thewindowsclub.com/hosts-file-in-windows)
+- macOS: [https://www.alphr.com/edit-hosts-file-mac-os-x/](https://www.alphr.com/edit-hosts-file-mac-os-x/)
+- Linux: _do i really have to tell you?..._ okay here it is: [https://www.makeuseof.com/tag/modify-manage-hosts-file-linux/](https://www.makeuseof.com/tag/modify-manage-hosts-file-linux/)
 
 If all goes right you can now open `wordpress.local` in your browser and enjoy wordpress!
 
