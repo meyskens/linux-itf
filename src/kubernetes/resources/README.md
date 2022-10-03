@@ -1,5 +1,88 @@
 # Kubernetes Resources
 
+## Pod
+
+### Pods
+
+Objects can also be generated/updated
+by Kubernetes
+
+API Objects have the following common fields:
+
+Metadata: The name and namespace
+
+Spec: The desired state of an object
+
+Status: The current state of an object
+
+Pod: a group of whales
+
+Is one or more containers, usually ONE
+
+Containers share one IP, one network
+
+Can look at each other's disk, processes etc.
+
+Smallest unit in Kubernetes (like atoms)
+
+One pod per application!
+
+You wouldn’t want to work on atomic level right?
+
+Deployments: drive applications!
+
+They take care of updating
+
+They take care of scaling
+
+They recreate pods should a server crash
+
+You define the spec, k8s will make it happen
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+name: nginx-deployment
+
+labels:
+
+app: nginx
+
+spec:
+
+replicas: 3
+
+selector:
+
+matchLabels:
+
+app: nginx
+
+template:
+
+metadata:
+
+labels:
+
+app: nginx
+
+spec:
+
+containers:
+
+- name: nginx
+
+image: nginx:1.14.2
+
+ports:
+
+- containerPort: 80
+
+How to talk Kubernetes
+
 ## Deployment
 
 ```yaml

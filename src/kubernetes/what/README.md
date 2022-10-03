@@ -281,106 +281,88 @@ If you're a developer you immediately see the flaws. This is a simplified versio
 
 ## Namespaces
 
-Namespace
+You will find many namespaces in Kubernetes. They are used to group resources together and isolate them if needed. It allows for a better overview when looking into the cluster.
 
-#
+It also is a security boundry when setting up RBAC (Role Based Access Control), you can give a user or system access to a specific namespace.
 
-Isolation
-
-A security boundary
+We can list namespaces and make them when needed:
 
 ```bash
-kubectl create <namespace>
+kubectl get namespaces
+kubectl create namespace <namespace>
+```
 
+By default you will see the `default` and `kube-system` namespace, the last one is used by Kubernetes to host it's own internal system.
+
+We can switch namespaces using the `-n` flag:
+
+```bash
 kubectl -n <namespace>
 ```
 
-default one: “default”
+For example you might want to list the pods per namespace:
 
-example: system services “kube-system”
+```bash
+kubectl -n kube-system get pods
+kubectl -n default get pods
+```
+
+:::tip
+Some resources are never bound to a namespace like `nodes` or `persistentvolumes` and all resources starting with the prefix `cluster`.
+Keep in mind these are exceptions and most resources are bound to a namespace.
+:::
+
+## Handy aliases
+
+You can use aliases to make your life easier. For example you can use `k` instead of `kubectl`:
+
+```bash
+alias k=kubectl
+alias kp='kubectl get pods'
+alias kdp='kubectl describe pod'
+```
+
+The next one is `kcc`, this can be used to switch the default context (cluster) and namespace:
+
+```bash
+function kcc () {
+    usage () {
+        echo -en "Usage: $0 <context> <namespace>\n"
+    }
+    result () {
+        echo -en "-> Context: \e[96m$context\e[0m\n-> Namespace: \e[92m$namespace\n\e[0m"
+    }
+    if  [ $# -eq 0 ] ; then
+        ## If no options, print the current context/cluster and namespace
+        context="$(kubectl config current-context 2>/dev/null)"
+        namespace="$(kubectl config view -o "jsonpath={.contexts[?(@.name==\"$context\")].context.namespace}")"
+        result
+    elif [ $# -eq 2 ]; then
+        ## If options, assume time to set
+        context="$1"
+        namespace="$2"
+        kubectl config use-context "$context" > /dev/null
+        kubectl config set-context "$context" --namespace="$namespace" > /dev/null
+        result
+    else
+        usage
+    fi
+
+}
+```
+
+_Credits to [InAnimaTe](https://gist.github.com/InAnimaTe/eeeb4b01467d74c522b94f12ed009889)_
+
+This will allow you to switch the cluster and namespace in one command:
+
+```bash
+kcc kind-kind kube-system # switch to the kind cluster and the kube-system namespace
+kcc kind-kind default
+```
+
+**Add both these codes to your `~/.bashrc` file so they are ready for use.**
 
 ## What's next?
 
 Congratulations you now know what Kubernetes is!
 But we're far from there yet... We need to set up a [Kubernetes cluster](../clusters/) first, from there on we can take a look at [Resources](../resources/) and to end we will take a look at our package manager [Helm](../helm/).
-
-### Pods
-
-Objects can also be generated/updated
-by Kubernetes
-
-API Objects have the following common fields:
-
-Metadata: The name and namespace
-
-Spec: The desired state of an object
-
-Status: The current state of an object
-
-Pod: a group of whales
-
-Is one or more containers, usually ONE
-
-Containers share one IP, one network
-
-Can look at each other's disk, processes etc.
-
-Smallest unit in Kubernetes (like atoms)
-
-One pod per application!
-
-You wouldn’t want to work on atomic level right?
-
-Deployments: drive applications!
-
-They take care of updating
-
-They take care of scaling
-
-They recreate pods should a server crash
-
-You define the spec, k8s will make it happen
-
-apiVersion: apps/v1
-
-kind: Deployment
-
-metadata:
-
-name: nginx-deployment
-
-labels:
-
-app: nginx
-
-spec:
-
-replicas: 3
-
-selector:
-
-matchLabels:
-
-app: nginx
-
-template:
-
-metadata:
-
-labels:
-
-app: nginx
-
-spec:
-
-containers:
-
-- name: nginx
-
-image: nginx:1.14.2
-
-ports:
-
-- containerPort: 80
-
-How to talk Kubernetes
