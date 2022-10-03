@@ -27,6 +27,8 @@ spec:
               name: http
 ```
 
+https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
 ## Service
 
 Gets you an IP and DNS entry
@@ -81,6 +83,14 @@ spec:
                 port:
                   name: http
 ```
+
+## Other interesting resources
+
+- [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) - for mounting configuration files into containers
+- [Secret](https://kubernetes.io/docs/concepts/configuration/secret/) - for mounting secrets into containers
+- [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) - for running scheduled jobs
+- [DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) - for running a pod on every node
+- [PresistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) - for requesting persistent storage to be added into containers
 
 ## Wordpress on Kubernetes - a tutorial
 
