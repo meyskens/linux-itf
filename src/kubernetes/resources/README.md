@@ -1,89 +1,88 @@
 # Kubernetes Resources
 
+So we learned before Kubernetes is a collection of resources. These resources are defined in a `spec` written in YAML files. The YAML files are then send to the cluster. Then those resources are then managed by the cluster. In many cases resources will create new resources as needed. But no worries we'll learn more about that later.
+
+How does a simple app look like in Kubernetes? This diagram tries to describe it:
+
+![typical deployment](./typical-deployment.png)
+
+You will see a lot of terms being used so let's go over them:
+
 ## Pod
 
-### Pods
+We'll be starting from the very **lowest** level: the pod.
 
-Objects can also be generated/updated
-by Kubernetes
+> **Pod**: a group of whales
 
-API Objects have the following common fields:
+This is often called the atom of Kubernetes. It is the smallest visible level of an application. But it is where everything runs.
 
-Metadata: The name and namespace
+A pod ss one or more containers, usually ONE. In case there are several we call these "sidecar containers", why would you use them? To add functionality to your main container. For example, you could have a sidecar container that does logging or monitoring.
 
-Spec: The desired state of an object
+All containers in a pod share one IP and one network. They have no isolation between them.
+For this the rule us to host one pod per application (so don't even think about putting a webserver and a database in one pod)!
 
-Status: The current state of an object
+A pod will look something like this:
 
-Pod: a group of whales
-
-Is one or more containers, usually ONE
-
-Containers share one IP, one network
-
-Can look at each other's disk, processes etc.
-
-Smallest unit in Kubernetes (like atoms)
-
-One pod per application!
-
-You wouldn’t want to work on atomic level right?
-
-Deployments: drive applications!
-
-They take care of updating
-
-They take care of scaling
-
-They recreate pods should a server crash
-
-You define the spec, k8s will make it happen
-
-apiVersion: apps/v1
-
-kind: Deployment
-
+```yaml
+apiVersion: v1
+kind: Pod
 metadata:
-
-name: nginx-deployment
-
-labels:
-
-app: nginx
-
+  name: my-pod
 spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: my-volume
+          mountPath: /data
+  volumes:
+    - name: my-volume
+      persistentVolumeClaim:
+        claimName: my-pvc
+```
 
-replicas: 3
+Popular parts of the pod are:
 
-selector:
+- `containers`: the containers that run in the pod
+- `volumes`: the volumes that are mounted in the pod, either from secrets, configmaps or persistent volumes
+- `initContainers`: containers that run before the main containers, used for example to deploy a database schema update
+- `restartPolicy`: the policy for restarting the pod, can be `Always`, `OnFailure` or `Never`
+- `nodeSelector`: the node selector for the pod, used to schedule the pod on a specific node or group of nodes
 
-matchLabels:
+A list of all fields can be gotten with `kubectl explain pod.spec` or [the api documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#pod-v1-core).
 
-app: nginx
+Let's look at the pods running in our cluster:
 
-template:
+```bash
+$ kubectl get pods -n kube-system
+NAME                                         READY   STATUS    RESTARTS   AGE
+coredns-565d847f94-8wmbk                     1/1     Running   0          3h16m
+coredns-565d847f94-dxz2j                     1/1     Running   0          3h16m
+etcd-kind-control-plane                      1/1     Running   0          3h16m
+kindnet-zlr76                                1/1     Running   0          3h16m
+kube-apiserver-kind-control-plane            1/1     Running   0          3h16m
+kube-controller-manager-kind-control-plane   1/1     Running   0          3h16m
+kube-proxy-wrvkh                             1/1     Running   0          3h16m
+kube-scheduler-kind-control-plane            1/1     Running   0          3h16m
+```
 
-metadata:
-
-labels:
-
-app: nginx
-
-spec:
-
-containers:
-
-- name: nginx
-
-image: nginx:1.14.2
-
-ports:
-
-- containerPort: 80
-
-How to talk Kubernetes
+**You wouldn’t want to work on atomic level right? We will never create pods ourselves!**
 
 ## Deployment
+
+Deployments are what drive applications! When we want to host a container in Kubernetes we will most of the times be using a deployment.
+
+What can Deployment do for us?
+
+- They take care of updating
+  - They will create a new set of pods (ReplicaSet), wait till they are started then delete the old ones
+  - Should this fail it will automaticaly stop
+  - This causes a rolling update **without downtime**
+- They take care of scaling
+  - We can ask to scale up or down the pods over multiple servers
+- They recreate pods should a server crash (or we delete them so they restart)
 
 ```yaml
 ---
@@ -101,24 +100,216 @@ spec:
     metadata:
       labels:
         app: hello-world
-    spec:
+    spec: # this is our pod spec!
       containers:
         - name: nginx
           image: nginxdemos/hello
           ports:
             - containerPort: 80
-              name: http
+              name: http # from now on we can use the name http to refer to this port
+          livenessProbe: # checks if the server still works every 5 seconds
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe: # checks if the server is ready to accept traffic
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
 ```
 
-https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+Want to know what all these words mean? [https://kubernetes.io/docs/concepts/workloads/controllers/deployment/](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+
+Let's try it out, save this config as `deployment.yaml` and run:
+
+```bash
+kubectl apply -f deployment.yaml
+```
+
+Let's check if it worked:
+
+```bash
+kubectl get deploy # deploy is short for deployment(s)
+```
+
+If all was okay you will see something like this:
+
+```bash
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+hello-world-deployment   1/1     1            1           43s
+```
+
+Let's run a `kubectl describe deploy hello-world-deployment` to see more details:
+
+```
+Name:                   hello-world-deployment
+Namespace:              default
+CreationTimestamp:      Mon, 03 Oct 2022 13:51:21 +0200
+Labels:                 <none>
+Selector:               app=hello-world
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=hello-world
+  Containers:
+   nginx:
+    Image:        nginxdemos/hello
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Liveness:     http-get http://:http/ delay=5s timeout=1s period=5s #success=1 #failure=3
+    Readiness:    http-get http://:http/ delay=2s timeout=1s period=10s #success=1 #failure=3
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   hello-world-deployment-5dc7657797 (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  96s   deployment-controller  Scaled up replica set hello-world-deployment-5dc7657797 to 1
+```
+
+You can see it made a `ReplicaSet` which it named `hello-world-deployment-5dc7657797`.
+Let's look into that using `kubectl describe rs hello-world-deployment-5dc7657797` (again `rs` is short for `replicaset` both work! Oh also the name on your machine will be different)
+
+```
+Name:           hello-world-deployment-5dc7657797
+Namespace:      default
+Selector:       app=hello-world,pod-template-hash=5dc7657797
+Labels:         app=hello-world
+                pod-template-hash=5dc7657797
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/hello-world-deployment
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=hello-world
+           pod-template-hash=5dc7657797
+  Containers:
+   nginx:
+    Image:        nginxdemos/hello
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Liveness:     http-get http://:http/ delay=5s timeout=1s period=5s #success=1 #failure=3
+    Readiness:    http-get http://:http/ delay=2s timeout=1s period=10s #success=1 #failure=3
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Events:
+  Type    Reason            Age    From                   Message
+  ----    ------            ----   ----                   -------
+  Normal  SuccessfulCreate  3m49s  replicaset-controller  Created pod: hello-world-deployment-5dc7657797-wkdnd
+```
+
+We see this make a `pod`! Let's look at that using `kubectl describe pod hello-world-deployment-5dc7657797-wkdnd`
+
+```
+Name:         hello-world-deployment-5dc7657797-wkdnd
+Namespace:    default
+Priority:     0
+Node:         kind-control-plane/172.20.0.2
+Start Time:   Mon, 03 Oct 2022 13:51:21 +0200
+Labels:       app=hello-world
+              pod-template-hash=5dc7657797
+Annotations:  <none>
+Status:       Running
+IP:           10.244.0.5
+IPs:
+  IP:           10.244.0.5
+Controlled By:  ReplicaSet/hello-world-deployment-5dc7657797
+Containers:
+  nginx:
+    Container ID:   containerd://d4c35c5f1278d967aab8358b4dee215eff4ca6be4e3952cfbd1a785a2d698c35
+    Image:          nginxdemos/hello
+    Image ID:       docker.io/nginxdemos/hello@sha256:224be382373facb075e5ed867f057e14f35132f91b7b59de132fbdee03dd140d
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Mon, 03 Oct 2022 13:51:31 +0200
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:http/ delay=5s timeout=1s period=5s #success=1 #failure=3
+    Readiness:      http-get http://:http/ delay=2s timeout=1s period=10s #success=1 #failure=3
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4hkq6 (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  kube-api-access-4hkq6:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute for 300s
+                             node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type    Reason     Age    From                         Message
+  ----    ------     ----   ----                         -------
+  Normal  Scheduled  4m31s  default-scheduler            Successfully assigned default/hello-world-deployment-5dc7657797-wkdnd to kind-control-plane
+  Normal  Pulling    4m30s  kubelet, kind-control-plane  Pulling image "nginxdemos/hello"
+  Normal  Pulled     4m21s  kubelet, kind-control-plane  Successfully pulled image "nginxdemos/hello" in 9.403020325s
+  Normal  Created    4m21s  kubelet, kind-control-plane  Created container nginx
+  Normal  Started    4m21s  kubelet, kind-control-plane  Started container nginx
+```
+
+:::tip
+You can do this from Pod -> ReplicaSet -> Deployment by following the `Controlled By` field! This is what Kubernetes uses to track down it's chain of command
+:::
+
+A Deployment is a type of Kubernetes resource that creates underlying resources! This is a very common pattern in Kubernetes.
+
+A deployment will create one `ReplicaSet` per update (to do rolling upgrade). A `ReplicaSet` is then responsible to creatre the `Pods` that are needed and scale them (thus the name). We rarely create `ReplicaSets` directly, we use `Deployments` instead.
+
+![deployment](./deployment.png)
+
+Let's scale up a bit!
+
+```
+kubectl scale deployment hello-world-deployment --replicas=3
+```
+
+This is a shortcut to change the `replicas:` field in the `Deployment` resource. We can also do this by editing the resource directly.
+
+```bash
+$ kubectl get pods
+NAME                                      READY   STATUS              RESTARTS   AGE
+hello-world-deployment-5dc7657797-vddkc   0/1     ContainerCreating   0          2s
+hello-world-deployment-5dc7657797-wkdnd   1/1     Running             0          37m
+hello-world-deployment-5dc7657797-zbwd9   0/1     ContainerCreating   0          2s
+```
+
+Good now we got 3!
 
 ## Service
 
-Gets you an IP and DNS entry
+We got a deployment running and containers are running. But how do we access them? We need a `Service`!
+What does a service do for you? It gets you an (internal) IP address that you can use to access your application. It also does load balancing for you! So if you have multiple pods, it will load balance between them (like those 3 we just made).
+It also gets you an internal DNS entry `<name>.<namespace>.svc.cluster.local` that you can use to access your application from other pods (think databases).
 
-Points to 1 or multiple pods
+There are 3 types of services:
 
-In the Cloud? It can get you a public IP!
+- ClusterIP: This is the default type. It gives you an internal IP address that you can use to access your application from within the cluster.
+- NodePort: It gives a random port that is accessible on the external IP of the node, it exposes it to the outside world. (it also creates a ClusterIP)
+- LoadBalancer: It will create a load balancer in your cloud provider that you are using so you get an external IP address. (it also creates a ClusterIP)
 
 ```yaml
 ---
@@ -128,15 +319,67 @@ metadata:
   name: hello-world-service
   namespace: default
 spec:
+  type: ClusterIP
   selector:
     app: hello-world
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
-      name: http
-  type: ClusterIP
+      targetPort: http
 ```
+
+Let's save this to a file called `service.yaml` and apply it!
+
+```bash
+kubectl apply -f service.yaml
+```
+
+```bash
+$ kubectl get service
+NAME                  TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+hello-world-service   ClusterIP   10.96.82.17   <none>        80/TCP    3s
+kubernetes            ClusterIP   10.96.0.1     <none>        443/TCP   3h50m
+```
+
+We see we got the internal IP `10.96.82.17` assigned. But where does it point to? Let's check the endpoints!
+
+```bash
+$ kubectl get endpoints
+NAME                  ENDPOINTS                                   AGE
+hello-world-service   10.244.0.5:80,10.244.0.6:80,10.244.0.7:80   82s
+kubernetes            172.20.0.2:6443                             3h51m
+```
+
+Just like Deployment created ReplicaSets, Services create Endpoints. Endpoints are just a list of IP addresses and ports that the service points to. In this case, it points to the 3 pods that we have running. If we scale up the deployment, the endpoints will be updated automatically.
+
+Let's try to access it! For now it is only accessible from within the cluster. We can do this by using `kubectl port-forward` to forward a local port to the service.
+
+```bash
+kubectl port-forward service/hello-world-service 8080:80
+```
+
+This will forward port 8080 on your local machine to port 80 on the service. However it is not actually loadbalancing as this is a **debug** feature.
+
+Let's quickly set up a **debud pod** for us to play in:
+
+```bash
+kubectl run -i -t test-alpine --image=alpine --restart=Never
+```
+
+Let's use `curl` to access the service from within the cluster:
+
+```bash
+apk add curl
+curl http://hello-world-service.default.svc.cluster.local
+```
+
+When you're done exit the pod and please clean up the mess you made:
+
+```bash
+kubectl delete pod test-alpine
+```
+
+Do the curl command a few times you will notice you get an answer from a different pod out of our 3 each time.
 
 ## Ingress
 
@@ -166,6 +409,10 @@ spec:
                 port:
                   name: http
 ```
+
+:::tip
+In production you probably want a proper HTTPS certificate. [cert-manager](https://cert-manager.io/docs/tutorials/acme/nginx-ingress/) is your friend to request one from Let's Encrypt using a few lines of YAML. (yes the author of this chapter is biased but it really is the best)
+:::
 
 ## Other interesting resources
 
