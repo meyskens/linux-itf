@@ -6,6 +6,7 @@
 - **k8s**: hacker talk for Kubernetes, [8 characters between k and s](https://twitter.com/lunasorcery/status/1278984875190689798)
 - **pod**: a group of whales
 - **Helm**: steering wheel of a boat
+- **cluster**: a term used for a whole bunch of servers
 
 ## In the beginning...
 
@@ -264,8 +265,42 @@ This will make sure the service links to the app `company-website-app` with the 
 We have a spec written in YAML, we can use `kubectl` to create it in our cluster. But how does Kubernetes know what to do with it?
 This is s a process called **reconciling**.
 
-Kubernetes will reconcile until reality matches
-the spec.
+![reconciling](./reconciling.jpg)
+
+How to think of this? Well Kubernetes has a database full of YAML specs, and also access to the actual things it creates like containers.
+
+It is in a constant infinite `while` loop that looks at the YAML specs and compares them to the actual object. If it doesn't exist it will create it. If it does exist it will make sure it is up to date with the `spec`. When doing to it updates the `status` of the resource and send out an event on what it did.
+
+It will keep doing this process till all changes are satisfied. When reaching out to an external service like a cloud provider (eg. to request a disk) it will wait for the result in the background and then continue the update process.
+
+:::info
+If you're a developer you immediately see the flaws. This is a simplified version. In reatity the underlaying database [etcd](https://etcd.io/) offers something called "watchers" it will only run this code when something changes in the database. However it regulary checks if the actual state is the same as the desired state every few minutes/seconds.
+:::
+
+## Namespaces
+
+Namespace
+
+#
+
+Isolation
+
+A security boundary
+
+```bash
+kubectl create <namespace>
+
+kubectl -n <namespace>
+```
+
+default one: “default”
+
+example: system services “kube-system”
+
+## What's next?
+
+Congratulations you now know what Kubernetes is!
+But we're far from there yet... We need to set up a [Kubernetes cluster](../clusters/) first, from there on we can take a look at [Resources](../resources/) and to end we will take a look at our package manager [Helm](../helm/).
 
 ### Pods
 
@@ -347,39 +382,3 @@ ports:
 - containerPort: 80
 
 How to talk Kubernetes
-
-## Namespaces
-
-Namespace
-
-#
-
-Isolation
-
-A security boundary
-
-```bash
-kubectl create <namespace>
-
-kubectl -n <namespace>
-```
-
-default one: “default”
-
-example: system services “kube-system”
-
-Writing all that YAML for everything? No you silly!
-
-#
-
-Helm!
-
-Your package manager for Kubernetes
-
-https://artifacthub.io/ offers 2548 apps
-
-https://artifacthub.io/packages/helm/bitnami/
-mysql
-
-Helm “charts”: allow configurable YAML, also for
-YOUR apps :D
