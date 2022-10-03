@@ -303,13 +303,13 @@ Good now we got 3!
 
 We got a deployment running and containers are running. But how do we access them? We need a `Service`!
 What does a service do for you? It gets you an (internal) IP address that you can use to access your application. It also does load balancing for you! So if you have multiple pods, it will load balance between them (like those 3 we just made).
-It also gets you an internal DNS entry `<name>.<namespace>.svc.cluster.local` that you can use to access your application from other pods (think databases).
+It also gets you an internal DNS entry `<name>.<namespace>.svc.cluster.local` that you can use to access your application from other pods (think databases). If you are working in the same namespace calling the service name as DNS name is enough!
 
 There are 3 types of services:
 
-- ClusterIP: This is the default type. It gives you an internal IP address that you can use to access your application from within the cluster.
-- NodePort: It gives a random port that is accessible on the external IP of the node, it exposes it to the outside world. (it also creates a ClusterIP)
-- LoadBalancer: It will create a load balancer in your cloud provider that you are using so you get an external IP address. (it also creates a ClusterIP)
+- **ClusterIP**: This is the default type. It gives you an internal IP address that you can use to access your application from within the cluster.
+- **NodePort**: It gives a random port that is accessible on the external IP of the node, it exposes it to the outside world. (it also creates a ClusterIP)
+- **LoadBalancer**: It will create a load balancer in your cloud provider that you are using so you get an external IP address. (it also creates a ClusterIP)
 
 ```yaml
 ---
@@ -383,11 +383,24 @@ Do the curl command a few times you will notice you get an answer from a differe
 
 ## Ingress
 
-HTTP(S) loadbalancer service
+An Ingress is an important part of the average Kubernetes setup. It will be loadbalancing HTTP(S) for you. It also does virtualhosting based routing! By default Kubernetes supports path and host based routing (port bases is called a NodePort Service).
 
-Exposes + secures HTTP services
+The Ingress is often also responsible for terminating TLS connections for HTTPS and will be keeping certificates for you. This usally happens here as the overlay network is often encrypted by default.
 
-Terminates TLS
+![ingress](./ingress.png)
+
+_Eyskens, M. (2018, April 18). Building a Kubernetes Ingress controller · https://eyskens.me/building-a-kubernetes-ingress-controller/_
+
+While being important it does not ship by default in Kubernetes. You need to install an Ingress Controller. There are a few options:
+
+- [NGINX Ingress Controller by Kubernetes](https://kubernetes.github.io/ingress-nginx/)
+- [NGINX Ingress Controller by NGINX inc (an F5 company)](https://www.nginx.com/products/nginx/kubernetes-ingress-controller/)
+- [Traefik](https://doc.traefik.io/traefik/providers/kubernetes-ingress/)
+- [HAProxy](https://haproxy-ingress.github.io/)
+- [Contour](https://projectcontour.io/)
+- [Skipper by Zalando](https://opensource.zalando.com/skipper/kubernetes/ingress-controller/)
+
+_In this tutorial I will be assufing you are using the NGINX Ingress Controller by Kubernetes as it is supported by the Kubernetes Community. For installation see [Clusters](../clusters/)_
 
 ```yaml
 ---
@@ -411,10 +424,32 @@ spec:
 ```
 
 :::tip
+Not a fan of `/etc/hosts`, [messwithdns.net](https://messwithdns.net/) is a great tool to quickly get a DNS entry on the interwebs.
+:::
+
+Let's save this to a file called `ingress.yaml` and apply it!
+
+```bash
+kubectl apply -f ingress.yaml
+```
+
+Let's quickly cheat with DNS:
+
+```bash
+echo "127.0.0.1 hello-world.local" | sudo tee -a /etc/hosts
+curl http://hello-world.local
+```
+
+You will now see the same hello-world page as before! But this time it is linked to a domain name, while still being loadbalanced as before!
+
+:::tip
 In production you probably want a proper HTTPS certificate. [cert-manager](https://cert-manager.io/docs/tutorials/acme/nginx-ingress/) is your friend to request one from Let's Encrypt using a few lines of YAML. (yes the author of this chapter is biased but it really is the best)
 :::
 
 ## Other interesting resources
+
+The above three are great to get started but there are many more to look into for building acually useful applications!
+The Kubernetes documentation is a great place to start:
 
 - [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) - for mounting configuration files into containers
 - [Secret](https://kubernetes.io/docs/concepts/configuration/secret/) - for mounting secrets into containers
@@ -425,7 +460,7 @@ In production you probably want a proper HTTPS certificate. [cert-manager](https
 ## Wordpress on Kubernetes - a tutorial
 
 Are you ready to sail the wild seas of the Kubernetes? Let's get started!
-This tutorial combines both the use of [Helm](../helm/) charts as well as working with our own YAML manifests.
+This tutorial combines both the use of [Helm](../helm/) (so read up on that first!) charts as well as working with our own YAML manifests.
 
 ### The Big Picture
 
@@ -434,6 +469,7 @@ Since managing databases is a solved issue we will be using a [Helm Chart](https
 We will also need a volume to host our user uploads to our wordpress container.
 
 ```
+
  ----------         --------
 (          )       |        |
 (          )       |        |
@@ -453,16 +489,21 @@ We will also need a volume to host our user uploads to our wordpress container.
 (          )       |        |       @         @
 (          )       |        |       @@@@@@@@@@@
  ----------         --------
+
 ```
 
 ### MySQL
 
-Let's start by our database! By looking at https://artifacthub.io/packages/helm/bitnami/mysql we learn a lot of options we can use to configure this.
-We can write our own `values.yaml` file to set all these but using `-set` for now is shorter.
+Let's start by our database! By looking at [artifacthub.io/packages/helm/bitnami/mysql](https://artifacthub.io/packages/helm/bitnami/mysql]) we learn a lot of options we can use to configure this.
+We can write our own `values.yaml` file to set all these but using `--set` for now is shorter.
+
+:::tip
+Bitnami (a VMWare company) is a big publisher of Helm Charts however they use their own images which will not yet work on `arm64`. If you need ARM based images you might want to try this [MariaDB Chart](https://artifacthub.io/packages/helm/nicholaswilde/mariadb)
+:::
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install wp-mysql bitnami/mysql --set auth.password=random --set auth.username=wp --set auth.database=wp
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install wp-mysql bitnami/mysql --set auth.password=random --set auth.username=wp --set auth.database=wp
 ```
 
 This will have installed everything our MySQL will need.
@@ -484,7 +525,7 @@ wp-mysql              ClusterIP   10.96.17.79    <none>        3306/TCP   2m12s
 wp-mysql-headless     ClusterIP   None           <none>        3306/TCP   2m12s
 ```
 
-We see we have a `wp-mysql` service, which has an IP! The IP here can change and is only showed for information. Kubernetes also sets up DNS for us (yay!) so we can just call it using `wp-mysql` as hostname later.
+We see we have a `wp-mysql` service, which has an IP! The IP here can change and is only showed for information. Kubernetes also sets up DNS for us (yay!) so we can just call it using `wp-mysql` as hostname later (in the same namespace).
 
 But wait where does it store data?
 
@@ -494,7 +535,7 @@ NAME              STATUS   VOLUME                                     CAPACITY  
 data-wp-mysql-0   Bound    pvc-19f8e65f-81be-4436-916c-2672f486199c   8Gi        RWO            standard       3m46s
 ```
 
-PVC stands for Presistent Volume Claim and will get us a request for storage, minikube and kind will make some space on our local HDD. If you use Kubernetes in the cloud Kubernetes will actually order storage with your cloud provider for you!
+PVC stands for Presistent Volume Claim and will get us a request for storage, minikube and kind will make some space on our local HDD. If you use Kubernetes in the cloud Kubernetes will actually order storage with your cloud provider for you! (on-premis you have to set something up yourself)
 
 At last we also have secrets! These are stored securely by Kubernetes and can be injected into other resources, here passwords are stored for example.
 
@@ -529,27 +570,12 @@ mysql-password:       6 bytes
 mysql-root-password:  10 bytes
 ```
 
-`kubectl describe` is your best friend to read Kubernetes resources in human friendly format!
-
-```bash
-$ kubectl describe secret wp-mysql
-Name:         wp-mysql
-Namespace:    default
-Labels:       app.kubernetes.io/instance=wp-mysql
-              app.kubernetes.io/managed-by=Helm
-              app.kubernetes.io/name=mysql
-              helm.sh/chart=mysql-8.2.3
-Annotations:  <none>
-
-Type:  Opaque
-
-Data
-====
-mysql-password:       6 bytes
-mysql-root-password:  10 bytes
-```
-
 We now know we have 2 data keys, these keys we can use later to get the data we want!
+
+:::tip
+Need the password? `kubectl get secret wp-mysql -o jsonpath="{.data.mysql-password}" | base64 --decode`
+Secrets are only encrypted at rest, you can easily get the data out of them! However they are base64 encoded (base64 is not encryption).
+:::
 
 Our MySQL is now ready! Thanks to Helm we don't have to care too much about it, the experts who made the Helm Chart already put in years of expertise into making magic.
 
@@ -694,6 +720,7 @@ spec:
     - protocol: TCP
       port: 80 # port on the service IP
       targetPort: wordpress # port on the container, can also be a number
+      name: wordpress
   selector:
     app: wordpress
 ```
@@ -703,25 +730,28 @@ We are now going to expose it with our Ingress:
 Let's create `ingress.yaml`
 
 ```yaml
-apiVersion: networking.k8s.io/v1beta1
+---
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: wordpress-ingress
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: "nginx" # tells us to use the nginx ingress controller
+  name: wordpress
+  labels:
+    app: wordpress
 spec:
   rules:
-    - host: wp.local # hostname to serve on, you can change this if you change it in your hosts file. If you use kind on linux you can make this `localhost` and skip the hosts file step below!
+    - host: wordpress.local
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: wordpress # tells which service to talk to
-              servicePort: 80
+              service:
+                name: wordpress
+                port:
+                  name: wordpress
 ```
 
-Now let's look at it, you will see we got an `address` (might take a minute),
+Now let's look at it,:
 
 ```bash
 $ kubectl get ingress
@@ -729,20 +759,13 @@ NAME                HOSTS       ADDRESS           PORTS   AGE
 wordpress-ingress   localhost   192.168.122.158   80      19m
 ```
 
-Take this IP and make a hosts entry on your system,
-More info on how to do that:
+To have more fun we could forward the domain to our server IP on our own machine:
 
 - Windows: https://www.thewindowsclub.com/hosts-file-in-windows
 - macOS: https://www.alphr.com/edit-hosts-file-mac-os-x/
-- Linux: do i really have to tell you? okay here it is: https://www.makeuseof.com/tag/modify-manage-hosts-file-linux/
+- Linux: _do i really have to tell you?..._ okay here it is: https://www.makeuseof.com/tag/modify-manage-hosts-file-linux/
 
-for example:
-
-```
-192.168.122.158 wp.local
-```
-
-If all goes right you can now open `wp.local` in your browser and enjoy wordpress!
+If all goes right you can now open `wordpress.local` in your browser and enjoy wordpress!
 
 ## The End!
 
