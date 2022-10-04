@@ -165,7 +165,7 @@ Docker run is a simple command to create and start a container.
 The command looks like this:
 
 ```bash
-docker run <options> <name image> [optional command].
+docker run <options> <name image> [optional command]
 ```
 
 - The image name is required, it comes from your own images or Docker Hub (or others). A `:` indicates a version e.g. `ubuntu:22.04` by default this is `latest`.
@@ -189,11 +189,12 @@ docker run -d -p 80:80 --rm --name wordpress-test wordpress
 
 ```bash
 $ docker ps
-CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
-5fc981c651eb wordpress "docker-entrypoint.s..."   2 minutes ago Up About a minute 0.0.0.0:80->80/tcp wordpress-test
+CONTAINER ID   IMAGE            COMMAND                  CREATED          STATUS          PORTS                                       NAMES
+e8afa5f4cbca   wordpress        "docker-entrypoint.s…"   21 seconds ago   Up 20 seconds   0.0.0.0:80->80/tcp, :::80->80/tcp           wordpress-test
+
 ```
 
-If we now open `localhost` we see.... A wordpress installation indeed! We can't do much yet because we don't have a database yet.
+If we now open the IP of our server and we see.... A wordpress installation indeed! We can't do much yet because we don't have a database yet.
 
 ```bash
 docker stop wordpress-test
