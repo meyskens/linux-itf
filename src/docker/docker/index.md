@@ -613,9 +613,9 @@ We have now been able to create an image. To share them and especially to get th
 A registry will host our images for us. We can make them either private or public.
 There are a number of solutions
 
-- Docker Hub](https://hub.docker.com/) was the first from Docker itself, is free for public images. An image for docker hub has the format `username/image:tag`.
-- Quay.io](https://quay.io) is a major competitor hosted by Red Hat (formerly CoreOS). It is for public images and private images. The format is `quay.io/username/image:tag`.
-- GitHub Container Registry](https://ghcr.io) is a recent addition from GitHub itself, is for public images and private images co-integrated into your GitHub repository. The format is `ghcr.io/username/image:tag`.
+- [Docker Hub](https://hub.docker.com/) was the first from Docker itself, is free for public images. An image for docker hub has the format `username/image:tag`.
+- [Quay.io](https://quay.io) is a major competitor hosted by Red Hat (formerly CoreOS). It is for public images and private images. The format is `quay.io/username/image:tag`.
+- [GitHub Container Registry](https://ghcr.io) is a recent addition from GitHub itself, is for public images and private images co-integrated into your GitHub repository. The format is `ghcr.io/username/image:tag`.
 
 #### Push
 
