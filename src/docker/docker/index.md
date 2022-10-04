@@ -127,7 +127,8 @@ docker run hello-world
 ```
 
 Now where does Hello World come from?
-Hello World image](./hello-world-image.png)
+
+[Hello World image](./hello-world-image.png)
 
 This is an official Docker image, which means Docker has approved it. For many images like MySQL, Apache or Nginx and Linux distros like Ubuntu, Fedora and Alpine Linux, it means that the original developers are responsible for maintaining these images.
 
