@@ -466,7 +466,7 @@ What is important here:
 
 Every RUN, COPY, etc. in a Docker file creates a layer in the image. Underneath, Docker keeps track of your file system via deltas. We best keep this minimal for effieciency (size and speed).
 
-Therefore, NEVER\*\*
+Therefore, NEVER
 
 ```Dockerfile
 FROM ubuntu:22.04
