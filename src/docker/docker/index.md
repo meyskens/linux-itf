@@ -150,8 +150,8 @@ We can now go to see our container
 
 ```bash
 $ docker ps -a
-CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
-1780e5b2abb1 hello-world "/hello" 2 seconds ago Exited (0) 1 second ago awesome_greider
+CONTAINER ID   IMAGE        COMMAND     CREATED        STATUS                   PORTS  NAMES
+1780e5b2abb1   hello-world  "/hello"    2 seconds ago  Exited (0) 1 second ago         awesome_greider
 ```
 
 We can see that our container was given an ID and Name, which command was used and when it was created and what status it has.
