@@ -18,7 +18,7 @@ Websites were as the author wrote them in HTML (HyperText Markup Language). Addi
 
 Back in the mid-1990s, the need for more came. Modifying websites manually requires a lot of work, soon "Server-side scripting" emerged (along with the introduction of client-side by Netscape's JavaScript). Languages such as ASP, ColdFusion, Perl, PHP, Python,... were designed to give Web servers a customized page for each user. Customized to current time, information from a database, even many sites offered their server statistics publicly.
 
-![Stats SIN 1998]](./sin98.png)
+![Stats SIN 1998](./sin98.png)
 
 Around the year 2000, server-side scripting made a big impact on the world, sites like Amazon made it easy to winklel on the Internet. "Web 2.0" became a larger revolt where people could contribute to the Internet without having their own domain or server. From blogs with comments on "Blogger" or videos on YouTube. Later Netlog, MySpace, Facebook, Twitter,...
 
@@ -42,7 +42,7 @@ Developers often choose a stack that suits their application well, also a popula
 
 For this course, we are looking at PHP as the programming language. PHP is an open source programming language widely used for the web. PHP also has its origins as a language for dynamic websites. We find PHP on most "smaller" websites but also at technology giants such as Facebook[^hack].
 
-PHP marketshare](./pl-php.png)
+![PHP marketshare](./pl-php.png)
 
 ### LAMP
 
