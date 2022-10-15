@@ -90,6 +90,17 @@ module.exports = config({
           { text: "Docker Compose", link: "/docker/compose/" },
         ],
       },
+      {
+        text: "Kubernetes",
+        icon: "fas fa-dharmachakra",
+        items: [
+          { text: "YAML", link: "/kubernetes/yaml/" },
+          { text: "What is k8s?", link: "/kubernetes/what/" },
+          { text: "Clusters", link: "/kubernetes/clusters/" },
+          { text: "Resources", link: "/kubernetes/resources/" },
+          { text: "Helm", link: "/kubernetes/helm/" },
+        ],
+      },
     ],
 
     sidebar: "auto",
