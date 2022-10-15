@@ -172,28 +172,45 @@ Feel free to explore those files!
 
 We take a look at `service.yaml`:
 
-```yaml
+```smarty
 apiVersion: v1
 kind: Service
 metadata:
-  name: { { include "test.fullname" . } }
-  labels: { { - include "test.labels" . | nindent 4 } }
+  name: {{ include "test.fullname" . }}
+  labels: {{ - include "test.labels" . | nindent 4 }}
 spec:
-  type: { { .Values.service.type } }
+  type: {{ .Values.service.type }}
   ports:
-    - port: { { .Values.service.port } }
+    - port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
       name: http
-  selector: { { - include "test.selectorLabels" . | nindent 4 } }
+  selector: {{ - include "test.selectorLabels" . | nindent 4 }}
 ```
 
 You notice this is a bit different than what we are used to! They contain Go Template syntax (quite diffrent than Go itself...).
 
-We can use the `{{ }}` syntax to insert values. We can also use `{{-` and `-}}` to remove whitespace. This is useful when you want to have a newline in your template but don't want it to be rendered.
+We can use the `{{` `}}` syntax to insert values. We can also use `{{-` and `-}}` to remove whitespace. This is useful when you want to have a newline in your template but don't want it to be rendered.
 
-We can also use `{{- if }}` and `{{- end }}` to create if statements. We can also use `{{- range }}` and `{{- end }}` to create loops.
+We can also use
+
+```
+{{- if .Values.property}}
+some YAML here
+{{- end }}
+```
+
+to create if statements. We can also use range to create loops:
+
+```
+{{- range .Values.ports }}
+- port: {{ .port }}
+  targetPort: {{ .targetPort }}
+  protocol: {{ .protocol }}
+  name: {{ .name }}
+{{- end }}
+```
 
 The `{{- include` comes from the helpers written in `_helpers.tpl`. The common ones are `<name>.fullname` and `<name>.labels`. You can also use `<name>.selectorLabels` when needed
 
-TODO WRITE MORE
+All values given in the `values.yaml` or that were overwritten via `--set` can be accessed with `{{ .Values.<name>` `}}`. They follow a dot notation object structure just like in JavaScript or many popular languages.
