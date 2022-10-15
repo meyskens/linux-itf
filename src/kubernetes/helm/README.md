@@ -9,7 +9,7 @@ Helm will be able to manage the lifecycle of your application, from installation
 
 Helm (today, v2 was not) is a clientside command line tool that does this all for you. Underneath is uses Kubernetes ConfigMaps to store all data it needs to function. The power of Helm is that it uses a templating engine called [Go Templates](https://golang.org/pkg/text/template/) to generate the YAML files that are needed to deploy your application. This means that you can use scripting logic inside it and use includes for common replicated parts like the labels, and have a configuration file for all options in one place! This is a huge advantage over writing all that YAML by hand.
 
-:::note
+::: tip
 Helm is not the only option to do this. It often is critisised for using a template engine which is sometimes hard to debug. There are other options like [Kustomize](https://kustomize.io/). But Helm is the most popular one and the one we will use in this course.
 :::
 
@@ -166,7 +166,7 @@ In `templates/` you will find the templates. Helm will provide you with:
 - `ingress.yaml` - An ingress service which can be enabled in the `values.yaml`
 - `service.yaml` - A service file that points to the deployment
 - `serviceaccount.yaml` - A service account, this should only be used when your application needs to talk to the Kubernetes API
-- `tests/test-connection.yaml` - A test to check if the application is running, this is a unit test to see if the chart works
+- `tests/test-connection.yaml` - A test to check if the application is running, this is a [unit test](https://helm.sh/docs/topics/chart_tests/) to see if the chart works
 
 Feel free to explore those files!
 
@@ -214,3 +214,19 @@ to create if statements. We can also use range to create loops:
 The `{{- include` comes from the helpers written in `_helpers.tpl`. The common ones are `<name>.fullname` and `<name>.labels`. You can also use `<name>.selectorLabels` when needed
 
 All values given in the `values.yaml` or that were overwritten via `--set` can be accessed with `{{ .Values.<name>` `}}`. They follow a dot notation object structure just like in JavaScript or many popular languages.
+
+When your own chart is ready to go you can install it with by just pointing it to the correct directory:
+
+```bash
+helm install name ./name-of-chart
+```
+
+::: tip
+In production use you will probably host your own Chart Repository. [The official chart release tool](https://helm.sh/docs/howto/chart_releaser_action/) is a good way to get started with that. This is however out of scope for this class
+:::
+
+## Exercises
+
+### Exercise 1
+
+In the resources chapter we deployed a simple WordPress application. We can also make a Chart for this. Create a Chart for the WordPress application configuration and deploy it to your cluster.
