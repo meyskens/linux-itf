@@ -107,7 +107,7 @@ How it is pronounced is [a mystery](https://www.youtube.com/watch?v=2wgAIvXpJqU)
 ![kube cuddle](kubecuddle.png)
 _(my favorite “mis”pronounciation is kube cuddle)_
 
-kubectl is a tool to create/read/update/delete (*CRUD is everywhere...*) everything in Kubernetes. But it does more that that!
+kubectl is a tool to create/read/update/delete (_CRUD is everywhere..._) everything in Kubernetes. But it does more that that!
 
 ```bash
 kubectl create -f file.yaml # create a resource from a file definition
@@ -175,6 +175,7 @@ spec:
   - often you will see `v1` which means it is the CORE API
     - `apps/v1`, `extensions/v1beta1`, `networking.k8s.io/v1` are all other APIs depending on their work domain
     - some resources are not yet stable so you might see `v1alpha1` or `v1beta1` or alike.
+    - Kubernetes will store one version of the resource in etcd and convert it to the version you are using when you request it. This allows for upgradign versions without you needing to do much!
 - `kind` - is the type of resource it is within the API version
 - `metadata` - is data that helps uniquely identify the resource, including a name, multiple labels, and optional namespace.
 - `spec` - is the specification of the desired behavior of the resource, this contains all configuration for the resource.
