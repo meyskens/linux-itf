@@ -2,7 +2,7 @@
 
 # Helm - Your package manager for Kubernetes
 
-![Helm](./helm.svg)
+![Helm](./helm.png)
 
 Helm is a package manager for Kubernetes. It allows you to fetch and install applications or to write some yourself.
 Helm will be able to manage the lifecycle of your application, from installation to upgrades and even rollbacks.
