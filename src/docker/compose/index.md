@@ -214,7 +214,7 @@ $ docker compose restart
 ### `docker compose down`
 
 The down command is a dangerous one, `down` stops all containers and **throws out** all data.
-Use this only locally or if you want to reset everything.
+Use this only locally or if you want to reset everything. You can also add `-v` to delete all volumes also.
 
 ### `docker compose build`
 
