@@ -555,7 +555,7 @@ WORKDIR /var/www/html
 RUN touch index.html
 ```
 
-This is the equivalent of `cd /var/www/html`, with the vershcil that the container will also open `/var/www/html` by default upon instructions.
+This is the equivalent of `cd /var/www/html`, with the difference being that the container will also open `/var/www/html` by default upon instructions.
 
 #### VOLUME
 
