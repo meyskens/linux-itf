@@ -28,13 +28,13 @@ You can have a [cheat sheet](https://kubernetes.io/docs/reference/kubectl/cheats
 
 ### The `kubeconfig`
 
-The `kubeconfig` is a file that contains all the information to connect to a Kubernetes cluster. It is a YAML file that contains all the information to connect to one or multiple cluster. It is a file that is often shared between developers to get cluster access but should be considered as a password.
+The `kubeconfig` is a file that contains all the information to connect to a Kubernetes cluster. It is a YAML file that contains all the information to connect to one or multiple cluster. It is often shared between developers to get cluster access but should be considered as confidential as a password.
 
 You can find it at `~/.kube/config` on macOS/Linux and `C:\Users\%USERNAME%\.kube\config` on Windows.
 
 ## kind - the developer's friend
 
-[kind](https://kind.sigs.k8s.io/docs/user/quick-start/) is a tool to run local Kubernetes clusters using Docker containerss. It is a great tool for developers as it is fast and lightweight compared to other solutions. It is an alternative to [minikube](https://minikube.sigs.k8s.io/docs/start/) which uses VMs under the hood so will be slower.
+[kind](https://kind.sigs.k8s.io/docs/user/quick-start/) is a tool to run local Kubernetes clusters using Docker containers. It is a great tool for developers as it is fast and lightweight compared to other solutions. It is an alternative to [minikube](https://minikube.sigs.k8s.io/docs/start/) which uses VMs under the hood so will be slower and more resource intensitive.
 
 You can install it with the following command:
 
@@ -44,7 +44,7 @@ chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 ```
 
-If you need a clustter it is as easy as running `kind create cluster` and you will have a cluster running in a few seconds. You can then interact with it with `kubectl` as you would with any other cluster, the credentials are automatically configured.
+If you need a cluster it is as easy as running `kind create cluster` and you will have a cluster (containing only one node) running in a few seconds. You can then interact with it with `kubectl` as you would with any other cluster, the credentials are automatically configured.
 
 Check it out with `kubectl get nodes`:
 
@@ -85,24 +85,24 @@ EOF
 kind doesn't come with an ingress controller out of the box. We will use [ingress-nginx](https://kubernetes.github.io/ingress-nginx/) which is the most popular ingress controller for Kubernetes.
 
 ```bash
-# Now let's install our ingress controller compoment
+# Now let's install our ingress controller component
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 kubectl get pod --all-namespaces # watch to see them all starting
 ```
 
 ### Storage
 
-kind has a built in local storage provider, we will use that to make Presistend Volumes available in our cluster.
+kind has a built in local storage provider, we will use that to make Presistent Volumes available in our cluster.
 
-## kubeadm - the production ready offcial way
+## kubeadm - the production ready official way
 
-[kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/) is the community supported way to install Kubernetes. It is a great tool to install a production ready Kubernetes cluster. It is a bit more complex to use than kind but it will get you started with a real cluster in no time.
+[kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/) is the community supported way to install Kubernetes. It is a great tool to install a production-ready Kubernetes cluster. It is a bit more complex to use than kind but it will get you started with a real cluster in no time.
 
 To set it up you need:
 
-- One "controller" server that has the Kubernetes API and the control plane
+- One "controller" node that has the Kubernetes API and the control plane
   - You can run multiple controllers (in uneven numbers) to have a highly available cluster
-- One or more "worker" servers that run the actual workloads
+- One or more "worker" node that run the actual workloads
 
 ### Prepare the servers
 
@@ -184,7 +184,7 @@ You can check the status of the cluster with `kubectl get nodes`.
 
 ## Batteries not included
 
-Kubeadm uses a very minimal set of components to run Kubernetes, this is so it is not opinionated on tools that are not part of the Kubernetes community that are requird to get going. You will need to install additional components to get a full featured cluster.
+Kubeadm uses a very minimal set of components to run Kubernetes, this is so it is not opinionated on tools that are not part of the Kubernetes community. You will need to install additional components to get a full featured cluster.
 
 ### Networking
 
@@ -206,13 +206,13 @@ When installing MetalLB you will need to configure it with a range of IP address
 
 ### Optional: Storage
 
-Storage is yet another service that is typically provided by your cloud provider. Open source self-hosted solitions like [OpenEBS](https://openebs.io/) provide a way to run your own storage solution. It offers many options with different perfomance and redundancy ranges.
+Storage is yet another service that is typically provided by your cloud provider. Open source self-hosted solutions like [OpenEBS](https://openebs.io/) provide a way to run your own storage solution. It offers many options with different performance and redundancy ranges.
 
-Unless you set up a production environment I reccomend to try [Local PV Hostpath](https://openebs.io/docs/user-guides/localpv-hostpath) which will create a directory on the host and use that as a storage solution. This is not a production ready solution as it will assign it to only _one_ server, but it is easy to set up and will work for most use cases.
+Unless you set up a production environment I recommend to try [Local PV Hostpath](https://openebs.io/docs/user-guides/localpv-hostpath) which will create a directory on the host and use that as a storage solution. **This is not a production ready solution** as it will assign it to only _one_ server, but it is easy to set up and will work for most use cases.
 
 ### Ingress
 
-Just like kind we need our own ingress controller. The most popular one is [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/).
+Just like before with kind, we need our own ingress controller. The most popular one is [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/).
 
 However when doing this you should consider several load balancing options... Everything you need is described in the [Bare-metal considerations guide](https://kubernetes.github.io/ingress-nginx/deploy/baremetal/).
 
@@ -225,6 +225,6 @@ Yup there is a Vagrant setup for Kubernetes too! You can find it at [github.com/
 
 (Do not do this... like really don't do this unless you do this for a living)
 
-So you want to brag to your friends you know Kubernetes really really well? Go set up a cluster using [Kelsey Hightower's Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
+So you want to brag to your friends you know Kubernetes *really, really* well? Go set up a cluster using [Kelsey Hightower's Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 
 [^bashbatter]: Eyskens, Mariën. (2022). Bash vs. PowerShell. B300 fights.
