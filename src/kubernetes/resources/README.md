@@ -1,8 +1,8 @@
 # Kubernetes Resources
 
-So we learned before Kubernetes is a collection of resources. These resources are defined in a `spec` written in YAML files. The YAML files are then send to the cluster. Then those resources are then managed by the cluster. In many cases resources will create new resources as needed. But no worries we'll learn more about that later.
+As mentioned before, Kubernetes is a collection of resources. These resources are defined in a `spec` written in YAML files. The YAML files are then sent to the cluster. From that point on, those resources are then managed by the cluster. In many cases those resources will create new resources as needed. But no worries we'll learn more about that later.
 
-How does a simple app look like in Kubernetes? This diagram tries to describe it:
+What does a simple app look like in Kubernetes? This diagram tries to describe it:
 
 ![typical deployment](./typical-deployment.png)
 
@@ -16,10 +16,10 @@ We'll be starting from the very **lowest** level: the pod.
 
 This is often called the atom of Kubernetes. It is the smallest visible level of an application. But it is where everything runs.
 
-A pod ss one or more containers, usually ONE. In case there are several we call these "sidecar containers", why would you use them? To add functionality to your main container. For example, you could have a sidecar container that does logging or monitoring.
+A pod has one or more containers, usually ONE. In case there are several we call these "sidecar containers", why would you use them? To add functionality to your main container. For example, you could have a sidecar container that does logging or monitoring.
 
 All containers in a pod share one IP and one network. They have no isolation between them.
-For this the rule us to host one pod per application (so don't even think about putting a webserver and a database in one pod)!
+Because of security concerns this could introduce, the rule is to host one pod per application (so don't even think about putting a webserver and a database in one pod)!
 
 A pod will look something like this:
 
@@ -51,7 +51,7 @@ Popular parts of the pod are:
 - `restartPolicy`: the policy for restarting the pod, can be `Always`, `OnFailure` or `Never`
 - `nodeSelector`: the node selector for the pod, used to schedule the pod on a specific node or group of nodes
 
-A list of all fields can be gotten with `kubectl explain pod.spec` or [the api documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#pod-v1-core).
+A list of all available fields can be printed with `kubectl explain pod.spec` or we can refer you to [the api documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#pod-v1-core).
 
 Let's look at the pods running in our cluster:
 
@@ -68,7 +68,7 @@ kube-proxy-wrvkh                             1/1     Running   0          3h16m
 kube-scheduler-kind-control-plane            1/1     Running   0          3h16m
 ```
 
-**You wouldn’t want to work on atomic level right? We will never create pods ourselves!**
+**But, you wouldn’t want to work on this atomic level right? That's why we will never create pods ourselves!**
 
 ## Deployment
 
@@ -179,7 +179,7 @@ Events:
 ```
 
 You can see it made a `ReplicaSet` which it named `hello-world-deployment-5dc7657797`.
-Let's look into that using `kubectl describe rs hello-world-deployment-5dc7657797` (again `rs` is short for `replicaset` both work! Oh also the name on your machine will be different)
+Let's look into that using `kubectl describe rs hello-world-deployment-5dc7657797` (again `rs` is short for `replicaset`, both work! Oh also the name on your machine will be different)
 
 ```
 Name:           hello-world-deployment-5dc7657797
@@ -212,7 +212,7 @@ Events:
   Normal  SuccessfulCreate  3m49s  replicaset-controller  Created pod: hello-world-deployment-5dc7657797-wkdnd
 ```
 
-We see this make a `pod`! Let's look at that using `kubectl describe pod hello-world-deployment-5dc7657797-wkdnd`
+We see this creates a `pod`! Let's have a look using `kubectl describe pod hello-world-deployment-5dc7657797-wkdnd`
 
 ```
 Name:         hello-world-deployment-5dc7657797-wkdnd
@@ -277,7 +277,7 @@ You can do this from Pod -> ReplicaSet -> Deployment by following the `Controlle
 
 A Deployment is a type of Kubernetes resource that creates underlying resources! This is a very common pattern in Kubernetes.
 
-A deployment will create one `ReplicaSet` per update (to do rolling upgrade). A `ReplicaSet` is then responsible to creatre the `Pods` that are needed and scale them (thus the name). We rarely create `ReplicaSets` directly, we use `Deployments` instead.
+A deployment will create one `ReplicaSet` per update (to do rolling upgrade). A `ReplicaSet` is then responsible to create the `Pods` that are needed and scale them (thus the name). We rarely create `ReplicaSets` directly, we use `Deployments` instead.
 
 ![deployment](./deployment.png)
 
@@ -360,32 +360,15 @@ kubectl port-forward service/hello-world-service 8080:80
 
 This will forward port 8080 on your local machine to port 80 on the service. However it is not actually loadbalancing as this is a **debug** feature.
 
-Let's quickly set up a **debud pod** for us to play in:
+Now you can use curl, links (or your GUI browser if you are running kubectl on a Linux, Windows or Mac Desktop OS) and browse to http://127.0.0.1:8080
 
-```bash
-kubectl run -i -t test-alpine --image=alpine --restart=Never
-```
-
-Let's use `curl` to access the service from within the cluster:
-
-```bash
-apk add curl
-curl http://hello-world-service.default.svc.cluster.local
-```
-
-When you're done exit the pod and please clean up the mess you made:
-
-```bash
-kubectl delete pod test-alpine
-```
-
-Do the curl command a few times you will notice you get an answer from a different pod out of our 3 each time.
+Do this a few times you will notice you get an answer from a different pod out of our 3 each time.
 
 ## Ingress
 
-An Ingress is an important part of the average Kubernetes setup. It will be loadbalancing HTTP(S) for you. It also does virtualhosting based routing! By default Kubernetes supports path and host based routing (port bases is called a NodePort Service).
+An Ingress is an important part of the average Kubernetes setup. It will be loadbalancing HTTP(S) for you. It also does virtualhosting based routing! By default Kubernetes supports path and host-based routing (port-based is called a NodePort Service).
 
-The Ingress is often also responsible for terminating TLS connections for HTTPS and will be keeping certificates for you. This usally happens here as the overlay network is often encrypted by default.
+The Ingress is often also responsible for terminating TLS connections for HTTPS and will be keeping certificates for you. This usually happens here as the overlay network is often encrypted by default.
 
 ![ingress](./ingress.png)
 
@@ -400,7 +383,7 @@ While being important it does not ship by default in Kubernetes. You need to ins
 - [Contour](https://projectcontour.io/)
 - [Skipper by Zalando](https://opensource.zalando.com/skipper/kubernetes/ingress-controller/)
 
-_In this tutorial I will be assufing you are using the NGINX Ingress Controller by Kubernetes as it is supported by the Kubernetes Community. For installation see [Clusters](../clusters/)_
+_In this tutorial I will be assuming you are using the NGINX Ingress Controller by Kubernetes as it is supported by the Kubernetes Community. For installation see [Clusters](../clusters/)_
 
 ```yaml
 ---
@@ -494,7 +477,7 @@ We will also need a volume to host our user uploads to our wordpress container.
 
 ### MySQL
 
-Let's start by our database! By looking at [artifacthub.io/packages/helm/bitnami/mysql](https://artifacthub.io/packages/helm/bitnami/mysql]) we learn a lot of options we can use to configure this.
+Let's start with our database! By looking at [artifacthub.io/packages/helm/bitnami/mysql](https://artifacthub.io/packages/helm/bitnami/mysql]) we learn a lot of options we can use to configure this.
 We can write our own `values.yaml` file to set all these but using `--set` for now is shorter.
 
 :::tip
