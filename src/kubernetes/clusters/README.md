@@ -2,6 +2,18 @@
 
 Before we get started we need a Kubernetes cluster to use! Several cloud providers offer Kubernetes as a service, but we're going to use [kind](https://kind.sigs.k8s.io/) to create a local cluster to play with first. If you're interested in deploying a multi server solution we'll look into the official Kubernetes distribution [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/) later.
 
+## The k8s cluster
+
+A k8s cluster is a group of machines, each machine is called a node. Nodes can have different roles in k8s:
+
+- "Controller" or "master" nodes that run the Kubernetes API and the control plane
+  - You can run multiple controllers (in uneven numbers) to have a highly available cluster
+- One or more "worker" node that run the actual workloads (= pods with containers).
+
+![k8s cluster](https://opensource.com/sites/default/files/uploads/kubernetes-architecture-diagram.png)
+
+*(Nived Velayudhan, CC BY-SA 4.0)*
+
 ## The Laptop Essentials: `kubectl`
 
 Before we can start we need to install `kubectl` which is the command line tool to interact with Kubernetes. You can find the installation instructions [on the official website](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
@@ -56,10 +68,9 @@ kind-control-plane   Ready    control-plane,master   10s   v1.22.2
 
 When you are done you can delete the cluster with `kind delete cluster`.
 
-When we use kind in class it is a good idea to enable ingress support so we can use HTTP/HTTPS routing. You can do this with the following command:
-
+When we use kind in class it is a good idea to enable ingress support so that we can use HTTP/HTTPS routing. First, create a kind configuration file and then load it while creating the kind cluster:
 ```bash
-cat <<EOF | kind create cluster --config=-
+$ cat kindconfig
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -77,7 +88,45 @@ nodes:
   - containerPort: 443
     hostPort: 443
     protocol: TCP
-EOF
+
+$ kind create cluster --config=kindconfig
+Creating cluster "kind" ...
+ ✓ Ensuring node image (kindest/node:v1.25.2) 🖼
+ ✓ Preparing nodes 📦 📦 📦
+ ✓ Writing configuration 📜
+ ✓ Starting control-plane 🕹️
+ ✓ Installing CNI 🔌
+ ✓ Installing StorageClass 💾
+ ✓ Joining worker nodes 🚜
+Set kubectl context to "kind-kind"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-kind
+
+Thanks for using kind! 😊
+```
+
+Want to create a multi-node cluster? Then you can use the following kind configuration file, which sets up 1 controller node and 2 worker nodes:
+```yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+- role: worker
+- role: worker
 ```
 
 ### Ingress
