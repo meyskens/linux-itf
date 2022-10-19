@@ -297,7 +297,15 @@ hello-world-deployment-5dc7657797-wkdnd   1/1     Running             0         
 hello-world-deployment-5dc7657797-zbwd9   0/1     ContainerCreating   0          2s
 ```
 
-Good now we got 3!
+Good now we got 3! If you have set up a multi-node cluster, k8s will divide the pods among all the worker nodes. To see which pod is running on which node:
+
+```bash
+$ kubectl get pods -o wide
+NAME                                      READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+hello-world-deployment-5dc7657797-8npv4   1/1     Running   0          10m   10.244.1.3   kind-worker2   <none>           <none>
+hello-world-deployment-5dc7657797-dmbvj   1/1     Running   0          19m   10.244.2.2   kind-worker    <none>           <none>
+hello-world-deployment-5dc7657797-lb6gs   1/1     Running   0          10m   10.244.2.4   kind-worker    <none>           <none>
+```
 
 ## Service
 
