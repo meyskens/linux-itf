@@ -1,8 +1,8 @@
 # Kubernetes Resources
 
-So we learned before Kubernetes is a collection of resources. These resources are defined in a `spec` written in YAML files. The YAML files are then send to the cluster. Then those resources are then managed by the cluster. In many cases resources will create new resources as needed. But no worries we'll learn more about that later.
+As mentioned before, Kubernetes is a collection of resources. These resources are defined in a `spec` written in YAML files. The YAML files are then sent to the cluster. From that point on, those resources are then managed by the cluster. In many cases those resources will create new resources as needed. But no worries we'll learn more about that later.
 
-How does a simple app look like in Kubernetes? This diagram tries to describe it:
+What does a simple app look like in Kubernetes? This diagram tries to describe it:
 
 ![typical deployment](./typical-deployment.png)
 
@@ -16,10 +16,10 @@ We'll be starting from the very **lowest** level: the pod.
 
 This is often called the atom of Kubernetes. It is the smallest visible level of an application. But it is where everything runs.
 
-A pod ss one or more containers, usually ONE. In case there are several we call these "sidecar containers", why would you use them? To add functionality to your main container. For example, you could have a sidecar container that does logging or monitoring.
+A pod has one or more containers, usually ONE. In case there are several we call these "sidecar containers", why would you use them? To add functionality to your main container. For example, you could have a sidecar container that does logging or monitoring.
 
 All containers in a pod share one IP and one network. They have no isolation between them.
-For this the rule us to host one pod per application (so don't even think about putting a webserver and a database in one pod)!
+Because of security concerns this could introduce, the rule is to host one pod per application (so don't even think about putting a webserver and a database in one pod)!
 
 A pod will look something like this:
 
@@ -51,7 +51,7 @@ Popular parts of the pod are:
 - `restartPolicy`: the policy for restarting the pod, can be `Always`, `OnFailure` or `Never`
 - `nodeSelector`: the node selector for the pod, used to schedule the pod on a specific node or group of nodes
 
-A list of all fields can be gotten with `kubectl explain pod.spec` or [the api documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#pod-v1-core).
+A list of all available fields can be printed with `kubectl explain pod.spec` or we can refer you to [the api documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#pod-v1-core).
 
 Let's look at the pods running in our cluster:
 
@@ -68,7 +68,7 @@ kube-proxy-wrvkh                             1/1     Running   0          3h16m
 kube-scheduler-kind-control-plane            1/1     Running   0          3h16m
 ```
 
-**You wouldn’t want to work on atomic level right? We will never create pods ourselves!**
+**But, you wouldn’t want to work on this atomic level right? That's why we will never create pods ourselves!**
 
 ## Deployment
 
@@ -179,7 +179,7 @@ Events:
 ```
 
 You can see it made a `ReplicaSet` which it named `hello-world-deployment-5dc7657797`.
-Let's look into that using `kubectl describe rs hello-world-deployment-5dc7657797` (again `rs` is short for `replicaset` both work! Oh also the name on your machine will be different)
+Let's look into that using `kubectl describe rs hello-world-deployment-5dc7657797` (again `rs` is short for `replicaset`, both work! Oh also the name on your machine will be different)
 
 ```
 Name:           hello-world-deployment-5dc7657797
@@ -212,7 +212,7 @@ Events:
   Normal  SuccessfulCreate  3m49s  replicaset-controller  Created pod: hello-world-deployment-5dc7657797-wkdnd
 ```
 
-We see this make a `pod`! Let's look at that using `kubectl describe pod hello-world-deployment-5dc7657797-wkdnd`
+We see this creates a `pod`! Let's have a look using `kubectl describe pod hello-world-deployment-5dc7657797-wkdnd`
 
 ```
 Name:         hello-world-deployment-5dc7657797-wkdnd
@@ -277,7 +277,7 @@ You can do this from Pod -> ReplicaSet -> Deployment by following the `Controlle
 
 A Deployment is a type of Kubernetes resource that creates underlying resources! This is a very common pattern in Kubernetes.
 
-A deployment will create one `ReplicaSet` per update (to do rolling upgrade). A `ReplicaSet` is then responsible to creatre the `Pods` that are needed and scale them (thus the name). We rarely create `ReplicaSets` directly, we use `Deployments` instead.
+A deployment will create one `ReplicaSet` per update (to do rolling upgrade). A `ReplicaSet` is then responsible to create the `Pods` that are needed and scale them (thus the name). We rarely create `ReplicaSets` directly, we use `Deployments` instead.
 
 ![deployment](./deployment.png)
 
@@ -297,7 +297,15 @@ hello-world-deployment-5dc7657797-wkdnd   1/1     Running             0         
 hello-world-deployment-5dc7657797-zbwd9   0/1     ContainerCreating   0          2s
 ```
 
-Good now we got 3!
+Good now we got 3! If you have set up a multi-node cluster, k8s will divide the pods among all the worker nodes. To see which pod is running on which node:
+
+```bash
+$ kubectl get pods -o wide
+NAME                                      READY   STATUS    RESTARTS   AGE   IP           NODE           NOMINATED NODE   READINESS GATES
+hello-world-deployment-5dc7657797-8npv4   1/1     Running   0          10m   10.244.1.3   kind-worker2   <none>           <none>
+hello-world-deployment-5dc7657797-dmbvj   1/1     Running   0          19m   10.244.2.2   kind-worker    <none>           <none>
+hello-world-deployment-5dc7657797-lb6gs   1/1     Running   0          10m   10.244.2.4   kind-worker    <none>           <none>
+```
 
 ## Service
 
@@ -341,7 +349,7 @@ hello-world-service   ClusterIP   10.96.82.17   <none>        80/TCP    3s
 kubernetes            ClusterIP   10.96.0.1     <none>        443/TCP   3h50m
 ```
 
-We see we got the internal IP `10.96.82.17` assigned. But where does it point to? Let's check the endpoints!
+We notice we got the internal IP `10.96.82.17` assigned. But where does it point to? Let's check the endpoints!
 
 ```bash
 $ kubectl get endpoints
@@ -360,32 +368,15 @@ kubectl port-forward service/hello-world-service 8080:80
 
 This will forward port 8080 on your local machine to port 80 on the service. However it is not actually loadbalancing as this is a **debug** feature.
 
-Let's quickly set up a **debud pod** for us to play in:
+Now you can use curl, links (or your GUI browser if you are running kubectl on a Linux, Windows or Mac Desktop OS) and browse to http://127.0.0.1:8080
 
-```bash
-kubectl run -i -t test-alpine --image=alpine --restart=Never
-```
-
-Let's use `curl` to access the service from within the cluster:
-
-```bash
-apk add curl
-curl http://hello-world-service.default.svc.cluster.local
-```
-
-When you're done exit the pod and please clean up the mess you made:
-
-```bash
-kubectl delete pod test-alpine
-```
-
-Do the curl command a few times you will notice you get an answer from a different pod out of our 3 each time.
+Do this a few times you will notice you get an answer from a different pod out of our 3 each time.
 
 ## Ingress
 
-An Ingress is an important part of the average Kubernetes setup. It will be loadbalancing HTTP(S) for you. It also does virtualhosting based routing! By default Kubernetes supports path and host based routing (port bases is called a NodePort Service).
+An Ingress is an important part of the average Kubernetes setup. It will be loadbalancing HTTP(S) for you. It also does virtualhosting based routing! By default Kubernetes supports path and host-based routing (port-based is called a NodePort Service).
 
-The Ingress is often also responsible for terminating TLS connections for HTTPS and will be keeping certificates for you. This usally happens here as the overlay network is often encrypted by default.
+The Ingress is often also responsible for terminating TLS connections for HTTPS and will be keeping certificates for you. This usually happens here as the overlay network is often encrypted by default.
 
 ![ingress](./ingress.png)
 
@@ -400,7 +391,7 @@ While being important it does not ship by default in Kubernetes. You need to ins
 - [Contour](https://projectcontour.io/)
 - [Skipper by Zalando](https://opensource.zalando.com/skipper/kubernetes/ingress-controller/)
 
-_In this tutorial I will be assufing you are using the NGINX Ingress Controller by Kubernetes as it is supported by the Kubernetes Community. For installation see [Clusters](../clusters/)_
+_In this tutorial I will be assuming you are using the NGINX Ingress Controller by Kubernetes as it is supported by the Kubernetes Community. For installation see [Clusters](../clusters/)_
 
 ```yaml
 ---
@@ -494,7 +485,7 @@ We will also need a volume to host our user uploads to our wordpress container.
 
 ### MySQL
 
-Let's start by our database! By looking at [artifacthub.io/packages/helm/bitnami/mysql](https://artifacthub.io/packages/helm/bitnami/mysql]) we learn a lot of options we can use to configure this.
+Let's start with our database! By looking at [artifacthub.io/packages/helm/bitnami/mysql](https://artifacthub.io/packages/helm/bitnami/mysql]) we learn a lot of options we can use to configure this.
 We can write our own `values.yaml` file to set all these but using `--set` for now is shorter.
 
 :::tip
@@ -503,7 +494,7 @@ Bitnami (a VMWare company) is a big publisher of Helm Charts however they use th
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install wp-mysql bitnami/mysql --set auth.password=random --set auth.username=wp --set auth.database=wp
+helm install wp-mysql bitnami/mysql --set auth.password=@NesTCU4geegeaM --set auth.username=wp --set auth.database=wp
 ```
 
 This will have installed everything our MySQL will need.
@@ -516,7 +507,7 @@ NAME         READY   STATUS    RESTARTS   AGE
 wp-mysql-0   1/1     Running   0          86s
 ```
 
-We see we have one MySQL container running. But we also needed a service right?
+We see we have one MySQL container running. But we also needed a service, right?
 
 ```dns
 $ kubectl get service
@@ -525,7 +516,7 @@ wp-mysql              ClusterIP   10.96.17.79    <none>        3306/TCP   2m12s
 wp-mysql-headless     ClusterIP   None           <none>        3306/TCP   2m12s
 ```
 
-We see we have a `wp-mysql` service, which has an IP! The IP here can change and is only showed for information. Kubernetes also sets up DNS for us (yay!) so we can just call it using `wp-mysql` as hostname later (in the same namespace).
+We see we have a `wp-mysql` service, which has an IP! The IP here can change and is only shown for information. Kubernetes also sets up DNS for us (yay!) so we can just call it using `wp-mysql` as a hostname later (in the same namespace).
 
 But wait where does it store data?
 
@@ -535,9 +526,9 @@ NAME              STATUS   VOLUME                                     CAPACITY  
 data-wp-mysql-0   Bound    pvc-19f8e65f-81be-4436-916c-2672f486199c   8Gi        RWO            standard       3m46s
 ```
 
-PVC stands for Presistent Volume Claim and will get us a request for storage, minikube and kind will make some space on our local HDD. If you use Kubernetes in the cloud Kubernetes will actually order storage with your cloud provider for you! (on-premis you have to set something up yourself)
+PVC stands for Presistent Volume Claim and will get us a request for storage, minikube and kind will make some space on our local HDD. If you use Kubernetes in the cloud Kubernetes will actually order storage with your cloud provider for you! (on-premise you have to set something up yourself)
 
-At last we also have secrets! These are stored securely by Kubernetes and can be injected into other resources, here passwords are stored for example.
+At last we also have secrets! These are stored securely by Kubernetes and can be injected into other resources. Password can be stored here, for example.
 
 ```bash
 $ kubectl get secret
@@ -765,7 +756,7 @@ To have more fun we could forward the domain to our server IP on our own machine
 - macOS: [https://www.alphr.com/edit-hosts-file-mac-os-x/](https://www.alphr.com/edit-hosts-file-mac-os-x/)
 - Linux: _do i really have to tell you?..._ okay here it is: [https://www.makeuseof.com/tag/modify-manage-hosts-file-linux/](https://www.makeuseof.com/tag/modify-manage-hosts-file-linux/)
 
-If all goes right you can now open `wordpress.local` in your browser and enjoy wordpress!
+If all goes right you can now open `wordpress.local` in your browser and enjoy wordpress! Or use [https://messwithdns.net/](https://messwithdns.net/)!
 
 ## The End!
 
