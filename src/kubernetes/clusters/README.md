@@ -12,7 +12,7 @@ A k8s cluster is a group of machines, each machine is called a node. Nodes can h
 
 ![k8s cluster](https://opensource.com/sites/default/files/uploads/kubernetes-architecture-diagram.png)
 
-*(Nived Velayudhan, CC BY-SA 4.0)*
+_(Nived Velayudhan, CC BY-SA 4.0)_
 
 ## The Laptop Essentials: `kubectl`
 
@@ -69,6 +69,7 @@ kind-control-plane   Ready    control-plane,master   10s   v1.22.2
 When you are done you can delete the cluster with `kind delete cluster`.
 
 When we use kind in class it is a good idea to enable ingress support so that we can use HTTP/HTTPS routing. First, create a kind configuration file and then load it while creating the kind cluster:
+
 ```bash
 $ cat kindconfig
 kind: Cluster
@@ -107,26 +108,27 @@ Thanks for using kind! 😊
 ```
 
 Want to create a multi-node cluster? Then you can use the following kind configuration file, which sets up 1 controller node and 2 worker nodes:
+
 ```yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
-- role: control-plane
-  kubeadmConfigPatches:
-  - |
-    kind: InitConfiguration
-    nodeRegistration:
-      kubeletExtraArgs:
-        node-labels: "ingress-ready=true"
-  extraPortMappings:
-  - containerPort: 80
-    hostPort: 80
-    protocol: TCP
-  - containerPort: 443
-    hostPort: 443
-    protocol: TCP
-- role: worker
-- role: worker
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP
+  - role: worker
+  - role: worker
 ```
 
 ### Ingress
@@ -144,6 +146,10 @@ kubectl get pod --all-namespaces # watch to see them all starting
 kind has a built in local storage provider, we will use that to make Presistent Volumes available in our cluster.
 
 ## kubeadm - the production ready official way
+
+::: warning
+kubeadm is mentioned to be complete but is out of scope for what we will do inside our classes. It can be used in your assignment as bonus points.
+:::
 
 [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/) is the community supported way to install Kubernetes. It is a great tool to install a production-ready Kubernetes cluster. It is a bit more complex to use than kind but it will get you started with a real cluster in no time.
 
@@ -274,6 +280,6 @@ Yup there is a Vagrant setup for Kubernetes too! You can find it at [github.com/
 
 (Do not do this... like really don't do this unless you do this for a living)
 
-So you want to brag to your friends you know Kubernetes *really, really* well? Go set up a cluster using [Kelsey Hightower's Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
+So you want to brag to your friends you know Kubernetes _really, really_ well? Go set up a cluster using [Kelsey Hightower's Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 
 [^bashbatter]: Eyskens, Mariën. (2022). Bash vs. PowerShell. B300 fights.
