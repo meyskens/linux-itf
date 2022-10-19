@@ -349,7 +349,7 @@ hello-world-service   ClusterIP   10.96.82.17   <none>        80/TCP    3s
 kubernetes            ClusterIP   10.96.0.1     <none>        443/TCP   3h50m
 ```
 
-We see we got the internal IP `10.96.82.17` assigned. But where does it point to? Let's check the endpoints!
+We notice we got the internal IP `10.96.82.17` assigned. But where does it point to? Let's check the endpoints!
 
 ```bash
 $ kubectl get endpoints
@@ -494,7 +494,7 @@ Bitnami (a VMWare company) is a big publisher of Helm Charts however they use th
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install wp-mysql bitnami/mysql --set auth.password=random --set auth.username=wp --set auth.database=wp
+helm install wp-mysql bitnami/mysql --set auth.password=@NesTCU4geegeaM --set auth.username=wp --set auth.database=wp
 ```
 
 This will have installed everything our MySQL will need.
@@ -507,7 +507,7 @@ NAME         READY   STATUS    RESTARTS   AGE
 wp-mysql-0   1/1     Running   0          86s
 ```
 
-We see we have one MySQL container running. But we also needed a service right?
+We see we have one MySQL container running. But we also needed a service, right?
 
 ```dns
 $ kubectl get service
@@ -516,7 +516,7 @@ wp-mysql              ClusterIP   10.96.17.79    <none>        3306/TCP   2m12s
 wp-mysql-headless     ClusterIP   None           <none>        3306/TCP   2m12s
 ```
 
-We see we have a `wp-mysql` service, which has an IP! The IP here can change and is only showed for information. Kubernetes also sets up DNS for us (yay!) so we can just call it using `wp-mysql` as hostname later (in the same namespace).
+We see we have a `wp-mysql` service, which has an IP! The IP here can change and is only shown for information. Kubernetes also sets up DNS for us (yay!) so we can just call it using `wp-mysql` as a hostname later (in the same namespace).
 
 But wait where does it store data?
 
@@ -526,9 +526,9 @@ NAME              STATUS   VOLUME                                     CAPACITY  
 data-wp-mysql-0   Bound    pvc-19f8e65f-81be-4436-916c-2672f486199c   8Gi        RWO            standard       3m46s
 ```
 
-PVC stands for Presistent Volume Claim and will get us a request for storage, minikube and kind will make some space on our local HDD. If you use Kubernetes in the cloud Kubernetes will actually order storage with your cloud provider for you! (on-premis you have to set something up yourself)
+PVC stands for Presistent Volume Claim and will get us a request for storage, minikube and kind will make some space on our local HDD. If you use Kubernetes in the cloud Kubernetes will actually order storage with your cloud provider for you! (on-premise you have to set something up yourself)
 
-At last we also have secrets! These are stored securely by Kubernetes and can be injected into other resources, here passwords are stored for example.
+At last we also have secrets! These are stored securely by Kubernetes and can be injected into other resources. Password can be stored here, for example.
 
 ```bash
 $ kubectl get secret
@@ -756,7 +756,7 @@ To have more fun we could forward the domain to our server IP on our own machine
 - macOS: [https://www.alphr.com/edit-hosts-file-mac-os-x/](https://www.alphr.com/edit-hosts-file-mac-os-x/)
 - Linux: _do i really have to tell you?..._ okay here it is: [https://www.makeuseof.com/tag/modify-manage-hosts-file-linux/](https://www.makeuseof.com/tag/modify-manage-hosts-file-linux/)
 
-If all goes right you can now open `wordpress.local` in your browser and enjoy wordpress!
+If all goes right you can now open `wordpress.local` in your browser and enjoy wordpress! Or use [https://messwithdns.net/](https://messwithdns.net/)!
 
 ## The End!
 
