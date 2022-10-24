@@ -657,13 +657,13 @@ docker images # List All Images
 # Starting Containers
 docker run <image>
 
-dockr run <name> -it # start the container in interactive mode
-dockr run <name> -d # start the container in background mode
-dockr run <name> -p src:dest # creates a port mapping between your container and your host. This allows you to open ports.
-dockr run <name> -v src:dest # creates a volume mapping between your container and your host. This way you can share a directory between host and container.
-dockr run <name> -e # creates an environment variable.
-dockr run <name> --name # sets a name for the container.
-dockr run <name> --rm # deletes the container after quitting.
+docker run <name> -it # start the container in interactive mode
+docker run <name> -d # start the container in background mode
+docker run <name> -p src:dest # creates a port mapping between your container and your host. This allows you to open ports.
+docker run <name> -v src:dest # creates a volume mapping between your container and your host. This way you can share a directory between host and container.
+docker run <name> -e # creates an environment variable.
+docker run <name> --name # sets a name for the container.
+docker run <name> --rm # deletes the container after quitting.
 
 # Manage existing containers
 docker start <name>
