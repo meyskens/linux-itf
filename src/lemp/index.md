@@ -20,7 +20,7 @@ Back in the mid-1990s, the need for more came. Modifying websites manually requi
 
 ![Stats SIN 1998](./sin98.png)
 
-Around the year 2000, server-side scripting made a big impact on the world, sites like Amazon made it easy to winklel on the Internet. "Web 2.0" became a larger revolt where people could contribute to the Internet without having their own domain or server. From blogs with comments on "Blogger" or videos on YouTube. Later Netlog, MySpace, Facebook, Twitter,...
+Around the year 2000, server-side scripting made a big impact on the world, sites like Amazon made it easy to shop on the Internet. "Web 2.0" became a larger revolt where people could contribute to the Internet without having their own domain or server. From blogs with comments on "Blogger" or videos on YouTube. Later Netlog, MySpace, Facebook, Twitter,...
 
 The dynamic web made it possible to modify content, host it, or even host entire applications on the Internet without modifications to your site.
 
@@ -73,7 +73,7 @@ NGINX is an open source web server started in 2002 by Igor Sysoev, designed to h
 
 ![nginx marketshare](./nginx-stats.png)[^stats].
 
-As a result, NGINX has had a larger market share than Apache for several years. Companies like Cloudflare that handle huge numbers of web traffic also use a modified version of the NGINX code !
+As a result, NGINX has had a larger market share than Apache for several years. Companies like Cloudflare[^pingora] that handle huge numbers of web traffic also use a modified version of the NGINX code !
 
 Because of this we are going to use NGINX instead of Apache in this course.
 
@@ -94,3 +94,4 @@ Example is the MEAN stack running a web server with the code in it with ExpressJ
 [^webring]: Before search engines were a thing, we had [Webrings](https://en.wikipedia.org/wiki/Webring) that allowed sites to reference each other over a particular underwork
 [^hack]: Facebook was built on the LAMP stack but had a [transition to Hack, a language designed by FB to run PHP faster and widely](https://www.cuelogic.com/blog/how-facebook-is-not-using-php-by-still-using-php)
 [^lempimagesource]: Image by Parth Shukla, Ahex Technologies
+[^pingora]: Cloudflare has recently replaced nginx by an in-house proxy [Pingora](https://blog.cloudflare.com/how-we-built-pingora-the-proxy-that-connects-cloudflare-to-the-internet/) to better suit their needs.

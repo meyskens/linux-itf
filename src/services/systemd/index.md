@@ -81,7 +81,7 @@ We see not only our services but more units. A `unit` is a component running in 
 - `.device` these are all connected devices (also virtual)
 - `.mount` are all mount points of file systems
 - `.service` these are all services
-- socket` are all network sockets
+- `.socket` are all network sockets
 - `.timer` these are all timers (similar to Cron jobs)
 
 In our job we focus mainly on all services, we can filter them with a simple `grep`:
@@ -149,7 +149,7 @@ KillMode=mixed
 WantedBy=multi-user.target
 ```
 
-With this we see all the congiguration options of the service. We'll look at the subcomponents later when we scrhve our own.
+With this we see all the configuration options of the service. We'll look at the subcomponents later when we scrhve our own.
 
 We can also stop and start this background service:
 

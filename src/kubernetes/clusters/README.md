@@ -282,4 +282,4 @@ Yup there is a Vagrant setup for Kubernetes too! You can find it at [github.com/
 
 So you want to brag to your friends you know Kubernetes _really, really_ well? Go set up a cluster using [Kelsey Hightower's Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 
-[^bashbatter]: Eyskens, Mariën. (2022). Bash vs. PowerShell. B300 fights.
+[^bashbetter]: Eyskens, Mariën. (2022). Bash vs. PowerShell. B300 fights.
