@@ -149,7 +149,7 @@ KillMode=mixed
 WantedBy=multi-user.target
 ```
 
-With this we see all the congiguration options of the service. We'll look at the subcomponents later when we scrhve our own.
+With this we see all the configuration options of the service. We'll look at the subcomponents later when we scrhve our own.
 
 We can also stop and start this background service:
 

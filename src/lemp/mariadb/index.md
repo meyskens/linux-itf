@@ -182,7 +182,7 @@ Nevertheless, we are going to find some parameters in configuration files, in `/
 Here we find:
 
 - `my.cnf` this is the mysql compatible configuration
-- `mariadb.cnf` dirt is the MariaDB specific configuration
+- `mariadb.cnf` this is the MariaDB specific configuration
 
 We can also find logs in `/var/log/mysql/`.
 In turn, all our data is in `/var/lib/mysql/`.

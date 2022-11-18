@@ -20,7 +20,7 @@ Back in the mid-1990s, the need for more came. Modifying websites manually requi
 
 ![Stats SIN 1998](./sin98.png)
 
-Around the year 2000, server-side scripting made a big impact on the world, sites like Amazon made it easy to winklel on the Internet. "Web 2.0" became a larger revolt where people could contribute to the Internet without having their own domain or server. From blogs with comments on "Blogger" or videos on YouTube. Later Netlog, MySpace, Facebook, Twitter,...
+Around the year 2000, server-side scripting made a big impact on the world, sites like Amazon made it easy to shop on the Internet. "Web 2.0" became a larger revolt where people could contribute to the Internet without having their own domain or server. From blogs with comments on "Blogger" or videos on YouTube. Later Netlog, MySpace, Facebook, Twitter,...
 
 The dynamic web made it possible to modify content, host it, or even host entire applications on the Internet without modifications to your site.
 

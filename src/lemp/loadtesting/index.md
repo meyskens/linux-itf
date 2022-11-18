@@ -10,7 +10,7 @@ In March 2021 an online Batibouw event took place, which was a great success and
 
 batibouw was down in March 2021](./batibouw.png)
 
-While predicting the number of visitors may not always be possible, in our business we can garatnies whether a certain number of visitors will have consequences. One way we do this is through load testing. We can simulate a large number of simultaneous logins, giving us an idea of how the server will react, detecting bottlenecks and perhaps drawing up plans for scaling up.
+While predicting the number of visitors may not always be possible, in our business we can make guarantees whether a certain number of visitors will have consequences. One way we do this is through load testing. We can simulate a large number of simultaneous logins, giving us an idea of how the server will react, detecting bottlenecks and perhaps drawing up plans for scaling up.
 
 ![Smartschool was down in online class week](./smartschool.png)
 
@@ -305,7 +305,7 @@ Requests/sec: 3461.15
 Transfer/sec: 1.29MB
 ```
 
-3461.15 requests/sec is already a bit less than the 10 000 requests/sec we requestedm we also see a maximum load time of 19 seconds!
+3461.15 requests/sec is already a bit less than the 10 000 requests/sec we requested we also see a maximum load time of 19 seconds!
 We have already exceeded our throughput here!
 
 :::warning StuVM Network
