@@ -111,7 +111,7 @@ Enter this. Note that SSH cares about your security and doesn't even show asteri
 
 ### Security
 
-SSH is a non-encrypted protocol, which ensures that all data including passwords is encrypted over the network. Access to our server is password protected. But is a password such a good idea?
+SSH is an encrypted protocol, which ensures that all data including passwords is encrypted over the network. Access to our server is password protected. But is a password such a good idea?
 
 We put an SSH server on the public Internet with password access for 5 minutes to demonstrate:
 
