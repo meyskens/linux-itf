@@ -38,8 +38,8 @@ We see these tremendously common for caching data. For example, we can store com
 Examples of key/value databases:
 
 - [Redis](https://redis.io/)
-- Memcached](https://memcached.org/)
-- Etcd](https://etcd.io/)
+- [Memcached](https://memcached.org/)
+- [Etcd](https://etcd.io/)
 
 ### Document Store
 
@@ -80,8 +80,8 @@ This is an example of a BSON (Binary method on JSON to succeed) document in Mong
 Known servers are:
 
 - [MongoDB](https://www.mongodb.com/)
-- Apache CouchDB](https://couchdb.apache.org/)
-- Amazon DocumentDB (AWS)](https://aws.amazon.com/documentdb/)
+- [Apache CouchDB](https://couchdb.apache.org/)
+- [Amazon DocumentDB (AWS)](https://aws.amazon.com/documentdb/)
 
 ### (Wide) Column Store.
 
@@ -95,8 +95,8 @@ Thanks to a hierarchical structure, we can quickly and easily find and store dat
 Well-known servers are:
 
 - [Google Cloud Bigtable](https://cloud.google.com/bigtable/)
-- Apache Cassandra](https://cassandra.apache.org/)
-- Apache HBase](https://hbase.apache.org/)
+- [Apache Cassandra](https://cassandra.apache.org/)
+- [Apache HBase](https://hbase.apache.org/)
 
 ### Graph database
 
@@ -111,8 +111,8 @@ Graph databases have their own query language like GraphQL to retrieve data.
 Well-known software:
 
 - [Neo4j](https://neo4j.com/)
-- OrientDB](https://www.orientdb.org/)
-- Dgraph](https://dgraph.io/)
+- [OrientDB](https://www.orientdb.org/)
+- [Dgraph](https://dgraph.io/)
 
 ### Relational database
 
@@ -123,10 +123,10 @@ Relational databases you normally know from the SQL class. Here we store data in
 Known software:
 
 - [MySQL](https://www.mysql.com/)
-- MariaDB](https://mariadb.org/)
-- Oracle Database](https://www.oracle.com/database/technologies/)
-- Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/)
-- PostreSQL](https://www.postgresql.org/)
+- [MariaDB](https://mariadb.org/)
+- [Oracle Database](https://www.oracle.com/database/technologies/)
+- [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/)
+- [PostreSQL](https://www.postgresql.org/)
 
 ## MariaDB
 
@@ -336,7 +336,7 @@ SHOW DATABASES;
 
 This shows us all the databases.
 
-`````sql
+```sql
 SHOW TABLES FROM mysql;
 ```
 
@@ -362,7 +362,7 @@ sudo mysql -u root -p
 
 Adding users we do with `CREATE USER`:
 
-````sql
+```sql
 CREATE USER 'test'@'%' IDENTIFIED BY 'password';
 FLUSH PRIVILEGES;
 ```
@@ -396,7 +396,7 @@ sudo mysql -u root -p
 
 Followed by:
 
-````sql
+```sql
 CREATE DATABASE mydb;
 ```
 
@@ -458,7 +458,7 @@ We open our SQL shell again and create a new database:
 sudo mysql -u root -p
 ```
 
-````sql
+```sql
 CREATE DATABASE myNEWdb;
 quit
 ```
@@ -468,5 +468,3 @@ Now we can import the backup with ``mysql``:
 ```bash
 sudo mysql -u root -p myNEWdb < mydb.sql
 ```
-
-`````
