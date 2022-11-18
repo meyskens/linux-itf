@@ -73,7 +73,7 @@ NGINX is an open source web server started in 2002 by Igor Sysoev, designed to h
 
 ![nginx marketshare](./nginx-stats.png)[^stats].
 
-As a result, NGINX has had a larger market share than Apache for several years. Companies like Cloudflare that handle huge numbers of web traffic also use a modified version of the NGINX code !
+As a result, NGINX has had a larger market share than Apache for several years. Companies like Cloudflare[^pingora] that handle huge numbers of web traffic also use a modified version of the NGINX code !
 
 Because of this we are going to use NGINX instead of Apache in this course.
 
@@ -94,3 +94,4 @@ Example is the MEAN stack running a web server with the code in it with ExpressJ
 [^webring]: Before search engines were a thing, we had [Webrings](https://en.wikipedia.org/wiki/Webring) that allowed sites to reference each other over a particular underwork
 [^hack]: Facebook was built on the LAMP stack but had a [transition to Hack, a language designed by FB to run PHP faster and widely](https://www.cuelogic.com/blog/how-facebook-is-not-using-php-by-still-using-php)
 [^lempimagesource]: Image by Parth Shukla, Ahex Technologies
+[^pingora]: Cloudflare has recently replaced nginx by an in-house proxy [Pingora](https://blog.cloudflare.com/how-we-built-pingora-the-proxy-that-connects-cloudflare-to-the-internet/) to better suit their needs.
